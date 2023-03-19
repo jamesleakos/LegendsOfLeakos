@@ -1,0 +1,39 @@
+:root {
+  --top-padding: 30px;
+}
+
+.lobby {
+  padding-top: var(--top-padding);
+  min-height: calc(100vh - var(--top-padding));
+  background-image: url('https://ik.imagekit.io/hfywj4j0a/HOSS_Images/council_2_-xtCInoWU.png');  
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.lobby-bar {
+  position: relative;
+  height: 50px;
+  margin: 0 20px;
+  border-bottom: 1px solid white;
+}
+
+.lobby-title {
+  position: absolute;
+  color: white;
+  font-size: 2.5rem;
+  left: 0;
+  bottom: 5px;
+}
+.lobby.mobile .lobby-title {
+  font-size: 1.5rem;
+}
+
+.new-room-button {
+  float: right;
+}
+
+.rooms-area {
+  text-align: left;
+}

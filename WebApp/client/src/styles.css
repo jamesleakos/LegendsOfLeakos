@@ -1,0 +1,34 @@
+* {
+  margin: 0;
+}
+
+html,
+body {
+  margin: 0;
+  font-family: 'Exo 2', sans-serif;
+  overflow-x: clip;
+  overscroll-behavior: none;
+}
+
+.hoss-button {
+  display: inline-block;
+  height: 20px;
+  width: 100px;
+  margin: 10px;
+  padding: 3px;
+  border: 1px solid grey;
+  border-radius: 2px;
+  background-color: white;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.5s ease;
+}
+
+.hoss-button:hover {
+  outline: none;
+  border-color: white;
+  box-shadow: 0 0 10px white;
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+
+}

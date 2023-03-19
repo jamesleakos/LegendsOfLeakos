@@ -1,0 +1,69 @@
+.game-screen {
+  min-height: 100vh;
+  background-image: url('https://ik.imagekit.io/hfywj4j0a/HOSS_Images/council_2_-xtCInoWU.png');  
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: white;
+}
+
+.game-screen .wrapper {
+  padding: 30px;
+}
+
+.status-bar {
+  border-bottom: 1px solid white;
+  margin-bottom: 15px;
+}
+
+.status-of-play {
+  font-size: 1.5rem;
+}
+
+.game-area {
+  display: grid;
+  grid-template-columns: 320px 2fr 1fr;
+}
+
+.mobile-game-area {
+  margin-top: 20px;
+  margin-bottom: 100px;
+}
+
+.mobile-game-area .player-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.mobile-game-area .play-area {
+  margin-top: 20px;
+}
+
+.game-area .player-list {
+  padding-right: 10px;
+  border-right: 1px solid white;
+}
+
+.players-title {
+  color: white;
+}
+
+.play-area {
+  padding: 0 10px;
+  border-right: 1px solid white;
+}
+.mobile .play-area {
+  padding: 0;
+  border: none;
+}
+
+/* mobile has their own logging comp */
+.log-area {
+  padding: 0 10px;
+}
+
+.log-list {
+  height: calc(90vh - 100px);
+  overflow-y: auto;
+}
