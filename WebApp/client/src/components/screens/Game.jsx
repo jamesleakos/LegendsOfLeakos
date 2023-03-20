@@ -3,10 +3,10 @@ import React, { useEffect, useState, createContext } from 'react';
 // css
 import './styles/Game.css';
 
-const GamestateContext = React.createContext();
-const [gamestate, setGamestate] = useState(null);
-
 const Game = ({ socket, setGameStarted, isMobile, playHover, playClick }) => {
+  const GamestateContext = React.createContext();
+  const [gamestate, setGamestate] = useState(null);
+
   return (
     <GamestateContext.Provider value={{ name: 'James' }}>
       <div>

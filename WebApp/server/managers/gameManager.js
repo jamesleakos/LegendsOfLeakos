@@ -1,8 +1,14 @@
-const Game = require('../game/game.js');
+const {
+  Constants: { gameSettings },
+} = require('legends-of-leakos');
+console.log(gameSettings);
 const Tracking = require('../db/controllers/tracking.js');
 
 const startGame = async (room, io) => {
-  if (room.players.length < 2 || room.players.length > 6) {
+  if (
+    room.players.length < gameSettings.minPlayers ||
+    room.players.length > gameSettings.maxPlayers
+  ) {
     throw new Error('Invalid number of players');
   }
   // track the game in the db

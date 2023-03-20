@@ -1,12 +1,16 @@
 {
   "name": "legends-of-leakos",
-  "version": "1.0.2",
+  "version": "1.0.7",
   "description": "",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "update": "npm version patch && npm run build && npm publish"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.15.3"
+  }
 }
