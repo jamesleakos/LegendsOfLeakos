@@ -28,4 +28,14 @@ router.get('/check-auth', (req, res) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return res.status(400).json({ errors: err });
+    } else {
+      res.redirect('/');
+    }
+  });
+});
+
 module.exports = router;

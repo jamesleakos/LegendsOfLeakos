@@ -1,17 +1,15 @@
 // EXTERNAL
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // INTERNAL
 // constants
 import { CONNECTION_URL } from '../network_constants.js';
 // css
 import '../styles.css';
-// hooks
-import usePersistedState from '../hooks/usePersistedState.js';
 // context
 import MasterContextProvider from '../contexts/MasterContextProvider.jsx';
+import AuthContext from '../contexts/AuthContext.js';
 // components
 import Home from './Home/HomePage.jsx';
 import SignInUpPage from './SignInUp/SignInUpPage.jsx';
@@ -21,32 +19,16 @@ import Protected from './UtilityComponents/Protected.jsx';
 // we're doing the Root thing to allow for useNavigate, which needs to be inside BrowserRouter
 function App() {
   return (
-    <MasterContextProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <MasterContextProvider>
         <Root />
-      </BrowserRouter>
-    </MasterContextProvider>
+      </MasterContextProvider>
+    </BrowserRouter>
   );
 }
 function Root() {
   // check if user is logged in
-  const [isLoggedIn, setIsLoggedIn] = usePersistedState('isLoggedIn', false);
-  useEffect(() => {
-    axios
-      .get('/auth/check-auth')
-      .then((res) => {
-        setIsLoggedIn(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate('/');
-    }
-  }, [isLoggedIn]);
+  const { isLoggedIn, setIsLoggedIn } = React.useContext(AuthContext);
 
   return (
     <div>

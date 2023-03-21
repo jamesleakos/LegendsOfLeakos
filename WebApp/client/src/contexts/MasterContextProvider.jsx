@@ -1,11 +1,14 @@
 import React from 'react';
 import SoundContextProvider from './SoundContextProvider.jsx';
+import AuthContextProvider from './AuthContextProvider.jsx';
 
 const MasterContextProvider = ({ children }) => {
   return (
     <SoundContextProvider>
-      {/* Wrap with any other context providers */}
-      {children}
+      <AuthContextProvider>
+        {/* Wrap with any other context providers */}
+        {children}
+      </AuthContextProvider>
     </SoundContextProvider>
   );
 };
