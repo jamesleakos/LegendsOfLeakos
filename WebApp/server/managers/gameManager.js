@@ -1,23 +1,35 @@
 const {
   Constants: { gameSettings },
+  GameServer,
 } = require('legends-of-leakos');
 console.log(gameSettings);
 const Tracking = require('../db/controllers/tracking.js');
 
 const startGame = async (room, io) => {
+  // make sure the players in the room are valid
+  // correct number of players
   if (
     room.players.length < gameSettings.minPlayers ||
     room.players.length > gameSettings.maxPlayers
   ) {
-    throw new Error('Invalid number of players');
+    console.log('ERROR: Invalid number of players');
+    return;
   }
+  // make sure each player has a realm
+  for (let player of room.players) {
+    if (!player.realm) {
+      console.log('ERROR: Player has no realm');
+      return;
+    }
+  }
+
   // track the game in the db
   Tracking.addGame(room.players.map((p) => p.name));
 
   const clients = io.sockets.adapter.rooms.get(room.id);
   const sockets = [...clients].map((id) => io.sockets.sockets.get(id));
 
-  room.game = new Game(
+  room.game = new GameServer(
     room,
     (messageType, data) => {
       sendToRoom(messageType, room.id, data, io);

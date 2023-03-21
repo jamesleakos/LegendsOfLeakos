@@ -3,16 +3,27 @@ const roomMan = require('../managers/roomManager.js');
 const gameMan = require('../managers/gameManager.js');
 
 module.exports = (io, playerSocket) => {
-  const createNewRoom = (data) => {
-    const room = roomMan.createNewRoomAddPlayer(data.roomname, data.username, playerSocket, io);
+  const createNewRoom = async (data) => {
+    const room = await roomMan.createNewRoomAddPlayer(
+      data.roomname,
+      data.username,
+      data.realmID,
+      playerSocket,
+      io
+    );
 
     playerSocket.emit('you-joined-room', room.id);
     io.emit('rooms-update', roomMan.getOpenRooms());
   };
 
-  const joinRoom = (data) => {
+  const joinRoom = async (data) => {
     const room = roomMan.getRoom(data.room_id);
-    roomMan.addPlayerToRoom(room, data.username, playerSocket);
+    await roomMan.addPlayerToRoom(
+      room,
+      data.username,
+      data.realmID,
+      playerSocket
+    );
 
     playerSocket.emit('you-joined-room', room.id);
     io.emit('rooms-update', roomMan.getOpenRooms());
@@ -43,8 +54,8 @@ module.exports = (io, playerSocket) => {
   io.emit('rooms-update', roomMan.getOpenRooms());
 
   // and these will be assigned
-  playerSocket.on('request-new-room', createNewRoom);
-  playerSocket.on('request-join-room', joinRoom);
+  playerSocket.on('request-new-room', async () => await createNewRoom());
+  playerSocket.on('request-join-room', async () => await joinRoom());
   playerSocket.on('request-leave-room', leaveRoom);
   playerSocket.on('request-start-game', startGame);
   playerSocket.on('disconnect', playerDisconnected);

@@ -1,10 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 const Tracking = require('../db/controllers/tracking.js');
 
-class Player {
-  constructor(id, name) {
+class LoLPlayer {
+  constructor(id, name, realm) {
     this.id = id;
     this.name = name;
+    this.realm = realm;
   }
 }
 
@@ -51,23 +52,31 @@ class RoomManager {
     return newRoom;
   }
 
-  addPlayerToRoom(room, username, playerSocket) {
-    // track that we added a new player
-    Tracking.addUser(username.slice(0, 10));
+  async addPlayerToRoom(room, username, realmID, playerSocket, realm) {
+    try {
+      // TODO: get the realm from our db
 
-    // don't let a player join a room they're already in
-    if (room.players.find((p) => p.id === playerSocket.id)) return;
+      // track that we added a new player
+      Tracking.addUser(username.slice(0, 10));
 
-    // remove from an old rooms they might be in
-    this.removePlayerFromTrackedRoom(playerSocket);
+      // don't let a player join a room they're already in
+      if (room.players.find((p) => p.id === playerSocket.id)) return;
 
-    // add to io namespace
-    playerSocket.join(room.id);
+      // remove from an old rooms they might be in
+      this.removePlayerFromTrackedRoom(playerSocket);
 
-    // add to new room
-    room.addPlayer(new Player(playerSocket.id, username.slice(0, 10)));
+      // add to io namespace
+      playerSocket.join(room.id);
 
-    this.playerToRoom[playerSocket.id] = room;
+      // add to new room
+      room.addPlayer(
+        new LoLPlayer(playerSocket.id, username.slice(0, 10), realm)
+      );
+
+      this.playerToRoom[playerSocket.id] = room;
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   removePlayerFromRoom(room, playerSocket) {
@@ -92,10 +101,10 @@ class RoomManager {
   }
 
   // new room on player request, player gets added
-  createNewRoomAddPlayer(roomname, username, playerSocket) {
+  async createNewRoomAddPlayer(roomname, username, realmID, playerSocket) {
     // create room
     const room = this.createRoom(roomname);
-    this.addPlayerToRoom(room, username, playerSocket);
+    await this.addPlayerToRoom(room, username, realmID, playerSocket);
     return room;
   }
 }

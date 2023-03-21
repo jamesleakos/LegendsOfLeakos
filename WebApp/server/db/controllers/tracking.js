@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const { User, Game } = require('../models/Tracking.js');
 
 exports.addUser = (username) => {
