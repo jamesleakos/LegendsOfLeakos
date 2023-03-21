@@ -1,57 +1,77 @@
-// external
-import React, { useState, useEffect, useMemo } from 'react';
-import io from 'socket.io-client';
-import hoverSfx from '../sounds/light_click.mp3';
-import clickSfx from '../sounds/heavy_click.mp3';
+// EXTERNAL
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
+// INTERNAL
 // constants
 import { CONNECTION_URL } from '../network_constants.js';
-
 // css
 import '../styles.css';
+// hooks
+import usePersistedState from '../hooks/usePersistedState.js';
+// context
+import MasterContextProvider from '../contexts/MasterContextProvider.jsx';
 // components
-import Pregame from './screens/Pregame.jsx';
-import Game from './screens/Game.jsx';
+import Home from './Home/HomePage.jsx';
+import SignInUpPage from './SignInUp/SignInUpPage.jsx';
+import Protected from './UtilityComponents/Protected.jsx';
 
 // App
+// we're doing the Root thing to allow for useNavigate, which needs to be inside BrowserRouter
 function App() {
-  const [socket, setSocket] = useState(null);
-  const [gameStarted, setGameStarted] = useState(false);
-  const hoverSound = useMemo(() => new Audio(hoverSfx));
-  const clickSound = useMemo(() => new Audio(clickSfx));
-
-  const playHover = function () {
-    hoverSound.play();
-  };
-
-  const playClick = function () {
-    clickSound.play();
-  };
-
+  return (
+    <MasterContextProvider>
+      <BrowserRouter>
+        <Root />
+      </BrowserRouter>
+    </MasterContextProvider>
+  );
+}
+function Root() {
+  // check if user is logged in
+  const [isLoggedIn, setIsLoggedIn] = usePersistedState('isLoggedIn', false);
   useEffect(() => {
-    const s = io(CONNECTION_URL, { transport: ['websocket'] });
-    setSocket(s);
+    axios
+      .get('/auth/check-auth')
+      .then((res) => {
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
-
-  // for mobile vs desktop
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  function handleWindowSizeChange() {
-    setIsMobile(window.innerWidth < 768);
-  }
+  const navigate = useNavigate();
   useEffect(() => {
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
-  }, []);
+    if (isLoggedIn) {
+      navigate('/');
+    }
+  }, [isLoggedIn]);
 
   return (
-    <div className="App">
-      {gameStarted ? (
-        <Game socket={socket} setGameStarted={setGameStarted} isMobile={isMobile} playHover={playHover} playClick={playClick} />
-      ) : (
-        <Pregame socket={socket} setGameStarted={setGameStarted} isMobile={isMobile} playHover={playHover} playClick={playClick} />
-      )}
+    <div>
+      <Routes>
+        <Route
+          path='/'
+          element={
+            <Protected isLoggedIn={isLoggedIn}>
+              <Home />
+            </Protected>
+          }
+        />
+        <Route
+          path='/test'
+          element={
+            <Protected isLoggedIn={isLoggedIn}>
+              <div>TEST TEST TEST</div>
+            </Protected>
+          }
+        />
+        <Route
+          path='/sign-in-up'
+          element={<SignInUpPage setIsLoggedIn={setIsLoggedIn} />}
+        />
+      </Routes>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require('uuid');
-const Tracking = require('../db/controllers/tracking.js');
 
 class LoLPlayer {
   constructor(id, name, realm) {
@@ -55,9 +54,6 @@ class RoomManager {
   async addPlayerToRoom(room, username, realmID, playerSocket, realm) {
     try {
       // TODO: get the realm from our db
-
-      // track that we added a new player
-      Tracking.addUser(username.slice(0, 10));
 
       // don't let a player join a room they're already in
       if (room.players.find((p) => p.id === playerSocket.id)) return;
