@@ -1,4 +1,4 @@
-const { Realm } = require('../models/Realm.js');
+const { Realm, DefaultRealm } = require('../models/Realm.js');
 
 const createRealm = async (req, res) => {
   try {
@@ -31,7 +31,44 @@ const updateRealm = async (req, res) => {
   }
 };
 
+// get all the authenticated user's realms
+// if the user doesn't have an realms, get the default realms
+const getRealms = async (req, res) => {
+  console.log('user_id: ', req.user._id);
+  try {
+    const realms = await Realm.find({ user_id: req.user._id });
+    if (!realms) {
+      res.status(404).json({ message: 'No realms found' });
+    } else if (realms.length === 0) {
+      console.log('no realms found, getting default realms');
+      return getDefaultRealms(req, res);
+    } else {
+      console.log('realms found');
+      res.status(200).json(realms);
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting realms', error });
+  }
+};
+
+const getDefaultRealms = async (req, res) => {
+  try {
+    const realms = await DefaultRealm.find();
+    if (!realms) {
+      console.log('no default realms found');
+      return res.status(404).json({ message: 'No realms found' });
+    } else {
+      console.log('default realms found');
+      console.log(realms);
+      res.status(200).json(realms);
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error getting realms', error });
+  }
+};
+
 module.exports = {
   createRealm,
   updateRealm,
+  getRealms,
 };

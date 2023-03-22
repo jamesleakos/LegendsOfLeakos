@@ -1,6 +1,8 @@
 // external
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+
 // internal
 import AuthContext from './AuthContext.js';
 import usePersistedState from '../hooks/usePersistedState.js';

@@ -1,15 +1,12 @@
-# The Noble Houses of System Seven
+# Legends of Leakos
 
-A space themed strategy game in the sytle of the popular board game 'Coup'. Play it at [playsystemseven.com](http://playsystemseven.com)!
-
-### Use as a template
-
-The game is entirely seperate from the infrastructure around creating / joining lobbies and starting games. It should be a decent template for other simple networked games.
+An innovative CCG.
 
 ### Stack
 
-- websockets with socket.io
-- node.js / express.js
-- React
-
-
+- node.js / express.js / TypeScript / JS
+- (websockets with socket.io) & (RESTful API)
+- React / React Router
+- passport.js
+- MongoDB
+- AWS S3

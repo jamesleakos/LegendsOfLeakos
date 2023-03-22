@@ -28,12 +28,21 @@ const BiomeSchema = new mongoose.Schema({
 });
 
 const RealmSchema = new mongoose.Schema({
+  // user id is a object id
+  user_id: mongoose.Schema.Types.ObjectId,
+  name: String,
+  biomes: [BiomeSchema],
+});
+
+const DefaultRealmSchema = new mongoose.Schema({
   name: String,
   biomes: [BiomeSchema],
 });
 
 const Realm = mongoose.model('realms', RealmSchema);
+const DefaultRealm = mongoose.model('defaultRealms', DefaultRealmSchema);
 
 module.exports = {
   Realm,
+  DefaultRealm,
 };

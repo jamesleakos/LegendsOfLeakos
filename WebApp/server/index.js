@@ -17,18 +17,21 @@ const io = require('socket.io')(server, { cors: { origin: '*' } });
 
 // routers
 const authRouter = require('./routers/auth.js');
+const realmRouter = require('./routers/realms.js');
 
 // auth
 const mongoURI = `mongodb+srv://${process.env.MONGO_CLOUD_ATLAS_USER}:${process.env.MONGO_CLOUD_ATLAS_PASSWORD}@${process.env.MONGO_CLOUD_ATLAS_URL}/${process.env.MONGO_CLOUD_ATLAS_DB}`;
 
-app.use(
-  session({
-    secret: 'very secret this is',
-    resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: mongoURI }),
-  })
-);
+const sessionMiddleware = session({
+  secret: 'very secret this is',
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: mongoURI }),
+});
+// this gives the restful API access to the session
+app.use(sessionMiddleware);
+// this gives the socket.io access to the session
+io.engine.use(sessionMiddleware);
 
 // Passport middleware
 app.use(passport.initialize());
@@ -43,15 +46,14 @@ app.use(cors({ origin: '*' }));
 
 // restful routes
 app.use('/auth', authRouter);
+app.use('/realms', realmRouter);
 
 // io handlers
-const playerHandler = require('./ioHandlers/playerHandler.js');
-
+const pregameHandler = require('./ioHandlers/pregameHandler.js');
 // register the io handlers
-const onConnection = (socket) => {
-  playerHandler(io, socket);
-};
-io.on('connection', onConnection);
+io.on('connection', (socket) => {
+  pregameHandler(io, socket);
+});
 
 // send the FE files
 app.use(express.static(path.join(__dirname, '../client/dist')));

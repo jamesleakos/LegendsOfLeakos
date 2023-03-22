@@ -1,9 +1,26 @@
 // internal
 const roomMan = require('../managers/roomManager.js');
 const gameMan = require('../managers/gameManager.js');
+const userController = require('../db/controllers/user.js');
 
-module.exports = (io, playerSocket) => {
+module.exports = async (io, playerSocket) => {
+  // on connection, create a user and add them to the room manager
+  const user_id = playerSocket?.request?.session?.passport?.user;
+  const user = await userController.getUserById(user_id);
+
+  // first check if the user is already in the system - if so, replace their socket
+
+  // here we could check if the user is already in a game, and if so, send them to the game
+
   const createNewRoom = async (data) => {
+    // get user from socket message data
+
+    // get realm from db and data
+
+    // create player
+    const player = roomMan.createPlayer(user, playerSocket, realm);
+
+    // create room and add player
     const room = await roomMan.createNewRoomAddPlayer(
       data.roomname,
       data.username,
@@ -17,7 +34,9 @@ module.exports = (io, playerSocket) => {
   };
 
   const joinRoom = async (data) => {
-    const room = roomMan.getRoom(data.room_id);
+    const room = roomMan.getRoomByID(data.room_id);
+
+    // create player and add to room
     await roomMan.addPlayerToRoom(
       room,
       data.username,
@@ -37,7 +56,7 @@ module.exports = (io, playerSocket) => {
   };
 
   const startGame = (data) => {
-    const room = roomMan.getRoom(data.room_id);
+    const room = roomMan.getRoomByID(data.room_id);
     // make sure this is a player actually in the room!
     if (!room.players.find((p) => p.id === playerSocket.id)) return;
 
@@ -47,7 +66,7 @@ module.exports = (io, playerSocket) => {
   };
 
   const playerDisconnected = () => {
-    roomMan.removePlayerFromTrackedRoom(playerSocket);
+    roomMan.playerDisconnected(playerSocket);
   };
 
   // on join, this will be sent
