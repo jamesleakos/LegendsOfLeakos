@@ -21,6 +21,7 @@ class Room {
 
   addPlayer(player) {
     if (this.players.find((p) => p.user_id === player.user_id)) return;
+
     this.players.push(player);
   }
 
@@ -34,7 +35,18 @@ class RoomManager {
     this.rooms = [];
     this.players = [];
     this.socketIDToRoom = {};
+    this.userIDToPlayer = {};
     this.socketIDToPlayer = {};
+  }
+
+  getFullRoomReport() {
+    return {
+      rooms: this.rooms,
+      players: this.players,
+      socketIDToRoom: this.socketIDToRoom,
+      userIDToPlayer: this.userIDToPlayer,
+      socketIDToPlayer: this.socketIDToPlayer,
+    };
   }
 
   getRoomByID(roomID) {
@@ -56,6 +68,10 @@ class RoomManager {
     return newRoom;
   }
 
+  getPlayerBySocketID(socketID) {
+    return this.socketIDToPlayer[socketID];
+  }
+
   createPlayer(user, playerSocket, realm = null) {
     const newPlayer = new LoLPlayer(
       playerSocket.id,
@@ -64,35 +80,33 @@ class RoomManager {
       realm
     );
     this.players.push(newPlayer);
+    this.socketIDToPlayer[playerSocket.id] = newPlayer;
+    this.userIDToPlayer[user._id] = newPlayer;
     return newPlayer;
   }
 
-  removePlayer(playerSocket) {
-    this.players = this.players.filter((p) => p.socket_id !== playerSocket.id);
+  // new room on player request, player gets added
+  createNewRoomAddPlayer(roomname, player, playerSocket) {
+    // create room
+    const room = this.createRoom(roomname);
+    this.addPlayerToRoom(room, player, playerSocket);
+    return room;
   }
 
-  async addPlayerToRoom(room, player, playerSocket) {
-    try {
-      // TODO: get the realm from our db
+  addPlayerToRoom(room, player, playerSocket) {
+    // don't let a player join a room they're already in
+    if (room.players.find((p) => p.user_id === player.user_id)) return;
 
-      // don't let a player join a room they're already in
-      if (room.players.find((p) => p.socket_id === playerSocket.id)) return;
+    // remove from an old rooms they might be in
+    this.removePlayerFromTrackedRoom(player);
 
-      // remove from an old rooms they might be in
-      this.removePlayerFromTrackedRoom(player);
+    // add to io namespace
+    playerSocket.join(room.id);
 
-      // add to io namespace
-      playerSocket.join(room.id);
+    // add to new room
+    room.addPlayer(player);
 
-      // add to new room
-      room.addPlayer(
-        new LoLPlayer(playerSocket.id, user.id, user.name.slice(0, 10), realm)
-      );
-
-      this.socketIDToRoom[playerSocket.id] = room;
-    } catch (err) {
-      console.error(err);
-    }
+    this.socketIDToRoom[playerSocket.id] = room;
   }
 
   removePlayerFromRoom(room, playerSocket) {
@@ -112,19 +126,70 @@ class RoomManager {
     if (oldRoom) this.removePlayerFromRoom(oldRoom, playerSocket);
   }
 
+  playerConnected(user, playerSocket) {
+    let needsToJoinGame = false;
+    const player = this.userIDToPlayer[user._id];
+    const room = this.socketIDToRoom[player.socket_id];
+    if (player && room && room.game && room.gameInProgress) {
+      // the player had been disconnected, but not removed and the game is still on
+
+      // update the player with the new socket
+      player.socket_id = playerSocket.id;
+
+      // update the socketIDToPlayer tracker
+      this.socketIDToPlayer[playerSocket.id] = player;
+
+      // subscribe the player to the room and game they were in
+      // add to io namespace
+      playerSocket.join(room.id);
+
+      needsToJoinGame = true;
+      return needsToJoinGame;
+    } else if (player) {
+      // they were here but not in a game so just remove them and start over
+      this.removePlayer(playerSocket);
+      this.createPlayer(user, playerSocket);
+      return needsToJoinGame;
+    } else {
+      // the player is new, create them
+      this.createPlayer(user, playerSocket);
+      return needsToJoinGame;
+    }
+  }
+
+  playerDisconnected(playerSocket) {
+    const room = this.socketIDToRoom[playerSocket.id];
+    if (room && room.game && room.gameInProgress) {
+      // set to disconnected but don't remove
+      const player = this.socketIDToPlayer[playerSocket.id];
+      player.isConnected = false;
+    } else {
+      // remove from all
+      this.removePlayer(playerSocket);
+    }
+
+    // TODO: we need to handle disconnections that never come back. Otherwise their game sticks around, and their room, and this player, and never gets cleaned up
+  }
+
+  removePlayer(playerSocket) {
+    // remove from room
+    this.removePlayerFromTrackedRoom(playerSocket);
+
+    // remove from array
+    this.players = this.players.filter((p) => p.socket_id !== playerSocket.id);
+
+    // delete from trackers
+    delete this.socketIDToPlayer[playerSocket.id];
+    delete this.socketIDToRoom[playerSocket.id];
+
+    // delete from userID tracker
+    const player = this.socketIDToPlayer[playerSocket.id];
+    delete this.userIDToPlayer[player.user_id];
+  }
+
   cleanupEmptyRooms() {
     this.rooms = this.rooms.filter((r) => r.players.length > 0);
   }
-
-  // new room on player request, player gets added
-  async createNewRoomAddPlayer(roomname, player, playerSocket) {
-    // create room
-    const room = this.createRoom(roomname);
-    await this.addPlayerToRoom(room, player, playerSocket);
-    return room;
-  }
-
-  playerDisconnected(playerSocket) {}
 }
 
 const roomMan = new RoomManager();

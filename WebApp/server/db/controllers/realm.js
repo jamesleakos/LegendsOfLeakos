@@ -51,6 +51,24 @@ const getRealms = async (req, res) => {
   }
 };
 
+const getRealmByID = async (realmID) => {
+  try {
+    const realms = await Realm.find({ _id: realmID });
+    if (!realms) {
+      console.log('ERROR: no realm object');
+      return null;
+    } else if (realms.length === 0) {
+      console.log('no realms found, getting default realms');
+      return getDefaultRealmByID(realmID);
+    } else {
+      console.log('realm found');
+      return realms[0];
+    }
+  } catch (error) {
+    console.log('Error getting realm by ID', error);
+  }
+};
+
 const getDefaultRealms = async (req, res) => {
   try {
     const realms = await DefaultRealm.find();
@@ -67,8 +85,32 @@ const getDefaultRealms = async (req, res) => {
   }
 };
 
+const getDefaultRealmByID = async (realmID) => {
+  try {
+    const realms = await DefaultRealm.find({ _id: realmID });
+    if (!realms) {
+      console.log('ERROR: no realm object');
+      return null;
+    } else if (realms.length === 0) {
+      console.log('no default realms found, returning random default realm');
+      const defaultRealms = await DefaultRealm.find();
+      if (!defaultRealms || defaultRealms.length === 0) {
+        console.log('ERROR: no default realms');
+        return null;
+      }
+      return defaultRealms[0];
+    } else {
+      console.log('realm found');
+      return realms[0];
+    }
+  } catch (error) {
+    console.log('Error getting realm by ID', error);
+  }
+};
+
 module.exports = {
   createRealm,
   updateRealm,
   getRealms,
+  getRealmByID,
 };

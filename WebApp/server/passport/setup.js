@@ -3,6 +3,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 const User = require('../db/models/Users.js');
+const nameGenerator = require('../utilities/nameGenerator.js');
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -22,7 +23,11 @@ passport.use(
       .then((user) => {
         // Create new User
         if (!user) {
-          const newUser = new User({ email, password });
+          const newUser = new User({
+            email: email,
+            password: password,
+            name: nameGenerator(),
+          });
           // Hash password before saving in database
           bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(newUser.password, salt, (err, hash) => {
