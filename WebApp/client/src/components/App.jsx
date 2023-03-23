@@ -11,9 +11,11 @@ import '../styles.css';
 import MasterContextProvider from '../contexts/MasterContextProvider.jsx';
 import AuthContext from '../contexts/AuthContext.js';
 // components
-import Home from './Home/HomePage.jsx';
-import SignInUpPage from './SignInUp/SignInUpPage.jsx';
+import AnimatedCursor from '../../helpers/animated_cursor.js';
+import HomePage from './Pregame/Home/HomePage.jsx';
+import SignInUpPage from './Pregame/SignInUp/SignInUpPage.jsx';
 import Protected from './UtilityComponents/Protected.jsx';
+import PlayPage from './Pregame/Play/PlayPage.jsx';
 
 // App
 // we're doing the Root thing to allow for useNavigate, which needs to be inside BrowserRouter
@@ -32,12 +34,21 @@ function Root() {
 
   return (
     <div>
+      <AnimatedCursor />
       <Routes>
         <Route
           path='/'
           element={
             <Protected isLoggedIn={isLoggedIn}>
-              <Home />
+              <HomePage />
+            </Protected>
+          }
+        />
+        <Route
+          path='/play'
+          element={
+            <Protected isLoggedIn={isLoggedIn}>
+              <PlayPage />
             </Protected>
           }
         />
