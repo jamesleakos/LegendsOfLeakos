@@ -8,6 +8,9 @@ export const NavbarStyled = styled.div`
   border-left: 1px solid gray;
   border-right: 1px solid gray;
   border-bottom: 1px solid gray;
+  position: sticky;
+  top: 0;
+  background-color: white;
 
   .navbar-item {
     display: inline-block;

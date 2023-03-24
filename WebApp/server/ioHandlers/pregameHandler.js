@@ -6,13 +6,21 @@ const realmController = require('../db/controllers/realm.js');
 
 module.exports = async (io, playerSocket) => {
   // on connection, create a user and add them to the room manager
-  const user_id = playerSocket?.request?.session?.passport?.user;
+  const user_id = playerSocket?.request?.session?.passport?.user.toString();
   const user = await userController.getUserById(user_id);
+  // this is necessary for matching stuff
   let needsToJoinGame = roomMan.playerConnected(user, playerSocket);
   if (needsToJoinGame) {
     // TODO - implement this later
     // pretty much just need to run them through the game subscription process and then let the client know that they're in the game
   }
+
+  // on join, this will be sent
+  io.emit('rooms-update', roomMan.getOpenRooms());
+
+  const roomUpdate = () => {
+    playerSocket.emit('rooms-update', roomMan.getOpenRooms());
+  };
 
   const createNewRoom = async (data) => {
     const player = roomMan.getPlayerBySocketID(playerSocket.id);
@@ -23,10 +31,13 @@ module.exports = async (io, playerSocket) => {
 
     // create room and add player
     const room = roomMan.createNewRoomAddPlayer(
-      data.roomname,
+      !!data?.roomname ? data.roomname : 'New Room',
       player,
       playerSocket
     );
+
+    console.log('outside');
+    console.log(roomMan.rooms);
 
     playerSocket.emit('you-joined-room', room.id);
     io.emit('rooms-update', roomMan.getOpenRooms());
@@ -43,7 +54,10 @@ module.exports = async (io, playerSocket) => {
   };
 
   const leaveRoom = () => {
-    roomMan.removePlayerFromTrackedRoom(playerSocket);
+    const player = roomMan.getPlayerBySocketID(playerSocket.id);
+    if (!player) return;
+
+    roomMan.removePlayerFromTrackedRoom(player, playerSocket);
 
     playerSocket.emit('you-left-room');
     io.emit('rooms-update', roomMan.getOpenRooms());
@@ -82,15 +96,17 @@ module.exports = async (io, playerSocket) => {
     playerSocket.emit('full-room-report', roomMan.getFullRoomReport());
   };
 
-  // on join, this will be sent
-  io.emit('rooms-update', roomMan.getOpenRooms());
-
   // and these will be assigned
   playerSocket.on('request-new-room', createNewRoom);
+  playerSocket.on('request-rooms', roomUpdate);
   playerSocket.on('request-join-room', joinRoom);
   playerSocket.on('request-update-realm', updateRealm);
   playerSocket.on('request-leave-room', leaveRoom);
   playerSocket.on('request-start-game', startGame);
   playerSocket.on('request-full-room-report', fullRoomReport);
   playerSocket.on('disconnect', playerDisconnected);
+  playerSocket.on('test', () => {
+    console.log('test');
+    playerSocket.emit('test-response');
+  });
 };
