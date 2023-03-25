@@ -16,6 +16,7 @@ import HomePage from './Pregame/Home/HomePage.jsx';
 import SignInUpPage from './Pregame/SignInUp/SignInUpPage.jsx';
 import Protected from './UtilityComponents/Protected.jsx';
 import PlayPage from './Pregame/Play/PlayPage.jsx';
+import GamePage from './Game/GamePage.jsx';
 
 // App
 // we're doing the Root thing to allow for useNavigate, which needs to be inside BrowserRouter
@@ -49,6 +50,14 @@ function Root() {
           element={
             <Protected isLoggedIn={isLoggedIn}>
               <PlayPage />
+            </Protected>
+          }
+        />
+        <Route
+          path='/game'
+          element={
+            <Protected isLoggedIn={isLoggedIn}>
+              <GamePage />
             </Protected>
           }
         />

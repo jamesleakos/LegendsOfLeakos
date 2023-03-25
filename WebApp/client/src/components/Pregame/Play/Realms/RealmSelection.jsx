@@ -5,11 +5,15 @@ import RealmScroller from './RealmScroller.jsx';
 // css
 import { RealmSelectionStyled } from './styles/RealmSelection.styled.js';
 
-function RealmSelection() {
+function RealmSelection({ realms, selectRealm, selectedRealmID }) {
   return (
     <RealmSelectionStyled>
       <h3>Choose your Realm</h3>
-      <RealmScroller />
+      <RealmScroller
+        realms={realms}
+        selectRealm={selectRealm}
+        selectedRealmID={selectedRealmID}
+      />
     </RealmSelectionStyled>
   );
 }

@@ -6,20 +6,7 @@ import RealmTile from './RealmTile.jsx';
 // css
 import { RealmScrollerStyled } from './styles/RealmScroller.styled.js';
 
-function RealmScroller() {
-  const [realms, setRealms] = useState([]);
-  useEffect(() => {
-    console.log('getting realms...');
-    axios
-      .get('/realms')
-      .then((res) => {
-        setRealms(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+function RealmScroller({ realms, selectRealm, selectedRealmID }) {
   // drag to scroll and text near cursor (all is for drag unless specified)
   // for drag
   const wrapperRef = useRef(null); // this is used by both
@@ -138,7 +125,14 @@ function RealmScroller() {
           {
             // map out the posts
             realms.map((realm, index) => {
-              return <RealmTile key={realm.name + index + ''} realm={realm} />;
+              return (
+                <RealmTile
+                  key={realm.name + index + ''}
+                  realm={realm}
+                  selectRealm={selectRealm}
+                  selected={realm._id === selectedRealmID}
+                />
+              );
             })
           }
         </div>

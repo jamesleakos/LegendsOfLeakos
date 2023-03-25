@@ -1,12 +1,16 @@
 const { v4: uuidv4 } = require('uuid');
+const gameMan = require('./gameManager.js');
+const MAX_PLAYERS = 2;
 
 class LoLPlayer {
-  constructor(socket_id, user_id, name, realm) {
+  constructor(socket_id, user_id, name) {
     this.socket_id = socket_id;
     this.user_id = user_id;
     this.name = name;
-    this.realm = realm;
     this.isConnected = true;
+    this.isReady = false;
+    // this is set to null because this is being handled by the restful API - it'll grab the realm once we go start the game
+    this.realm = null;
   }
 }
 
@@ -27,6 +31,10 @@ class Room {
 
   removePlayer(user_id) {
     this.players = this.players.filter((p) => p.user_id !== user_id);
+  }
+
+  checkReady() {
+    return this.players.every((p) => p.isReady) && this.players.length > 1;
   }
 }
 
@@ -78,12 +86,11 @@ class RoomManager {
     return this.socketIDToPlayer[socketID];
   }
 
-  createPlayer(user, playerSocket, realm = null) {
+  createPlayer(user, playerSocket) {
     const newPlayer = new LoLPlayer(
       playerSocket.id,
       user.id,
-      user.name.slice(0, 10),
-      realm
+      user.name.slice(0, 10)
     );
     this.players.push(newPlayer);
     this.socketIDToPlayer[playerSocket.id] = newPlayer;
@@ -100,11 +107,22 @@ class RoomManager {
   }
 
   addPlayerToRoom(room, player, playerSocket) {
+    player.isReady = false;
+
+    // don't let too many players join
+    if (room.players.length >= MAX_PLAYERS) return;
+
     // don't let a player join a room they're already in
     if (room.players.find((p) => p.user_id === player.user_id)) return;
 
     // add to io namespace
     playerSocket.join(room.id);
+    console.log(
+      'playerSocket with id: ',
+      playerSocket.id,
+      ' joined room: ',
+      room.id
+    );
 
     // add to new room
     room.addPlayer(player);
@@ -119,6 +137,7 @@ class RoomManager {
   }
 
   removePlayerFromRoom(room, player, playerSocket) {
+    player.isReady = false;
     // remove from room
     room.removePlayer(player.user_id);
     // remove from playerToRoom tracker
@@ -136,21 +155,12 @@ class RoomManager {
   }
 
   playerConnected(user, playerSocket) {
-    console.log(
-      'playerConnected with socket_id',
-      playerSocket.id,
-      'and user_id',
-      user.id
-    );
-    console.log(this.userIDToPlayer);
+    // console.log('playerConnected', user, user.id);
     let needsToJoinGame = false;
     const player = this.userIDToPlayer[user.id];
     if (player) {
-      console.log('found player');
       // update the player with the new socket
       player.socket_id = playerSocket.id;
-
-      console.log(this.rooms);
 
       // update the socketIDToPlayer tracker
       this.socketIDToPlayer[playerSocket.id] = player;
@@ -174,6 +184,7 @@ class RoomManager {
   }
 
   playerDisconnected(playerSocket) {
+    console.log('playerDisconnected', playerSocket.id);
     const player = this.socketIDToPlayer[playerSocket.id];
     const room = this.userIDToRoom[player.user_id];
     if (room && room.game && room.gameInProgress) {
@@ -181,6 +192,7 @@ class RoomManager {
       player.isConnected = false;
     } else {
       // remove from all
+      console.log('removing player', playerSocket.id);
       this.removePlayer(playerSocket);
     }
 
@@ -204,6 +216,19 @@ class RoomManager {
 
     // delete from trackers
     delete this.socketIDToPlayer[playerSocket.id];
+  }
+
+  checkForGameReady(player) {
+    const room = this.userIDToRoom[player.user_id];
+    if (!room) {
+      console.log('roomManager.checkforGameReady: no room found for player');
+      return false;
+    }
+    if (room.checkReady()) {
+      return room;
+    } else {
+      return false;
+    }
   }
 
   cleanupEmptyRooms() {

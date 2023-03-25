@@ -16,9 +16,8 @@ function PlayPage() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  // socket
-  const { socket } = useContext(SocketContext);
+  // navigate
+  const navigate = useNavigate();
 
   // UI states
   const [selectionState, setSelectionState] = useState('realm');
@@ -26,13 +25,40 @@ function PlayPage() {
   // realm and room selection - we've pulled it up one level so that we don't have a delay when switching between realms and rooms - if it needed to be even faster, we could move it to context
 
   //#region REALM SELECTION
+  const [realms, setRealms] = useState([]);
+  const [selectedRealmID, setSelectedRealmID] = useState(null);
+  useEffect(() => {
+    console.log('getting realms...');
+    axios
+      .get('/realms')
+      .then((res) => {
+        setRealms(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
+  const selectRealm = (realm_id) => {
+    setSelectedRealmID(realm_id);
+    axios
+      .patch('/realms/selected-realm', { realm_id })
+      .then((res) => {
+        setSelectedRealmID(realm_id);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   //#endregion
 
   //#region ROOM SELECTION and GAME START
+  // socket
+  const { socket } = useContext(SocketContext);
 
   const [rooms, setRooms] = useState([]);
   const [myRoomID, setMyRoomID] = useState(null);
+  const [amReady, setAmReady] = useState(false);
 
   useEffect(() => {
     if (!socket) return;
@@ -51,7 +77,19 @@ function PlayPage() {
     });
 
     socket.on('game-started', (room_id) => {
-      setGameStarted(true);
+      // navigate to the game page
+    });
+
+    socket.on('set-ready', (data) => {
+      setAmReady(data);
+    });
+
+    socket.on('server-message', (data) => {
+      console.log('server message', data);
+    });
+
+    socket.on('game-ended', (data) => {
+      console.log('game ended');
     });
 
     // on load and socket request the rooms
@@ -63,7 +101,9 @@ function PlayPage() {
       socket.off('you-joined-room');
       socket.off('you-left-room');
       socket.off('game-started');
-
+      socket.off('set-ready');
+      socket.off('server-message');
+      socket.off('game-ended');
       // leave the room if we're in one
       leaveRoom();
     };
@@ -84,8 +124,15 @@ function PlayPage() {
     socket.emit('request-leave-room');
   };
 
-  const startGame = () => {
-    socket.emit('request-start-game');
+  const setReady = () => {
+    socket.emit('request-toggle-ready');
+  };
+
+  const test = () => {
+    socket.emit('client-message');
+  };
+  const endGame = () => {
+    socket.emit('end-game');
   };
   //#endregion
 
@@ -93,7 +140,11 @@ function PlayPage() {
     <PlayPageStyled>
       <Navbar />
       {selectionState === 'realm' ? (
-        <RealmSelection />
+        <RealmSelection
+          realms={realms}
+          selectRealm={selectRealm}
+          selectedRealmID={selectedRealmID}
+        />
       ) : (
         <div
           className='section-selector'
@@ -103,7 +154,15 @@ function PlayPage() {
         </div>
       )}
       {selectionState === 'room' ? (
-        <RoomSelection rooms={rooms} requestNewRoom={requestNewRoom} />
+        <RoomSelection
+          amReady={amReady}
+          myRoomID={myRoomID}
+          rooms={rooms}
+          requestNewRoom={requestNewRoom}
+          joinRoom={joinRoom}
+          leaveRoom={leaveRoom}
+          setReady={setReady}
+        />
       ) : (
         <div
           className='section-selector'
@@ -112,6 +171,8 @@ function PlayPage() {
           Choose Room
         </div>
       )}
+      <button onClick={test}>test</button>
+      <button onClick={endGame}>endGame</button>
     </PlayPageStyled>
   );
 }

@@ -19,6 +19,10 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
     // Match User
+    console.log('passport: ');
+    console.log('email: ', email);
+    console.log('password: ', password);
+
     User.findOne({ email: email })
       .then((user) => {
         // Create new User
@@ -46,6 +50,8 @@ passport.use(
 
           // Return other user
         } else {
+          // console.log('user: ');
+          // console.log(user);
           // Match password
           bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) throw err;

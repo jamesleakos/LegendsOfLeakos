@@ -13,4 +13,20 @@ const getUserById = async (id) => {
   }
 };
 
-exports.getUserById = getUserById;
+const updateSelectedRealm = async (req, res) => {
+  try {
+    const result = await User.findOneAndUpdate(
+      { _id: req.user._id },
+      { selectedRealm: req.body.realm_id }
+    );
+    res.status(200).send(result.selectedRealm);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+};
+
+module.exports = {
+  getUserById,
+  updateSelectedRealm,
+};

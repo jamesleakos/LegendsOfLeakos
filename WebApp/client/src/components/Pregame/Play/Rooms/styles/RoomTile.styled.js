@@ -1,15 +1,13 @@
 import styled from 'styled-components';
 
-export const RealmTileStyled = styled.div`
-  --post-list-height: 200px;
-
+export const RoomTileStyled = styled.div`
   display: inline-block;
+  height: 200px;
   width: 150px;
-  height: var(--post-list-height);
   border: 1px solid black;
   border-radius: 5px;
+  margin: 10px;
   padding: 10px;
-  margin-right: 10px;
   transition: 0.5s;
 
   :hover {

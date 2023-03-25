@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const { Realm, DefaultRealm } = require('../models/Realm.js');
+const User = require('../models/Users.js');
 
 const createRealm = async (req, res) => {
   try {
@@ -33,18 +35,36 @@ const updateRealm = async (req, res) => {
 
 // get all the authenticated user's realms
 // if the user doesn't have an realms, get the default realms
-const getRealms = async (req, res) => {
+const getRealmsAPI = async (req, res) => {
   try {
     const realms = await Realm.find({ user_id: req.user._id });
     if (!realms) {
       res.status(404).json({ message: 'No realms found' });
     } else if (realms.length === 0) {
-      return getDefaultRealms(req, res);
+      return getDefaultRealmsAPI(req, res);
     } else {
       res.status(200).json(realms);
     }
   } catch (error) {
     res.status(500).json({ message: 'Error getting realms', error });
+  }
+};
+
+const getUserRealms = async (user) => {
+  try {
+    const realms = await Realm.find({
+      user_id: user._id,
+    });
+    if (!realms) {
+      console.log('ERROR: no realm object');
+    } else if (realms.length === 0) {
+      console.log('getUserRealms: no realms found, returning default realms');
+      return getDefaultRealms();
+    } else {
+      return realms;
+    }
+  } catch (error) {
+    console.log('Error getting realms', error);
   }
 };
 
@@ -64,17 +84,29 @@ const getRealmByID = async (realmID) => {
   }
 };
 
-const getDefaultRealms = async (req, res) => {
+const getDefaultRealmsAPI = async (req, res) => {
   try {
     const realms = await DefaultRealm.find();
     if (!realms) {
       return res.status(404).json({ message: 'No realms found' });
     } else {
-      console.log(realms);
       res.status(200).json(realms);
     }
   } catch (error) {
     res.status(500).json({ message: 'Error getting realms', error });
+  }
+};
+
+const getDefaultRealms = async () => {
+  try {
+    const realms = await DefaultRealm.find();
+    if (!realms) {
+      console.log('ERROR: no realm object');
+    } else {
+      return realms;
+    }
+  } catch (error) {
+    console.log('Error getting default realms', error);
   }
 };
 
@@ -100,9 +132,25 @@ const getDefaultRealmByID = async (realmID) => {
   }
 };
 
+const getUserSelectedRealm = async (userID) => {
+  try {
+    const user = User.findOne({ _id: userID });
+    if (!user) {
+      console.log('ERROR: no user object');
+      return null;
+    } else {
+      return getRealmByID(user.selectedRealm);
+    }
+  } catch (error) {
+    console.log('Error getting user selected realm', error);
+  }
+};
+
 module.exports = {
   createRealm,
   updateRealm,
-  getRealms,
+  getUserRealms,
+  getRealmsAPI,
   getRealmByID,
+  getUserSelectedRealm,
 };

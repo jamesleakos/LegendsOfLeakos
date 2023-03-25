@@ -3,9 +3,14 @@ const router = express.Router();
 const passport = require('passport');
 // internal
 const RealmController = require('../db/controllers/realm.js');
+const UserController = require('../db/controllers/user.js');
 
 router.get('/', (req, res) => {
-  RealmController.getRealms(req, res);
+  RealmController.getRealmsAPI(req, res);
+});
+
+router.patch('/selected-realm', (req, res) => {
+  UserController.updateSelectedRealm(req, res);
 });
 
 module.exports = router;

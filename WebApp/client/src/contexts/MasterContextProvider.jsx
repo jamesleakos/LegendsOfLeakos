@@ -6,12 +6,10 @@ import SocketContextProvider from './SocketContextProvider.jsx';
 const MasterContextProvider = ({ children }) => {
   return (
     <SoundContextProvider>
-      <AuthContextProvider>
-        <SocketContextProvider>
-          {/* Wrap with any other context providers */}
-          {children}
-        </SocketContextProvider>
-      </AuthContextProvider>
+      <SocketContextProvider>
+        {/* Auth needs access to socket */}
+        <AuthContextProvider>{children}</AuthContextProvider>
+      </SocketContextProvider>
     </SoundContextProvider>
   );
 };

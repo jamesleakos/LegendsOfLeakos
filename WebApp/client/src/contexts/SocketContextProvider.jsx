@@ -8,14 +8,27 @@ import { CONNECTION_URL } from '../network_constants.js';
 
 const SocketContextProvider = ({ children }) => {
   const [socket, setSocket] = React.useState(null);
+
   useEffect(() => {
+    console.log('socket provider:', socket);
+    if (socket) return;
+
     console.log('connecting to socket...');
     const s = io(CONNECTION_URL, { transport: ['websocket'] });
     setSocket(s);
   }, []);
 
+  const disconnectSocket = () => {
+    if (socket) {
+      console.log('disconnecting socket...');
+      socket.disconnect();
+      setSocket(null);
+    }
+  };
+
   const value = {
     socket,
+    disconnectSocket,
   };
   return (
     <SocketContext.Provider value={value}>{children}</SocketContext.Provider>

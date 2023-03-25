@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'player',
   },
+  selectedRealm: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
 });
 
 const User = mongoose.model('users', UserSchema);
