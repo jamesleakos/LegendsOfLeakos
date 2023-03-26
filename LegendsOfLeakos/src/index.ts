@@ -31,6 +31,12 @@ class GameServer {
       });
     }
   }
+  unlisten(playerSockets:any) {
+    for (let socket of playerSockets) {
+      socket.removeAllListeners('client-message');
+      socket.removeAllListeners('end-game');
+    }
+  }
   test(playerSocket:any, data:any) {
     console.log('GameServer: returning message');
     this.sendToRoom('server-message', 'Hello from server');

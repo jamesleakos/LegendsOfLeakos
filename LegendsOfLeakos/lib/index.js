@@ -33,6 +33,13 @@ var GameServer = /** @class */ (function () {
             _loop_1(socket);
         }
     };
+    GameServer.prototype.unlisten = function (playerSockets) {
+        for (var _i = 0, playerSockets_2 = playerSockets; _i < playerSockets_2.length; _i++) {
+            var socket = playerSockets_2[_i];
+            socket.removeAllListeners('client-message');
+            socket.removeAllListeners('end-game');
+        }
+    };
     GameServer.prototype.test = function (playerSocket, data) {
         console.log('GameServer: returning message');
         this.sendToRoom('server-message', 'Hello from server');

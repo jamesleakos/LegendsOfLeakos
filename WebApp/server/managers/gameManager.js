@@ -40,7 +40,7 @@ const startGame = async (room, io) => {
     },
     // end game callback
     (gameSummaryData) => {
-      endGame(room, io, gameSummaryData);
+      endGame(room, io, gameSummaryData, sockets);
     }
   );
   room.game.listen(sockets);
@@ -59,13 +59,17 @@ const sendToPlayer = (messageType, data, playerSocketID, io) => {
   if (client) client.emit(messageType, data);
 };
 
-const endGame = (room, io, gameSummaryData) => {
+const endGame = (room, io, gameSummaryData, sockets) => {
+  room.game.unlisten(sockets);
   room.gameInProgress = false;
   room.game = null;
   console.log(
     'save summary data to DB, update player stats, report to player, etc.: ',
     gameSummaryData
   );
+  for (let player of room.players) {
+    player.isReady = false;
+  }
   io.to(room.id).emit('game-ended');
 };
 

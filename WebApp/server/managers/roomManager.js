@@ -115,18 +115,13 @@ class RoomManager {
     // don't let a player join a room they're already in
     if (room.players.find((p) => p.user_id === player.user_id)) return;
 
-    // add to io namespace
+    // add to io namespace - this could get moved to game manager in the future, but it is okay for a pregame chat here
     playerSocket.join(room.id);
-    console.log(
-      'playerSocket with id: ',
-      playerSocket.id,
-      ' joined room: ',
-      room.id
-    );
 
     // add to new room
     room.addPlayer(player);
 
+    delete this.userIDToRoom[player.user_id];
     this.userIDToRoom[player.user_id] = room;
 
     // remove player from any other rooms they're in
@@ -141,7 +136,9 @@ class RoomManager {
     // remove from room
     room.removePlayer(player.user_id);
     // remove from playerToRoom tracker
-    delete this.userIDToRoom[player.user_id];
+    if (this.userIDToRoom[player.user_id] === room) {
+      delete this.userIDToRoom[player.user_id];
+    }
     //unsub from room messages
     playerSocket.leave(room.id);
 
@@ -151,7 +148,11 @@ class RoomManager {
 
   removePlayerFromTrackedRoom(player, playerSocket) {
     const oldRoom = this.userIDToRoom[player.user_id];
-    if (oldRoom) this.removePlayerFromRoom(oldRoom, player, playerSocket);
+    if (oldRoom) {
+      this.removePlayerFromRoom(oldRoom, player, playerSocket);
+    } else {
+      console.log('no room to remove player from');
+    }
   }
 
   playerConnected(user, playerSocket) {

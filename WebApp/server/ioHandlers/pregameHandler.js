@@ -63,6 +63,7 @@ module.exports = async (io, playerSocket) => {
   };
 
   const leaveRoom = () => {
+    console.log('pregame leave room');
     const player = roomMan.getPlayerBySocketID(playerSocket.id);
     if (!player) {
       console.log('ERROR: player not found in pregameHandler.leaveRoom');
