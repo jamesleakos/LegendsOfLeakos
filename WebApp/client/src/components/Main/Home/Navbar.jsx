@@ -39,7 +39,7 @@ function Navbar() {
       </div>
       <div className='navbar-item right'>
         <Link to='/test' className='clickable-link' onClick={logout}>
-          Logout
+          Flee
         </Link>
       </div>
       <div className='navbar-item right'>
