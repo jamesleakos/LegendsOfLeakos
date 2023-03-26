@@ -173,44 +173,48 @@ class RoomManager {
         // subscribe the player to the room and game they were in
         playerSocket.join(room.id);
 
-        needsToJoinGame = true;
-        return needsToJoinGame;
+        return room; // needs to rejoin game
       }
-      return needsToJoinGame;
+      {
+        return false; // does need to join game
+      }
     } else {
       // the player is new, create them
       this.createPlayer(user, playerSocket);
-      return needsToJoinGame;
+      return false; // does not need to join game
     }
   }
 
   playerDisconnected(playerSocket) {
-    console.log('playerDisconnected', playerSocket.id);
     const player = this.socketIDToPlayer[playerSocket.id];
+    console.log(
+      'player disconnecting with user_id:',
+      player.user_id,
+      'and socket_id:',
+      playerSocket.id
+    );
     const room = this.userIDToRoom[player.user_id];
     if (room && room.game && room.gameInProgress) {
-      // set to disconnected but don't remove
       player.isConnected = false;
+      if (room.players.filter((p) => p.isConnected).length === 0) {
+        // if no players are connected, shut down the room
+        this.rooms = this.rooms.filter((r) => r.id !== room.id);
+      }
     } else {
       // remove from all
-      console.log('removing player', playerSocket.id);
-      this.removePlayer(playerSocket);
+      console.log('removing player with socket_id:', playerSocket.id);
+      this.removePlayer(player, playerSocket);
     }
-
-    // TODO: we need to handle disconnections that never come back. Otherwise their game sticks around, and their room, and this player, and never gets cleaned up
   }
 
-  removePlayer(playerSocket) {
+  removePlayer(player, playerSocket) {
     // remove from room
-    this.removePlayerFromTrackedRoom(playerSocket);
+    this.removePlayerFromTrackedRoom(player, playerSocket);
 
-    const player = this.socketIDToPlayer[playerSocket.id];
-    if (player) {
-      const user_id = player.user_id;
-      // delete from userID tracker
-      delete this.userIDToPlayer[user_id];
-      delete this.userIDToRoom[user_id];
-    }
+    const user_id = player.user_id;
+    // delete from userID tracker
+    delete this.userIDToPlayer[user_id];
+    delete this.userIDToRoom[user_id];
 
     // remove from array - this auto removes it from the trackers as well?
     this.players = this.players.filter((p) => p.socket_id !== playerSocket.id);

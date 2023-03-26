@@ -5,7 +5,7 @@ import RoomTile from './RoomTile.jsx';
 // css
 import { RoomSelectionStyled } from './styles/RoomSelection.styled.js';
 
-function RoomSelection({ socket, setSelectionState }) {
+function RoomSelection({ socket }) {
   const [rooms, setRooms] = useState([]);
   const [myRoomID, setMyRoomID] = useState(null);
   const [amReady, setAmReady] = useState(false);
@@ -26,10 +26,6 @@ function RoomSelection({ socket, setSelectionState }) {
       setMyRoomID(null);
     });
 
-    socket.on('game-started', (room_id) => {
-      setSelectionState('game');
-    });
-
     socket.on('set-ready', (data) => {
       setAmReady(data);
     });
@@ -42,7 +38,6 @@ function RoomSelection({ socket, setSelectionState }) {
       socket.off('rooms-update');
       socket.off('you-joined-room');
       socket.off('you-left-room');
-      socket.off('game-started');
       socket.off('set-ready');
     };
   }, [socket]);

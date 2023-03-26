@@ -22,7 +22,20 @@ function PlayPage() {
   const { socket } = useContext(SocketContext);
   const [selectionState, setSelectionState] = useState('realm');
 
-  // realm and room selection - we've pulled it up one level so that we don't have a delay when switching between realms and rooms - if it needed to be even faster, we could move it to context
+  useEffect(() => {
+    if (!socket) return;
+    socket.on('game-started', (room_id) => {
+      setSelectionState('game');
+    });
+    socket.on('rejoined-game', (room_id) => {
+      setSelectionState('game');
+    });
+
+    return () => {
+      // have to leave everything here, otherwise the socket events will be subscribed to multiple times
+      socket.off('game-started');
+    };
+  }, [socket]);
 
   //#region REALM SELECTION
   const [realms, setRealms] = useState([]);
@@ -69,10 +82,7 @@ function PlayPage() {
           />
         )}
         {selectionState === 'room' ? (
-          <RoomSelection
-            socket={socket}
-            setSelectionState={setSelectionState}
-          />
+          <RoomSelection socket={socket} />
         ) : (
           <SectionSelector
             setSelectionState={() => setSelectionState('room')}

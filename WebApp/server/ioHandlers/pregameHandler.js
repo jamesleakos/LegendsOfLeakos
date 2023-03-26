@@ -7,16 +7,26 @@ module.exports = async (io, playerSocket) => {
   // on connection, create a user and add them to the room manager
   const user_id = playerSocket?.request?.session?.passport?.user;
   const user = await userController.getUserById(user_id);
+  console.log(
+    'player connected with user_id:',
+    user_id,
+    'and socket_id:',
+    playerSocket.id
+  );
+
   if (!user) {
     console.log("ERROR: this shouldn't happen, user not found");
     console.log('user_id', user_id);
     return;
   }
   // this is necessary for matching stuff
-  let needsToJoinGame = roomMan.playerConnected(user, playerSocket);
-  if (needsToJoinGame) {
-    // TODO - implement this later
-    // pretty much just need to run them through the game subscription process and then let the client know that they're in the game
+  let room = roomMan.playerConnected(user, playerSocket);
+  if (room) {
+    // we already subscribed them to the room
+    // we need to subscribe them to the game
+    room.game.listen([playerSocket]);
+    // then let the client know that they are in the game
+    playerSocket.emit('rejoined-game', room.id);
   }
 
   // on join, this will be sent
