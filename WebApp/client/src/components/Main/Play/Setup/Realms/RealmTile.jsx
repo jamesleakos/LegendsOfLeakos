@@ -3,14 +3,24 @@ import React from 'react';
 import { RealmTileStyled } from './styles/RealmTile.styled';
 
 function RealmTile({ realm, selectRealm, selected }) {
+  // const title = realm.name.toUpperCase();
+  const title = realm.name;
   return (
     <RealmTileStyled
-      onClick={() => {
-        selectRealm(realm._id);
-      }}
+    // onClick={() => {
+    //   selectRealm(realm._id);
+    // }}
     >
-      <div>{realm.name}</div>
-      {selected ? <div className='selected'>Selected</div> : null}
+      <div className={`interior-border ${selected ? ' selected' : ''}`}></div>
+      <div className='title'>{title}</div>
+      <div
+        className={`menu-button ${selected ? ' selected' : ''}`}
+        onClick={() => {
+          selectRealm(realm._id);
+        }}
+      >
+        {selected ? 'Selected' : 'Select Realm'}
+      </div>
     </RealmTileStyled>
   );
 }

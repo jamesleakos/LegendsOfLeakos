@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 // internal
 import RoomTile from './RoomTile.jsx';
+import TileScroller from '../../../../UtilityComponents/TileScroller.jsx';
 // css
 import { RoomSelectionStyled } from './styles/RoomSelection.styled.js';
 
@@ -9,6 +10,8 @@ function RoomSelection({ socket }) {
   const [rooms, setRooms] = useState([]);
   const [myRoomID, setMyRoomID] = useState(null);
   const [amReady, setAmReady] = useState(false);
+
+  //#region SOCKET EVENTS and EMITS
 
   useEffect(() => {
     if (!socket) return;
@@ -61,22 +64,43 @@ function RoomSelection({ socket }) {
     socket.emit('request-toggle-ready');
   };
 
+  //#endregion
+
+  const RoomMapper = () => {
+    return rooms.map((room, index) => {
+      return (
+        <RoomTile
+          key={room.id + index + ''}
+          room={room}
+          joinRoom={joinRoom}
+          selected={room.id === myRoomID}
+        />
+      );
+    });
+  };
+
   return (
     <RoomSelectionStyled>
-      <div>
-        <div className='top-bar'>
-          <h3>Select a Room</h3>
-          <button onClick={requestNewRoom}>Create New Room</button>
-          <button onClick={leaveRoom}>Leave Room</button>
-          <button onClick={setReady}>
-            {amReady ? 'Set Not Ready' : 'Set Ready'}
-          </button>
+      <h3 className='title'>Select a Room</h3>
+      <div className='button-bar'>
+        <div className='menu-button' onClick={requestNewRoom}>
+          Create New Room
         </div>
-
-        {rooms.map((room) => {
-          return <RoomTile key={room.id} room={room} joinRoom={joinRoom} />;
-        })}
+        <div className='menu-button' onClick={leaveRoom}>
+          Leave Room
+        </div>
+        <div className='menu-button' onClick={setReady}>
+          {amReady ? 'Set Not Ready' : 'Set Ready'}
+        </div>
       </div>
+
+      {rooms.length > 0 ? (
+        <TileScroller Mapper={RoomMapper} />
+      ) : (
+        <div className='no-rooms'>
+          <p>No open rooms. Create a new one!</p>
+        </div>
+      )}
     </RoomSelectionStyled>
   );
 }

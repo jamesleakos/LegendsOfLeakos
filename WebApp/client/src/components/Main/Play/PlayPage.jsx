@@ -65,7 +65,7 @@ function PlayPage() {
   };
   //#endregion
 
-  function Setup() {
+  function SelectorBasedSetup() {
     return (
       <div>
         <Navbar />
@@ -85,10 +85,25 @@ function PlayPage() {
           <RoomSelection socket={socket} />
         ) : (
           <SectionSelector
+            className='room-section-selector'
             setSelectionState={() => setSelectionState('room')}
             title='Choose Room'
           />
-        )}{' '}
+        )}
+      </div>
+    );
+  }
+
+  function Setup() {
+    return (
+      <div>
+        <Navbar />
+        <RealmSelection
+          realms={realms}
+          selectRealm={selectRealm}
+          selectedRealmID={selectedRealmID}
+        />
+        <RoomSelection socket={socket} />
       </div>
     );
   }

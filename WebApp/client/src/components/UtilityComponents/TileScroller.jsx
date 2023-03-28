@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 
-// components
-import RealmTile from './RealmTile.jsx';
 // css
-import { RealmScrollerStyled } from './styles/RealmScroller.styled.js';
+import { TileScrollerStyled } from './styles/TileScroller.styled.js';
 
-function RealmScroller({ realms, selectRealm, selectedRealmID }) {
+function TileScroller({ Mapper }) {
   // drag to scroll and text near cursor (all is for drag unless specified)
   // for drag
   const wrapperRef = useRef(null); // this is used by both
@@ -108,7 +105,7 @@ function RealmScroller({ realms, selectRealm, selectedRealmID }) {
   }, [velX]);
 
   return (
-    <RealmScrollerStyled>
+    <TileScrollerStyled>
       <div
         className='scroll-wrapper'
         ref={wrapperRef}
@@ -122,23 +119,11 @@ function RealmScroller({ realms, selectRealm, selectedRealmID }) {
         onTouchEnd={handleTouchEnd}
       >
         <div className='scroller'>
-          {
-            // map out the posts
-            realms.map((realm, index) => {
-              return (
-                <RealmTile
-                  key={realm.name + index + ''}
-                  realm={realm}
-                  selectRealm={selectRealm}
-                  selected={realm._id === selectedRealmID}
-                />
-              );
-            })
-          }
+          <Mapper />
         </div>
       </div>
-    </RealmScrollerStyled>
+    </TileScrollerStyled>
   );
 }
 
-export default RealmScroller;
+export default TileScroller;

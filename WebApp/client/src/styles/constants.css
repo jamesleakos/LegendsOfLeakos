@@ -1,0 +1,27 @@
+:root {
+  /* background colors */
+  --color-background-primary: #2a2a2a;
+  --color-background-secondary: #3a3a3a;
+  --color-background-light: #F4F4F4;
+  --color-background-navbar: #0b0b0b;
+
+  /* text color */
+  --text-color-primary: #ffffff;
+  --text-color-secondary: #bfbfbf;
+  --text-color-accent: red;
+
+  /* border color */
+  --border-color-bright: #ffffff;
+  --border-color-dim: #888888;
+
+  /* fonts */
+  --logo-font: 'Lobster', cursive;
+  --bold-medieval-font: 'Cinzel Decorative', cursive;
+
+  /* margins */
+  --margin-outside-main: 20px;
+  --margin-inside-main: 20px;
+
+  /* objects */
+  --realm-tile-height: 400px;
+}

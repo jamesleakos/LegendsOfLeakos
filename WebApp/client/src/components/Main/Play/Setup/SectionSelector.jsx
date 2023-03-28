@@ -1,13 +1,11 @@
 import React from 'react';
+import { SectionSelectorStyled } from './styles/SectionSelector.styled';
 
 function SectionSelector({ setSelectionState, title }) {
   return (
-    <div
-      className='section-selector'
-      onClick={() => setSelectionState('realm')}
-    >
+    <SectionSelectorStyled onClick={() => setSelectionState('realm')}>
       {title}
-    </div>
+    </SectionSelectorStyled>
   );
 }
 

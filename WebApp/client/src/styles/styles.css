@@ -1,10 +1,14 @@
+/* import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Exo+2:ital,wght@0,200;0,400;0,500;0,800;0,900;1,200;1,400;1,500;1,800;1,900&family=Lobster&display=swap');
+
+/* import constants */
+@import './constants.css';
+
 :root {
   --color-cursor: 40, 40, 40;
   --cursor-outline-shade: 0.3;
   --cursor-size: 10px;
   --cursor-outline-size: 30px;
-
-  --text-accent: red;
 }
 
 html,
@@ -12,6 +16,8 @@ body {
   cursor: none;
   margin: 0;
   padding: 0;
+  background-color: var(--color-background-primary);
+  color: var(--text-color-primary);
 }
 
 html *,
@@ -19,6 +25,12 @@ body * {
   cursor: none;
   margin: 0;
   padding: 0;
+
+  /* prevent text selection */
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+
 }
 
 .clickable {
@@ -27,23 +39,9 @@ body * {
   transition: 0.5s ease;
 }
 .clickable:hover {
-  color: var(--text-accent);
+  color: var(--text-color-accent);
+  transform: scale(1.2);
   -webkit-transform: scale(1.2);
-}
-
-.clickable-link {
-  display: table;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  text-decoration: none;
-  color: black;
-  transition: 0.5s ease;
-}
-.clickable-link:hover {
-  color: var(--text-accent);
-  transform: scale(1.05);
-  -webkit-transform: scale(1.05);
 }
 
 #cursor-dot,

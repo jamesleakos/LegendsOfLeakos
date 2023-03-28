@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 // constants
 import { CONNECTION_URL } from '../network_constants.js';
 // css
-import '../styles.css';
+import '../styles/styles.css';
 // context
 import MasterContextProvider from '../contexts/MasterContextProvider.jsx';
 import AuthContext from '../contexts/AuthContext.js';
@@ -16,6 +16,12 @@ import HomePage from './Main/Home/HomePage.jsx';
 import SignInUpPage from './Main/SignInUp/SignInUpPage.jsx';
 import Protected from './UtilityComponents/Protected.jsx';
 import PlayPage from './Main/Play/PlayPage.jsx';
+
+// font awesome import
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+library.add(faBars);
 
 // App
 // we're doing the Root thing to allow for useNavigate, which needs to be inside BrowserRouter

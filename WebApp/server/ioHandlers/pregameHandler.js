@@ -110,6 +110,7 @@ module.exports = async (io, playerSocket) => {
   const playerDisconnected = () => {
     console.log('player disconnected');
     roomMan.playerDisconnected(playerSocket);
+    io.emit('rooms-update', roomMan.getOpenRooms());
   };
 
   const fullRoomReport = () => {
