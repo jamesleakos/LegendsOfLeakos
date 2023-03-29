@@ -1,7 +1,7 @@
-import gameSettings from './gameSettings'
-import landTypes from './landTypes'
+import gameSettings from './gameSettings';
+import ImageMapping from './ImageMapping';
 
 export default {
   gameSettings: gameSettings,
-  landTypes: landTypes
+  imageMapping: ImageMapping,
 }
