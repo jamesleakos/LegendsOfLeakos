@@ -4,7 +4,15 @@ export default [
   {
     type: LandType.forest,
     name: 'Forest',
-    image: 'https://ik.imagekit.io/hfywj4j0a/LoL/canyon_city_N6bb4PTK3.png'
+    images: {
+      all: [],
+      shallow: [],
+      mid: [],
+      deep: [],
+      borders: {
+        tundra: [],
+      }
+    }
   },
   {
     type: LandType.ocean,

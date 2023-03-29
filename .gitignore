@@ -97,3 +97,6 @@ dist
 
 # DSSTORE
 .DS_Store
+
+# exclude image mapping
+ImageMapper/*/images
