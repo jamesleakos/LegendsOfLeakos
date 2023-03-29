@@ -52,7 +52,7 @@ function Navbar() {
           style={{ gridColumn: 3, borderWidth: '0 1px 0 0' }}
         >
           <Link
-            to='/test'
+            to='/collections'
             className='clickable-link'
             onClick={soundContext.playClick}
           >

@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 // imports
 import { SignInUpStyled } from './styles/SignInUpComp.styled.js';
+import AuthContext from '../../../contexts/AuthContext.js';
 
-function SignInUp({ setIsLoggedIn }) {
+function SignInUp() {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = React.useContext(AuthContext);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

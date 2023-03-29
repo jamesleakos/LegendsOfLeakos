@@ -3,5 +3,10 @@ declare const _default: {
         minPlayers: number;
         maxPlayers: number;
     };
+    landTypes: {
+        type: import("../Enums/landType").default;
+        name: string;
+        image: string;
+    }[];
 };
 export default _default;

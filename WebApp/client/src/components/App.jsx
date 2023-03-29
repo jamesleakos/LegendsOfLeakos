@@ -3,19 +3,19 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 // INTERNAL
-// constants
-import { CONNECTION_URL } from '../network_constants.js';
 // css
 import '../styles/styles.css';
 // context
 import MasterContextProvider from '../contexts/MasterContextProvider.jsx';
-import AuthContext from '../contexts/AuthContext.js';
 // components
-import AnimatedCursor from '../../helpers/animated_cursor.js';
+// pages
 import HomePage from './Main/Home/HomePage.jsx';
-import SignInUpPage from './Main/SignInUp/SignInUpPage.jsx';
-import Protected from './UtilityComponents/Protected.jsx';
 import PlayPage from './Main/Play/PlayPage.jsx';
+import SignInUpPage from './Main/SignInUp/SignInUpPage.jsx';
+import RealmPage from './Main/Realms/RealmPage.jsx';
+// utility components
+import AnimatedCursor from '../../helpers/animated_cursor.js';
+import Protected from './UtilityComponents/Protected.jsx';
 
 // font awesome import
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -35,9 +35,6 @@ function App() {
   );
 }
 function Root() {
-  // check if user is logged in
-  const { isLoggedIn, setIsLoggedIn } = React.useContext(AuthContext);
-
   return (
     <div>
       <AnimatedCursor />
@@ -45,7 +42,7 @@ function Root() {
         <Route
           path='/'
           element={
-            <Protected isLoggedIn={isLoggedIn}>
+            <Protected>
               <HomePage />
             </Protected>
           }
@@ -53,7 +50,7 @@ function Root() {
         <Route
           path='/play'
           element={
-            <Protected isLoggedIn={isLoggedIn}>
+            <Protected>
               <PlayPage />
             </Protected>
           }
@@ -61,15 +58,20 @@ function Root() {
         <Route
           path='/test'
           element={
-            <Protected isLoggedIn={isLoggedIn}>
+            <Protected>
               <div>TEST TEST TEST</div>
             </Protected>
           }
         />
         <Route
-          path='/sign-in-up'
-          element={<SignInUpPage setIsLoggedIn={setIsLoggedIn} />}
+          path='/collections'
+          element={
+            <Protected>
+              <RealmPage />
+            </Protected>
+          }
         />
+        <Route path='/sign-in-up' element={<SignInUpPage />} />
       </Routes>
     </div>
   );

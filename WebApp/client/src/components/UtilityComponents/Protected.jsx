@@ -1,6 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-function Protected({ isLoggedIn, children }) {
+// context
+import AuthContext from '../../contexts/AuthContext.js';
+function Protected({ children }) {
+  const { isLoggedIn } = React.useContext(AuthContext);
+
   if (!isLoggedIn) {
     return <Navigate to='/sign-in-up' replace />;
   }
