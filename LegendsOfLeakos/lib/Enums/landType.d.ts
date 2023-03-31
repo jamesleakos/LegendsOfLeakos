@@ -7,4 +7,4 @@ declare enum LandType {
     fells = 5,
     tundra = 6
 }
-export default LandType;
+export { LandType };

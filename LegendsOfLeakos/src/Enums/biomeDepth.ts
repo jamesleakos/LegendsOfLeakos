@@ -6,4 +6,4 @@ enum BiomeDepth
     deep
 }
 
-export default BiomeDepth;
+export { BiomeDepth };

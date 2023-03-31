@@ -1,4 +1,5 @@
-export default {
+import Enums from "../../Enums";
+const mapping:any = {
   "desert": {
     "all": [
       "https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/desert/all/hexDesertDunes00.png",
@@ -219,4 +220,41 @@ export default {
       "https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/tundra/shallow/hexPlainsColdSnowCovered03.png"
     ]
   }
+}
+
+const stringsToUrl = function (type:string, depth:string, mapObj:any = mapping) {
+  // the red tile
+  let url = 'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/red_hex.png';
+
+  const typeObj = mapObj[type];
+  // check the array at the depth - if there's nothing there, use the all array
+  if (typeObj[depth].length > 0) {
+    // choose random string from array
+    const randomIndex = Math.floor(
+      Math.random() * typeObj[depth].length
+    );
+    url = typeObj[depth][randomIndex];
+  } else {
+    const randomIndex = Math.floor(
+      Math.random() * typeObj.all.length
+    );
+    url = typeObj.all[randomIndex];
+  }
+
+  return url;
+}
+
+const intsToUrl = function (
+  type:number, 
+  depth:number, 
+  mapObj:any = mapping) {
+  const typeString:string = Enums.LandType[type];
+  const depthString:string = Enums.BiomeDepth[depth];
+  return stringsToUrl(typeString, depthString, mapObj);
+}
+
+export default {
+  mapping: mapping,
+  stringsToUrl: stringsToUrl,
+  intsToUrl: intsToUrl
 }

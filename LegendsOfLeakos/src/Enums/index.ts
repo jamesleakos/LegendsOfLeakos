@@ -1,5 +1,5 @@
-import LandType from './landType'
-import BiomeDepth from './biomeDepth'
+import { LandType } from './landType'
+import { BiomeDepth } from './biomeDepth'
 
 export default {
   LandType: LandType,

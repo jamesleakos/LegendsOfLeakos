@@ -8,7 +8,11 @@ import { RealmMapStyled } from './styles/RealmMap.styled.js';
 const RealmMap = ({ tiles }) => {
   return (
     <RealmMapStyled className='realm-map'>
-      <Hexmap tiles={tiles} />
+      {!!tiles.length && tiles.length > 0 ? (
+        <Hexmap tiles={tiles} />
+      ) : (
+        <div>NO TILES FOUND</div>
+      )}
     </RealmMapStyled>
   );
 };

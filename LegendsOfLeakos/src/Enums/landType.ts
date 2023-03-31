@@ -9,4 +9,4 @@ enum LandType
     tundra
 }
 
-export default LandType;
+export { LandType };

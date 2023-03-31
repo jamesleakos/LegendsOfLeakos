@@ -43,7 +43,7 @@ function RealmPage() {
   return (
     <RealmPageStyled>
       <Navbar />
-      {tiles.length > 0 ? <RealmMap tiles={tiles} /> : null}
+      <RealmMap tiles={tiles} />
     </RealmPageStyled>
   );
 }

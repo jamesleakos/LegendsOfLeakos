@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.LandType = void 0;
 var LandType;
 (function (LandType) {
     LandType[LandType["forest"] = 0] = "forest";
@@ -10,4 +11,4 @@ var LandType;
     LandType[LandType["fells"] = 5] = "fells";
     LandType[LandType["tundra"] = 6] = "tundra";
 })(LandType || (LandType = {}));
-exports.default = LandType;
+exports.LandType = LandType;

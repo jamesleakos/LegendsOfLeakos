@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = {
+var Enums_1 = __importDefault(require("../../Enums"));
+var mapping = {
     "desert": {
         "all": [
             "https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/desert/all/hexDesertDunes00.png",
@@ -221,4 +225,32 @@ exports.default = {
             "https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/tundra/shallow/hexPlainsColdSnowCovered03.png"
         ]
     }
+};
+var stringsToUrl = function (type, depth, mapObj) {
+    if (mapObj === void 0) { mapObj = mapping; }
+    // the red tile
+    var url = 'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/red_hex.png';
+    var typeObj = mapObj[type];
+    // check the array at the depth - if there's nothing there, use the all array
+    if (typeObj[depth].length > 0) {
+        // choose random string from array
+        var randomIndex = Math.floor(Math.random() * typeObj[depth].length);
+        url = typeObj[depth][randomIndex];
+    }
+    else {
+        var randomIndex = Math.floor(Math.random() * typeObj.all.length);
+        url = typeObj.all[randomIndex];
+    }
+    return url;
+};
+var intsToUrl = function (type, depth, mapObj) {
+    if (mapObj === void 0) { mapObj = mapping; }
+    var typeString = Enums_1.default.LandType[type];
+    var depthString = Enums_1.default.BiomeDepth[depth];
+    return stringsToUrl(typeString, depthString, mapObj);
+};
+exports.default = {
+    mapping: mapping,
+    stringsToUrl: stringsToUrl,
+    intsToUrl: intsToUrl
 };

@@ -14,13 +14,4 @@ export const HexmapStyled = styled.div`
     width: 100%;
     height: 90%;
   }
-
-  .hexagon-svg {
-    stroke: #000;
-    stroke-width: 1;
-  }
-
-  .hexagon-svg:hover {
-    fill: rgba(255, 255, 255, 1);
-  }
 `;

@@ -4,4 +4,4 @@ declare enum BiomeDepth {
     mid = 2,
     deep = 3
 }
-export default BiomeDepth;
+export { BiomeDepth };
