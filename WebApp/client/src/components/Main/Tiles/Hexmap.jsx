@@ -12,7 +12,7 @@ import Tile from './Tile.jsx';
 // css
 import { HexmapStyled } from './styles/Hexmap.styled.js';
 
-function Hexmap({ tiles }) {
+function Hexmap({ tiles, onClick }) {
   const rows = [7, 10, 11, 12, 11, 12, 11, 10, 7];
   const [availableHeight, setAvailableHeight] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(0);
@@ -65,12 +65,14 @@ function Hexmap({ tiles }) {
             return (
               <Tile
                 key={`${rowIndex}-${colIndex}`}
+                id={index}
                 x={x}
                 y={y}
                 hexagonSize={hexagonSize}
                 rowIndex={rowIndex}
                 colIndex={colIndex}
                 url={url}
+                onClick={onClick}
               />
             );
           });

@@ -5,11 +5,11 @@ import Hexmap from './Hexmap.jsx';
 // css
 import { RealmMapStyled } from './styles/RealmMap.styled.js';
 
-const RealmMap = ({ tiles }) => {
+const RealmMap = ({ tiles, onClick }) => {
   return (
     <RealmMapStyled className='realm-map'>
       {!!tiles.length && tiles.length > 0 ? (
-        <Hexmap tiles={tiles} />
+        <Hexmap tiles={tiles} onClick={onClick} />
       ) : (
         <div>NO TILES FOUND</div>
       )}

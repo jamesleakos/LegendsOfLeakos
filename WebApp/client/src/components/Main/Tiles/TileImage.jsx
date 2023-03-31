@@ -5,7 +5,6 @@ import React from 'react';
 import { TileImageStyled } from './styles/TileImage.styled.js';
 
 const TileImage = ({ x, y, hexagonSize, url }) => {
-  console.log('hexagonSize', hexagonSize);
   return (
     <TileImageStyled
       src={url}

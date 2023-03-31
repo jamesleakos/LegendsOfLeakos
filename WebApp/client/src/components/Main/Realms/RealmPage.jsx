@@ -43,7 +43,12 @@ function RealmPage() {
   return (
     <RealmPageStyled>
       <Navbar />
-      <RealmMap tiles={tiles} />
+      <RealmMap
+        tiles={tiles}
+        onClick={(id) => {
+          console.log(`tile with id ${id} clicked`);
+        }}
+      />
     </RealmPageStyled>
   );
 }
