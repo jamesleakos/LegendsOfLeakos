@@ -1,7 +1,10 @@
 // external
 import React, { useState, useEffect, useRef } from 'react';
 const {
-  Constants: { landTypes },
+  Constants: {
+    imageMapping: { landTypes },
+  },
+  Enums,
 } = require('legends-of-leakos');
 // internal
 // css
@@ -65,12 +68,32 @@ function Hexmap({ tiles }) {
             const x = xOffset + colIndex * Math.sqrt(3) * hexagonSize;
             const y = yOffset;
 
-            // const url = landTypes.find(
-            //   (lt) => lt.type === tiles[index].landType
-            // ).image;
+            const tileType = tiles[index].landType;
+            const typeString = Enums.LandType[tileType];
+            const depth = tiles[index].depth;
+            const depthString = Enums.BiomeDepth[depth];
+            console.log('depth:', depth);
+            console.log('depthString:', depthString);
 
-            const url =
-              'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/hexagon_fzbL_Cz-O.png?updatedAt=1680076686687';
+            // default red hex
+            let url =
+              'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/red_hex.png';
+
+            const typeObj = landTypes[typeString];
+            console.log(typeObj);
+            console.log(depthString);
+            if (typeObj[depthString].length > 0) {
+              // choose random string from array
+              const randomIndex = Math.floor(
+                Math.random() * typeObj[depthString].length
+              );
+              url = typeObj[depthString][randomIndex];
+            } else {
+              const randomIndex = Math.floor(
+                Math.random() * typeObj.all.length
+              );
+              url = typeObj.all[randomIndex];
+            }
 
             return (
               <div>
@@ -84,16 +107,17 @@ function Hexmap({ tiles }) {
                     fontSize: '1rem',
                   }}
                 >
-                  {!!tiles && tiles[index] ? tiles[index].landType : ''}
+                  {/* {!!tiles && tiles[index] ? tiles[index].landType : ''} */}
                 </div>
                 <img
                   src={url}
                   style={{
                     position: 'absolute',
                     left: x,
-                    top: y,
+                    top: y - (3 * hexagonSize) / 3,
                     zIndex: 9,
                     width: hexagonSize * Math.sqrt(3),
+                    height: 3 * hexagonSize,
                   }}
                 ></img>
                 <svg

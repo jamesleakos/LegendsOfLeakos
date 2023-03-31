@@ -37,7 +37,6 @@ function RealmPage() {
     });
     // sort tiles by id in ascending order
     tempTiles.sort((a, b) => a.id - b.id);
-    console.log('tempTiles: ', tempTiles);
     setTiles(tempTiles);
   }, [realms]);
 

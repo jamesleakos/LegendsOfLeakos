@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const IMAGEKITURL = 'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles';
 
 async function buildNestedObject(dir, relativePath = '') {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -22,7 +23,7 @@ async function buildNestedObject(dir, relativePath = '') {
         relativePath + '/' + entry.name
       );
     } else if (entry.isFile()) {
-      obj.push(relativePath + '/' + entry.name);
+      obj.push(IMAGEKITURL + relativePath + '/' + entry.name);
     }
   }
 
@@ -33,4 +34,9 @@ async function buildNestedObject(dir, relativePath = '') {
   const rootDir = './images';
   const nestedObject = await buildNestedObject(rootDir);
   console.log(JSON.stringify(nestedObject, null, 2));
+  // write to file
+  fs.writeFileSync(
+    '../output/landTypes.json',
+    JSON.stringify(nestedObject, null, 2)
+  );
 })();

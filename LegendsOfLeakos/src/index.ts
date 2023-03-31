@@ -1,5 +1,6 @@
 
 import Constants from "./Constants";
+import Enums from "./Enums";
 
 class GameServer {
   room: any;
@@ -46,7 +47,8 @@ class GameServer {
 
 module.exports = {
   Constants: Constants,
-  GameServer: GameServer
+  GameServer: GameServer,
+  Enums: Enums
 }
 
 

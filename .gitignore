@@ -100,3 +100,4 @@ dist
 
 # exclude image mapping
 ImageMapper/*/images
+ImageMapper/output
