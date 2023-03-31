@@ -29,6 +29,7 @@ function RealmPage() {
   }, []);
   useEffect(() => {
     if (realms.length === 0) return;
+    // TODO: this should be replaced by a Realm class function
     const tempTiles = [];
     realms[0].biomes.forEach((biome) => {
       biome.terrain.landTiles.forEach((tile) => {

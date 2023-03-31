@@ -60,6 +60,8 @@ function Hexmap({ tiles, onClick }) {
             const tileType = tiles[index].landType;
             const depth = tiles[index].depth;
 
+            console.log('tileType', tileType);
+            console.log('depth', depth);
             let url = intsToUrl(tileType, depth);
 
             return (

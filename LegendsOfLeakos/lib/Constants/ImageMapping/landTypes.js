@@ -246,7 +246,7 @@ var stringsToUrl = function (type, depth, mapObj) {
 var intsToUrl = function (type, depth, mapObj) {
     if (mapObj === void 0) { mapObj = mapping; }
     var typeString = Enums_1.default.LandType[type];
-    var depthString = Enums_1.default.BiomeDepth[depth];
+    var depthString = Enums_1.default.BiomeDepth[Math.min(depth, 2)];
     return stringsToUrl(typeString, depthString, mapObj);
 };
 exports.default = {

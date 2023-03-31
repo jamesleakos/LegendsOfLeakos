@@ -81,4 +81,12 @@ export const RealmTileStyled = styled.div`
     font-size: 1.2rem;
     background-color: red;
   }
+
+  .background {
+    height: 100%;
+  }
+
+  .background RealmMap {
+    height: 100%;
+  }
 `;

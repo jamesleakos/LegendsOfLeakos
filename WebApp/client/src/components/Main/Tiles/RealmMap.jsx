@@ -8,10 +8,10 @@ import { RealmMapStyled } from './styles/RealmMap.styled.js';
 const RealmMap = ({ tiles, onClick }) => {
   return (
     <RealmMapStyled className='realm-map'>
-      {!!tiles.length && tiles.length > 0 ? (
-        <Hexmap tiles={tiles} onClick={onClick} />
-      ) : (
+      {!tiles || !tiles.length ? (
         <div>NO TILES FOUND</div>
+      ) : (
+        <Hexmap tiles={tiles} onClick={onClick} />
       )}
     </RealmMapStyled>
   );
