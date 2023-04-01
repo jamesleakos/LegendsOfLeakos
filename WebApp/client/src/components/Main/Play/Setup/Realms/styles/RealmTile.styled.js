@@ -14,6 +14,7 @@ export const RealmTileStyled = styled.div`
   border-radius: 5px;
   margin-right: 10px;
   transition: 0.5s;
+  overflow: hidden;
 
   .title {
     max-height: calc(
@@ -64,6 +65,7 @@ export const RealmTileStyled = styled.div`
     color: var(--text-color-secondary);
     border: 1px solid var(--border-color-dim);
     // border-radius: 5px;
+    background-color: var(--color-background-navbar);
     text-align: center;
     line-height: var(--menu-button-height);
     font-family: var(--logo-font);
@@ -83,10 +85,15 @@ export const RealmTileStyled = styled.div`
   }
 
   .background {
-    height: 100%;
+    position: absolute;
+    top: -30px;
+    left: -250px;
+    width: 800px;
+    height: calc(var(--realm-tile-height) + 200px);
+    z-index: -1;
   }
 
-  .background RealmMap {
+  .realm-map {
     height: 100%;
   }
 `;
