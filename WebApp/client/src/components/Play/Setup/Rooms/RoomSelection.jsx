@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 // internal
 import RoomTile from './RoomTile.jsx';
-import TileScroller from '../../../../UtilityComponents/TileScroller.jsx';
+import TileScroller from '../../../UtilityComponents/TileScroller.jsx';
 // css
 import { RoomSelectionStyled } from './styles/RoomSelection.styled.js';
 

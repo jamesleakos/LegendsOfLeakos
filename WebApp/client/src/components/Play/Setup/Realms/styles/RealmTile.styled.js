@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import '../../../../../../styles/constants.css';
+import '../../../../../styles/constants.css';
 
 export const RealmTileStyled = styled.div`
   --interior-border-margin: 5px;

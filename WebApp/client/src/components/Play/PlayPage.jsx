@@ -11,7 +11,7 @@ import RoomSelection from './Setup/Rooms/RoomSelection.jsx';
 import SectionSelector from './Setup/SectionSelector.jsx';
 import GamePage from './Game/GamePage.jsx';
 // context
-import SocketContext from '../../../contexts/SocketContext.js';
+import SocketContext from '../../contexts/SocketContext.js';
 
 function PlayPage() {
   useEffect(() => {

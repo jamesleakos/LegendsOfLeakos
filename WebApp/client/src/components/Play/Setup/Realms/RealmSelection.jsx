@@ -1,7 +1,7 @@
 import React from 'react';
 
 // components
-import TileScroller from '../../../../UtilityComponents/TileScroller.jsx';
+import TileScroller from '../../../UtilityComponents/TileScroller.jsx';
 import RealmTile from './RealmTile.jsx';
 
 // css

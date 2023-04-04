@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 // imports
 import { SignInUpStyled } from './styles/SignInUpComp.styled.js';
-import AuthContext from '../../../contexts/AuthContext.js';
+import AuthContext from '../../contexts/AuthContext.js';
 
 function SignInUp() {
   const navigate = useNavigate();

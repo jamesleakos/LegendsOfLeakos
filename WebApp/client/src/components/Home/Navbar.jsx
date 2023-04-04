@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // internal
-import SoundContext from '../../../contexts/SoundContext.js';
-import AuthContext from '../../../contexts/AuthContext.js';
+import SoundContext from '../../contexts/SoundContext.js';
+import AuthContext from '../../contexts/AuthContext.js';
 // css
 import { NavbarStyled } from './styles/Navbar.styled.js';
 

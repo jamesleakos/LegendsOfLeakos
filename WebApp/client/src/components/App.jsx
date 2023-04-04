@@ -9,10 +9,11 @@ import '../styles/styles.css';
 import MasterContextProvider from '../contexts/MasterContextProvider.jsx';
 // components
 // pages
-import HomePage from './Main/Home/HomePage.jsx';
-import PlayPage from './Main/Play/PlayPage.jsx';
-import SignInUpPage from './Main/SignInUp/SignInUpPage.jsx';
-import RealmPage from './Main/Realms/RealmPage.jsx';
+import HomePage from './Home/HomePage.jsx';
+import PlayPage from './Play/PlayPage.jsx';
+import SignInUpPage from './SignInUp/SignInUpPage.jsx';
+import RealmPage from './Realms/RealmPage.jsx';
+import WaitlistPage from './Waitlist/WaitlistPage.jsx';
 // utility components
 import AnimatedCursor from '../../helpers/animated_cursor.js';
 import Protected from './UtilityComponents/Protected.jsx';
@@ -43,7 +44,7 @@ function Root() {
           path='/'
           element={
             <Protected>
-              <HomePage />
+              <WaitlistPage />
             </Protected>
           }
         />

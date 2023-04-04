@@ -2,7 +2,7 @@
   /* background colors */
   --color-background-primary: #2a2a2a;
   --color-background-secondary: #3a3a3a;
-  --color-background-light: #F4F4F4;
+  --color-background-light: #f4f4f4;
   --color-background-navbar: #0b0b0b;
 
   /* text color */
@@ -24,4 +24,5 @@
 
   /* objects */
   --realm-tile-height: 400px;
+  --navbar-height: 65px;
 }

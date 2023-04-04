@@ -1,5 +1,5 @@
 // external
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import axios from 'axios';
 
 // internal
@@ -11,6 +11,17 @@ const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = usePersistedState('isLoggedIn', false);
 
   const { disconnectSocket } = useContext(SocketContext);
+
+  useEffect(() => {
+    axios
+      .get('/auth/check-auth')
+      .then((res) => {
+        setIsLoggedIn(true);
+      })
+      .catch((err) => {
+        setIsLoggedIn(false);
+      });
+  }, []);
 
   const logout = () => {
     axios

@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import '../../../../styles/constants.css';
+import '../../../styles/constants.css';
 
 export const NavbarStyled = styled.div`
   // define some constants
-  --navbar-height: 65px;
   --border-color: var(--color-background-secondary);
 
   // navbar holder essentially
