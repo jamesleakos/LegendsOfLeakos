@@ -40,7 +40,7 @@ function Root() {
     <div>
       <AnimatedCursor />
       <Routes>
-        <Route path='/' element={<WaitlistPage />} />
+        <Route path='/' element={<HomePage />} />
         <Route
           path='/play'
           element={

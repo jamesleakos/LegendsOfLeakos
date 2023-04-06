@@ -8,7 +8,10 @@ const {
   },
 } = require('legends-of-leakos');
 // internal
+// components
 import Tile from './Tile.jsx';
+// hooks
+import usePersistedState from '../../hooks/usePersistedState.js';
 // css
 import { HexmapStyled } from './styles/Hexmap.styled.js';
 
@@ -19,6 +22,8 @@ function Hexmap({ tiles, onClick }) {
   const hexmapRef = useRef(null);
   const [hexagonSize, setHexagonSize] = useState(0);
 
+  //#region setting hexagonSize
+  // setting availableHeight and availableWidth
   useEffect(() => {
     const handleResizeWindow = () => {
       const hexmap = hexmapRef.current;
@@ -33,6 +38,7 @@ function Hexmap({ tiles, onClick }) {
     };
   }, []);
 
+  // setting hexagonSize based on changing availableHeight and availableWidth
   useEffect(() => {
     // hexagon size is 1/2 of the row height
     const sizeImpliedByHeight = ((availableHeight / rows.length) * 2) / 3;
@@ -42,6 +48,17 @@ function Hexmap({ tiles, onClick }) {
 
     setHexagonSize(Math.min(sizeImpliedByHeight, sizeImpliedByWidth));
   }, [availableHeight, availableWidth]);
+  //#endregion
+
+  // keeping the same urls for the same tile types and depths
+  const [indexToInfoAndURL, setIndexToInfoAndURL] = useState({});
+  const updateIndex = (index, typeDepthString, url) => {
+    setIndexToInfoAndURL((prev) => {
+      const newInfoAndURL = { ...prev };
+      newInfoAndURL[index] = { typeDepthString, url };
+      return newInfoAndURL;
+    });
+  };
 
   return (
     <HexmapStyled ref={hexmapRef}>
@@ -60,9 +77,16 @@ function Hexmap({ tiles, onClick }) {
             const tileType = tiles[index].landType;
             const depth = tiles[index].depth;
 
-            console.log('tileType', tileType);
-            console.log('depth', depth);
-            let url = intsToUrl(tileType, depth);
+            // here we get a url if we have one stored and it's still of the right type and depth, and make one if not
+            let url = '';
+            let typeDepthString = `${tileType}-${depth}`;
+            const infoAndURL = indexToInfoAndURL[index];
+            if (infoAndURL && infoAndURL.typeDepthString === typeDepthString) {
+              url = infoAndURL.url;
+            } else {
+              url = intsToUrl(tileType, depth);
+              updateIndex(index, typeDepthString, url);
+            }
 
             return (
               <Tile
