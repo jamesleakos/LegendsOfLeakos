@@ -260,7 +260,7 @@ const intsToUrl = function (
   mapObj: any = mapping
 ) {
   const typeString: string = Enums.LandType[type];
-  const depthString: string = Enums.BiomeDepth[Math.min(depth, 2)];
+  const depthString: string = Enums.BiomeDepth[Math.min(depth, 3)];
   return stringsToUrl(typeString, depthString, mapObj);
 };
 
