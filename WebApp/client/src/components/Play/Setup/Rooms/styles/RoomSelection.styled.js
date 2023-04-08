@@ -5,10 +5,7 @@ export const RoomSelectionStyled = styled.div`
   padding: var(--margin-outside-main);
   height: 600px;
 
-  .title {
-    border-bottom: 1px solid var(--text-color-accent);
-    font-family: var(--logo-font);
-    color: var(--text-color-accent);
+  .underlined-title {
     margin-bottom: 10px;
   }
 

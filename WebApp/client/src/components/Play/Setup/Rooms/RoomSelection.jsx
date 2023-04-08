@@ -81,7 +81,7 @@ function RoomSelection({ socket }) {
 
   return (
     <RoomSelectionStyled>
-      <h3 className='title'>Select a Room</h3>
+      <h3 className='underlined-title'>Select a Room</h3>
       <div className='button-bar'>
         <div className='menu-button' onClick={requestNewRoom}>
           Create New Room

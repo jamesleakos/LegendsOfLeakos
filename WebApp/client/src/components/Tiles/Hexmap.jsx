@@ -15,7 +15,7 @@ import usePersistedState from '../../hooks/usePersistedState.js';
 // css
 import { HexmapStyled } from './styles/Hexmap.styled.js';
 
-function Hexmap({ tiles, onClick }) {
+function Hexmap({ tiles, onClick, hover }) {
   const rows = [7, 10, 11, 12, 11, 12, 11, 10, 7];
   const [availableHeight, setAvailableHeight] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(0);
@@ -99,6 +99,7 @@ function Hexmap({ tiles, onClick }) {
                 colIndex={colIndex}
                 url={url}
                 onClick={onClick}
+                hover={hover}
               />
             );
           });

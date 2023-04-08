@@ -46,10 +46,29 @@ function RealmPage() {
   return (
     <RealmPageStyled>
       <Navbar />
-      <RealmWrapper realm={selectedRealm} />
-      {displayState === 'select-realm' && <RealmList />}
-      {displayState === 'edit-realm' && <BiomeList />}
-      {displayState === 'edit-realm' && <LandTypeSelectorBar />}
+      <div className='title-bar'>
+        <div className='back-button'>Back</div>
+        <div className='realm-title'>{selectedRealm?.name}</div>
+      </div>
+      <div className='main-content'>
+        {displayState === 'select-realm' && (
+          <RealmList
+            realms={realms}
+            selectedRealm={selectedRealm}
+            setSelectedRealm={setSelectedRealm}
+          />
+        )}
+        {displayState === 'edit-realm' && <BiomeList />}
+        <RealmWrapper
+          realm={selectedRealm}
+          displayState={displayState}
+          setDisplayState={setDisplayState}
+        />
+        {displayState === 'select-realm' && (
+          <div className='select-realm-button'>Back</div>
+        )}
+        {displayState === 'edit-realm' && <LandTypeSelectorBar />}
+      </div>
     </RealmPageStyled>
   );
 }

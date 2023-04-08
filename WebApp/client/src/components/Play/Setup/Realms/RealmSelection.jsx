@@ -45,7 +45,7 @@ function RealmSelection({ realms, selectRealm, selectedRealmID }) {
       }}
     >
       <div className='fader'></div>
-      <h3>Choose your Realm</h3>
+      <h3 className='underlined-title'>Choose your Realm</h3>
       <TileScroller Mapper={RealmMapper} />
     </RealmSelectionStyled>
   );

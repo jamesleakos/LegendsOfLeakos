@@ -25,4 +25,7 @@
   /* objects */
   --realm-tile-height: 400px;
   --navbar-height: 65px;
+
+  /* realm editor area */
+  --title-bar-height: 50px;
 }

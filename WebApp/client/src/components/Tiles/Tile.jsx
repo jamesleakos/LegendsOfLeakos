@@ -8,7 +8,7 @@ import TileHexagon from './TileHexagon.jsx';
 // css
 import { TileStyled } from './styles/Tile.styled.js';
 
-function Tile({ id, x, y, hexagonSize, url, onClick }) {
+function Tile({ id, x, y, hexagonSize, url, onClick, hover }) {
   return (
     <TileStyled
       // confusingly, pointer events are disabled for the parent, but enabled for the svg, but that triggers it here
@@ -20,7 +20,7 @@ function Tile({ id, x, y, hexagonSize, url, onClick }) {
       {/* if we need to add any text, this is it */}
       {/* <TileText x={x} y={y} hexagonSize={hexagonSize} text={'test'} /> */}
       <TileImage x={x} y={y} hexagonSize={hexagonSize} url={url} />
-      <TileHexagon x={x} y={y} hexagonSize={hexagonSize} />
+      {hover && <TileHexagon x={x} y={y} hexagonSize={hexagonSize} />}
     </TileStyled>
   );
 }

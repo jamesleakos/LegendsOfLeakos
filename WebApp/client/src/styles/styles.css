@@ -11,6 +11,8 @@
   --cursor-outline-size: 30px;
 }
 
+/* #region  HTML AND BODY */
+
 html,
 body {
   cursor: none;
@@ -32,6 +34,8 @@ body * {
   user-select: none; /* Standard syntax */
 }
 
+/* #endregion */
+
 .clickable {
   text-decoration: none;
   color: black;
@@ -42,6 +46,8 @@ body * {
   transform: scale(1.2);
   -webkit-transform: scale(1.2);
 }
+
+/* #region CURSOR CSS */
 
 #cursor-dot,
 #cursor-dot-outline {
@@ -67,3 +73,15 @@ body * {
   height: var(--cursor-outline-size);
   background-color: rgba(var(--color-cursor), var(--cursor-outline-shade));
 }
+
+/* #endregion */
+
+/* #region TEXT STYLING - TITLES, ETC */
+
+.underlined-title {
+  border-bottom: 1px solid var(--text-color-accent);
+  font-family: var(--logo-font);
+  color: var(--text-color-accent);
+}
+
+/* #endregion */

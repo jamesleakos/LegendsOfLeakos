@@ -16,14 +16,8 @@ export const RealmSelectionStyled = styled.div`
     z-index: 3;
   }
 
-  h3 {
-    position: relative;
-    display: block;
-    border-bottom: 1px solid var(--text-color-accent);
-    font-family: var(--logo-font);
-    color: var(--text-color-accent);
+  .underlined-title {
     z-index: 3;
-    // margin-bottom: var(--margin-inside-main);
   }
 
   .fader {

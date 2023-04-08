@@ -3,11 +3,28 @@ import React, { useEffect, useState } from 'react';
 
 // internal
 // components
+import RealmTile from './RealmTile.jsx';
 //css
 import { RealmListStyled } from './styles/RealmList.styled.js';
 
-function RealmList({}) {
-  return <RealmListStyled>Realm List</RealmListStyled>;
+function RealmList({ realms, selectedRealm, setSelectedRealm }) {
+  return (
+    <RealmListStyled>
+      <div className='underlined-title'>Realms</div>
+      <div className='realmtile-holder'>
+        {realms.map((realm) => {
+          return (
+            <RealmTile
+              key={realm._id}
+              realm={realm}
+              isSelected={realm._id === selectedRealm._id}
+              setSelectedRealm={setSelectedRealm}
+            />
+          );
+        })}
+      </div>
+    </RealmListStyled>
+  );
 }
 
 export default RealmList;
