@@ -40,14 +40,56 @@ function RealmPage() {
   //#region DISPLAY STATE
 
   const [displayState, setDisplayState] = useState('select-realm');
+  const handleBack = () => {
+    if (displayState === 'edit-realm') {
+      setDisplayState('select-realm');
+    } else if (displayState === 'edit-biome') {
+      setDisplayState('edit-realm');
+    }
+  };
 
   //#endregion
 
+  // #region BIOME FUNCTIONS
+
+  const [outlinedTileIndices, setOutlinedTileIndices] = useState([]);
+  const mouseOverBiome = (biome) => {
+    if (!biome) {
+      setOutlinedTileIndices([]);
+      return;
+    }
+    if (displayState === 'select-realm') return;
+
+    const tempIndices = [];
+    biome.terrain.landTiles.forEach((tile) => {
+      tempIndices.push(tile.id);
+    });
+    // sort tiles by id in ascending order
+    tempIndices.sort((a, b) => a.id - b.id);
+    setOutlinedTileIndices(tempIndices);
+  };
+
+  // #endregion
+
+  const formatImageLink = (link) => {
+    return `linear-gradient( rgba(0, 0, 0, .5), rgba(0, 0, 0, .5) ), url('${link}')`;
+  };
+
   return (
-    <RealmPageStyled>
+    <RealmPageStyled
+      style={{
+        backgroundImage: formatImageLink(
+          'https://ik.imagekit.io/hfywj4j0a/LoL/canyon_city_N6bb4PTK3.png'
+        ),
+      }}
+    >
       <Navbar />
       <div className='title-bar'>
-        <div className='back-button'>Back</div>
+        {displayState !== 'select-realm' && (
+          <div className='back-button' onClick={handleBack}>
+            Back
+          </div>
+        )}
         <div className='realm-title'>{selectedRealm?.name}</div>
       </div>
       <div className='main-content'>
@@ -58,11 +100,17 @@ function RealmPage() {
             setSelectedRealm={setSelectedRealm}
           />
         )}
-        {displayState === 'edit-realm' && <BiomeList />}
+        {displayState === 'edit-realm' && (
+          <BiomeList
+            biomes={selectedRealm?.biomes}
+            mouseOverBiome={mouseOverBiome}
+          />
+        )}
         <RealmWrapper
           realm={selectedRealm}
           displayState={displayState}
           setDisplayState={setDisplayState}
+          outlinedTileIndices={outlinedTileIndices}
         />
         {displayState === 'select-realm' && (
           <div className='select-realm-button'>Back</div>

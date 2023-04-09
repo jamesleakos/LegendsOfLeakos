@@ -4,7 +4,6 @@ import { RealmTileStyled } from './styles/RealmTile.styled.js';
 import RealmMap from '../Tiles/RealmMap.jsx';
 
 function RealmTile({ realm, isSelected, setSelectedRealm }) {
-  const title = realm.name;
   // TODO - relace with a Realm class function
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
@@ -26,7 +25,7 @@ function RealmTile({ realm, isSelected, setSelectedRealm }) {
       }}
     >
       <div className={`interior-border ${isSelected ? ' selected' : ''}`}></div>
-      <div className='title'>{title}</div>
+      <div className='title'>{realm.name}</div>
       <div className='background'>
         <RealmMap tiles={tiles} />
       </div>

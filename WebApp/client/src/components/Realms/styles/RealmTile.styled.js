@@ -42,12 +42,14 @@ export const RealmTileStyled = styled.div`
     border-radius: 5px;
     transition: 0.5s;
   }
-  .interior-border.selected {
-    border-color: var(--border-color-bright);
-  }
   .interior-border:hover {
     border-color: var(--border-color-bright);
+    // border-color: gold;
   }
+  .interior-border.selected {
+    border-color: gold;
+  }
+
 
   .background {
     position: absolute;

@@ -5,22 +5,27 @@ export const RealmWrapperStyled = styled.div`
   grid-column: 2;
   height: calc(100vh - var(--navbar-height) - var(--title-bar-height));
   width: 100%;
-  transition: 0.5s ease;
+  // transition: 0.5s ease;
 
   .realm-map-wrapper {
-    border: 1px solid var(--border-color-dim);
+    border: 3px solid gold;
+    border-radius: 25px;
     padding: 40px;
+    background-color: black;
+    // transition: 0.5s ease;
   }
-  .realm-map-wrapper:hover {
-    border: 1px solid var(--border-color-bright);
+  .hoverable.realm-map-wrapper:hover {
+    // border: 3px solid white;
+
+    .realm-map {
+      transform: scale(1.02);
+      -webkit-transform: scale(1.02);
+    }
   }
 
   .realm-map {
     height: 100%;
     transition: 0.5s ease;
   }
-  .realm-map:hover {
-    transform: scale(1.01);
-    -webkit-transform: scale(1.01);
-  }
+
 `;

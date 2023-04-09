@@ -6,6 +6,12 @@ export const RealmPageStyled = styled.div`
 
   height: 100vh;
   overflow: hidden;
+  // background-color: var(--color-background-light);
+  // background image
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 
   .main-content {
     display: grid;
@@ -14,8 +20,9 @@ export const RealmPageStyled = styled.div`
 
   .title-bar {
     width: 100vw;
+    position: relative;
     height: var(--title-bar-height);
-    background-color: var(--color-background-primary);
+    // background-color: var(--color-background-primary);
     text-align: center;
     line-height: var(--title-bar-height);
   }
@@ -27,15 +34,17 @@ export const RealmPageStyled = styled.div`
   }
 
   .back-button {
-    display: inline-block;
-    float: left;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 100px;
     height: var(--back-button-height);
     font-size: 0.8rem;
     padding: 5px;
     color: var(--text-color-secondary);
     border: 1px solid var(--border-color-dim);
     // border-radius: 5px;
-    background-color: var(--color-background-navbar);
+    // background-color: var(--color-background-navbar);
     text-align: center;
     line-height: var(--back-button-height);
     font-family: var(--logo-font);

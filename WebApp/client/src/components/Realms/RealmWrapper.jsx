@@ -9,7 +9,12 @@ import RealmMap from '../Tiles/RealmMap.jsx';
 //css
 import { RealmWrapperStyled } from './styles/RealmWrapper.styled.js';
 
-function RealmWrapper({ realm, displayState, setDisplayState }) {
+function RealmWrapper({
+  realm,
+  displayState,
+  setDisplayState,
+  outlinedTileIndices,
+}) {
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
     if (!realm) return;
@@ -36,8 +41,6 @@ function RealmWrapper({ realm, displayState, setDisplayState }) {
   useEffect(() => {
     const handleResizeWindow = () => {
       // based on the css
-      console.log('windowHeight', windowHeight);
-      console.log('windowWidth', windowWidth);
       setAvailableHeight(windowHeight - 300);
       setAvailableWidth((windowWidth * 3) / 5);
     };
@@ -50,8 +53,6 @@ function RealmWrapper({ realm, displayState, setDisplayState }) {
   }, [windowHeight, windowWidth]);
 
   useEffect(() => {
-    console.log('availableHeight', availableHeight);
-    console.log('availableWidth', availableWidth);
     // TODO - rows should come from a constant somewhere
     const rows = [7, 10, 11, 12, 11, 12, 11, 10, 7];
     // hexagon size is 1/2 of the row height
@@ -77,12 +78,17 @@ function RealmWrapper({ realm, displayState, setDisplayState }) {
   return (
     <RealmWrapperStyled ref={wrapperRef}>
       <div
-        className='realm-map-wrapper'
+        className={
+          displayState === 'select-realm'
+            ? 'hoverable realm-map-wrapper'
+            : 'realm-map-wrapper'
+        }
         style={{ ...size }}
         onClick={handleClick}
       >
         <RealmMap
           tiles={tiles}
+          outlinedTileIndices={outlinedTileIndices}
           onClick={(id) => {
             console.log(`tile with id ${id} clicked`);
           }}

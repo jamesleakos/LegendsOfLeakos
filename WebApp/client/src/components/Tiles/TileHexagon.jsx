@@ -17,7 +17,8 @@ const Hexagon = ({ x, y, size }) => {
   return <polygon className='hexagon' points={points} />;
 };
 
-const TileHexagon = ({ x, y, hexagonSize }) => {
+const TileHexagon = ({ x, y, hexagonSize, borderAlwaysOn }) => {
+  const border = borderAlwaysOn ? { stroke: 'gold', strokeWidth: 4 } : null;
   return (
     <TileHexagonStyled
       width={hexagonSize * Math.sqrt(3)}
@@ -26,6 +27,7 @@ const TileHexagon = ({ x, y, hexagonSize }) => {
         position: 'absolute',
         left: x,
         top: y,
+        ...border,
       }}
     >
       <Hexagon x={0} y={0} size={hexagonSize} />

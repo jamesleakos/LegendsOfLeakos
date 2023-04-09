@@ -3,6 +3,7 @@
   --color-background-primary: #2a2a2a;
   --color-background-secondary: #3a3a3a;
   --color-background-light: #f4f4f4;
+  --color-background-light-secondary: #f4f4f4;
   --color-background-navbar: #0b0b0b;
 
   /* text color */
@@ -27,5 +28,5 @@
   --navbar-height: 65px;
 
   /* realm editor area */
-  --title-bar-height: 50px;
+  --title-bar-height: 80px;
 }
