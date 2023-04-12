@@ -17,16 +17,17 @@ const Hexagon = ({ x, y, size }) => {
   return <polygon className='hexagon' points={points} />;
 };
 
-const TileHexagon = ({ x, y, hexagonSize, borderAlwaysOn }) => {
+const TileHexagon = ({ hexagonSize, borderAlwaysOn }) => {
   const border = borderAlwaysOn ? { stroke: 'gold', strokeWidth: 4 } : null;
   return (
     <TileHexagonStyled
+      className='tile-hexagon'
       width={hexagonSize * Math.sqrt(3)}
       height={2 * hexagonSize}
       style={{
         position: 'absolute',
-        left: x,
-        top: y,
+        left: 0,
+        top: 0,
         ...border,
       }}
     >

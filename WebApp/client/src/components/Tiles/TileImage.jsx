@@ -4,14 +4,14 @@ import React from 'react';
 // css
 import { TileImageStyled } from './styles/TileImage.styled.js';
 
-const TileImage = ({ x, y, hexagonSize, url }) => {
+const TileImage = ({ hexagonSize, url }) => {
   return (
     <TileImageStyled
       src={url}
       style={{
         position: 'absolute',
-        left: x,
-        top: y - (3 * hexagonSize) / 3,
+        left: 0,
+        top: (-1 * (3 * hexagonSize)) / 3,
         zIndex: 9,
         width: hexagonSize * Math.sqrt(3),
         height: 3 * hexagonSize,

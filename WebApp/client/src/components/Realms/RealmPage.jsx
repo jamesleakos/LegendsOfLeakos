@@ -8,10 +8,11 @@ import Navbar from '../Home/Navbar.jsx';
 import RealmWrapper from './RealmWrapper.jsx';
 import RealmList from './RealmList.jsx';
 import BiomeList from './BiomeList.jsx';
-import LandTypeSelectorBar from './LandTypeSelectorBar.jsx';
 import CardDisplay from './CardDisplay.jsx';
 //css
 import { RealmPageStyled } from './styles/RealmPage.styled.js';
+// hooks
+import useMouseDown from '../../hooks/useMouseDown.js';
 
 function RealmPage() {
   useEffect(() => {
@@ -71,9 +72,32 @@ function RealmPage() {
 
   // #endregion
 
+  // #region LAND TYPE SELECTOR
+
+  const [landTypeSelected, setLandTypeSelected] = useState(0);
+
   const formatImageLink = (link) => {
     return `linear-gradient( rgba(0, 0, 0, .5), rgba(0, 0, 0, .5) ), url('${link}')`;
   };
+
+  const landTileClicked = (tile_index) => {
+    if (displayState === 'select-realm') return;
+    console.log('landTileClicked', tile_index);
+  };
+
+  const isMouseDown = useMouseDown();
+  const landTileEntered = (tile_index) => {
+    if (displayState === 'select-realm') return;
+    if (isMouseDown) {
+      console.log('landTileEntered', tile_index);
+    }
+  };
+
+  const selfSelectorReturn = (tile_index, landType) => {
+    console.log('realm page.selfSelectorReturn: ', tile_index, landType);
+  };
+
+  //#endregion
 
   return (
     <RealmPageStyled
@@ -111,11 +135,16 @@ function RealmPage() {
           displayState={displayState}
           setDisplayState={setDisplayState}
           outlinedTileIndices={outlinedTileIndices}
+          setLandTypeSelected={setLandTypeSelected}
+          landTypeSelected={landTypeSelected}
+          landTileClicked={landTileClicked}
+          landTileEntered={landTileEntered}
+          landTileLeft={() => {}}
+          selfSelectorReturn={selfSelectorReturn}
         />
         {displayState === 'select-realm' && (
           <div className='select-realm-button'>Back</div>
         )}
-        {displayState === 'edit-realm' && <LandTypeSelectorBar />}
       </div>
     </RealmPageStyled>
   );

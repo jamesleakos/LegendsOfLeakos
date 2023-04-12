@@ -5,7 +5,16 @@ import Hexmap from './Hexmap.jsx';
 // css
 import { RealmMapStyled } from './styles/RealmMap.styled.js';
 
-const RealmMap = ({ tiles, onClick, hover, outlinedTileIndices }) => {
+const RealmMap = ({
+  tiles,
+  onClickTile,
+  onRightClickTile,
+  onMouseEnterTile,
+  onMouseLeaveTile,
+  outlineOnHover,
+  outlinedTileIndices,
+  selfSelectorReturn,
+}) => {
   return (
     <RealmMapStyled className='realm-map'>
       {!tiles || !tiles.length ? (
@@ -13,9 +22,13 @@ const RealmMap = ({ tiles, onClick, hover, outlinedTileIndices }) => {
       ) : (
         <Hexmap
           tiles={tiles}
-          onClick={onClick}
-          hover={hover}
+          onClickTile={onClickTile}
+          onRightClickTile={onRightClickTile}
+          onMouseEnterTile={onMouseEnterTile}
+          onMouseLeaveTile={onMouseLeaveTile}
+          outlineOnHover={outlineOnHover}
           outlinedTileIndices={outlinedTileIndices}
+          selfSelectorReturn={selfSelectorReturn}
         />
       )}
     </RealmMapStyled>

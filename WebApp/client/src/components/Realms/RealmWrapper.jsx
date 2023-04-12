@@ -6,6 +6,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import useWindowDimensions from '../../hooks/useWindowDimensions.js';
 // components
 import RealmMap from '../Tiles/RealmMap.jsx';
+import LandTypeSelectorBar from './LandTypeSelectorBar.jsx';
 //css
 import { RealmWrapperStyled } from './styles/RealmWrapper.styled.js';
 
@@ -14,7 +15,14 @@ function RealmWrapper({
   displayState,
   setDisplayState,
   outlinedTileIndices,
+  setLandTypeSelected,
+  landTypeSelected,
+  landTileClicked,
+  landTileEntered,
+  landTileLeft,
+  selfSelectorReturn,
 }) {
+  // #region GETTING TILES FROM REALM
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
     if (!realm) return;
@@ -30,6 +38,8 @@ function RealmWrapper({
     setTiles(tempTiles);
   }, [realm]);
 
+  // #endregion
+
   // #region SIZING THE MAP
 
   const { windowHeight, windowWidth } = useWindowDimensions();
@@ -41,7 +51,7 @@ function RealmWrapper({
   useEffect(() => {
     const handleResizeWindow = () => {
       // based on the css
-      setAvailableHeight(windowHeight - 300);
+      setAvailableHeight(windowHeight - 400);
       setAvailableWidth((windowWidth * 3) / 5);
     };
 
@@ -70,13 +80,21 @@ function RealmWrapper({
 
   // #endregion
 
+  // #region CLICK HANDLER
   const handleClick = (e) => {
-    if (displayState !== 'select-realm') return;
+    if (displayState !== 'select-realm' || !realm) return;
     setDisplayState('edit-realm');
   };
+  // #endregion
 
   return (
-    <RealmWrapperStyled ref={wrapperRef}>
+    <RealmWrapperStyled
+      className='realm-wrapper'
+      ref={wrapperRef}
+      onContextMenu={(e) => {
+        e.preventDefault();
+      }}
+    >
       <div
         className={
           displayState === 'select-realm'
@@ -89,10 +107,21 @@ function RealmWrapper({
         <RealmMap
           tiles={tiles}
           outlinedTileIndices={outlinedTileIndices}
-          onClick={(id) => {
-            console.log(`tile with id ${id} clicked`);
-          }}
+          onClickTile={landTileClicked}
+          onRightClickTile={null}
+          onMouseEnterTile={landTileEntered}
+          onMouseLeaveTile={landTileLeft}
+          outlineOnHover={displayState !== 'select-realm'}
+          selfSelectorReturn={
+            displayState === 'edit-realm' ? selfSelectorReturn : null
+          }
         />
+        {displayState === 'edit-realm' && (
+          <LandTypeSelectorBar
+            landTypeSelected={landTypeSelected}
+            setLandTypeSelected={setLandTypeSelected}
+          />
+        )}
       </div>
     </RealmWrapperStyled>
   );

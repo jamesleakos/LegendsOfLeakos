@@ -1,12 +1,6 @@
 // external
 import React, { useState, useEffect, useRef } from 'react';
-const {
-  Constants: {
-    imageMapping: {
-      landTypes: { intsToUrl },
-    },
-  },
-} = require('legends-of-leakos');
+
 // internal
 // components
 import Tile from './Tile.jsx';
@@ -15,7 +9,16 @@ import usePersistedState from '../../hooks/usePersistedState.js';
 // css
 import { HexmapStyled } from './styles/Hexmap.styled.js';
 
-function Hexmap({ tiles, onClick, hover, outlinedTileIndices }) {
+function Hexmap({
+  tiles,
+  onClickTile,
+  onRightClickTile,
+  onMouseEnterTile,
+  onMouseLeaveTile,
+  outlineOnHover,
+  outlinedTileIndices,
+  selfSelectorReturn,
+}) {
   // TODO - rows should come from a constant somewhere
   const rows = [7, 10, 11, 12, 11, 12, 11, 10, 7];
   const [availableHeight, setAvailableHeight] = useState(0);
@@ -51,16 +54,6 @@ function Hexmap({ tiles, onClick, hover, outlinedTileIndices }) {
   }, [availableHeight, availableWidth]);
   //#endregion
 
-  // keeping the same urls for the same tile types and depths
-  const [indexToInfoAndURL, setIndexToInfoAndURL] = useState({});
-  const updateIndex = (index, typeDepthString, url) => {
-    setIndexToInfoAndURL((prev) => {
-      const newInfoAndURL = { ...prev };
-      newInfoAndURL[index] = { typeDepthString, url };
-      return newInfoAndURL;
-    });
-  };
-
   return (
     <HexmapStyled ref={hexmapRef}>
       <div className='hex-area'>
@@ -75,20 +68,6 @@ function Hexmap({ tiles, onClick, hover, outlinedTileIndices }) {
             const x = xOffset + colIndex * Math.sqrt(3) * hexagonSize;
             const y = yOffset;
 
-            const tileType = tiles[index].landType;
-            const depth = tiles[index].depth;
-
-            // here we get a url if we have one stored and it's still of the right type and depth, and make one if not
-            let url = '';
-            let typeDepthString = `${tileType}-${depth}`;
-            const infoAndURL = indexToInfoAndURL[index];
-            if (infoAndURL && infoAndURL.typeDepthString === typeDepthString) {
-              url = infoAndURL.url;
-            } else {
-              url = intsToUrl(tileType, depth);
-              updateIndex(index, typeDepthString, url);
-            }
-
             return (
               <Tile
                 key={`${rowIndex}-${colIndex}`}
@@ -96,12 +75,15 @@ function Hexmap({ tiles, onClick, hover, outlinedTileIndices }) {
                 x={x}
                 y={y}
                 hexagonSize={hexagonSize}
-                rowIndex={rowIndex}
-                colIndex={colIndex}
-                url={url}
-                onClick={onClick}
-                hover={hover}
+                landType={tiles[index].landType}
+                depth={tiles[index].depth}
+                onClickTile={onClickTile}
+                onRightClickTile={onRightClickTile}
+                onMouseEnterTile={onMouseEnterTile}
+                onMouseLeaveTile={onMouseLeaveTile}
+                outlineOnHover={outlineOnHover}
                 outlined={outlinedTileIndices?.includes(index)}
+                selfSelectorReturn={selfSelectorReturn}
               />
             );
           });
