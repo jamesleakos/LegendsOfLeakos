@@ -1,5 +1,5 @@
 // import LandType enum from Enums
-import { LandType } from '../../Enums/LandAndBiome';
+import { LandType } from '../../../Enums/LandAndBiome';
 
 class RuntimeLandTile {
   // TODO - add player info

@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var landType_1 = require("./landType");
-var biomeDepth_1 = require("./biomeDepth");
+var LandAndBiome_1 = require("./LandAndBiome");
 exports.default = {
-    LandType: landType_1.LandType,
-    BiomeDepth: biomeDepth_1.BiomeDepth,
+    LandType: LandAndBiome_1.LandType,
+    BiomeType: LandAndBiome_1.BiomeType,
+    BiomeDepth: LandAndBiome_1.BiomeDepth,
 };

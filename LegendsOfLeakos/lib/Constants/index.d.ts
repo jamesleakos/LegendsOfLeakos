@@ -1,7 +1,12 @@
 declare const _default: {
-    gameSettings: {
+    gameProperties: {
         minPlayers: number;
         maxPlayers: number;
+        realmLayout: number[];
+        upgradeTreeShape: {
+            x: number;
+            y: number;
+        };
     };
     imageMapping: {
         landTypes: {

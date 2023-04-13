@@ -1,4 +1,2 @@
-declare const _default: {
-    Realm: any;
-};
-export default _default;
+import RuntimeLandTile from './LandTile/RuntimeLandTile';
+export { RuntimeLandTile };

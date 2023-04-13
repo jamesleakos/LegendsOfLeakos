@@ -1,7 +1,7 @@
-import gameSettings from './gameSettings';
+import gameProperties from './gameProperties';
 import ImageMapping from './ImageMapping';
 
 export default {
-  gameSettings: gameSettings,
+  gameProperties: gameProperties,
   imageMapping: ImageMapping,
-}
+};

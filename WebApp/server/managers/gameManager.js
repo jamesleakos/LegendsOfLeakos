@@ -1,5 +1,5 @@
 const {
-  Constants: { gameSettings },
+  Constants: { gameProperties },
   GameServer,
 } = require('legends-of-leakos');
 const { getUserSelectedRealm } = require('../db/controllers/realm.js');
@@ -7,8 +7,8 @@ const { getUserSelectedRealm } = require('../db/controllers/realm.js');
 const startGame = async (room, io) => {
   // check for correct number of players
   if (
-    room.players.length < gameSettings.minPlayers ||
-    room.players.length > gameSettings.maxPlayers
+    room.players.length < gameProperties.minPlayers ||
+    room.players.length > gameProperties.maxPlayers
   ) {
     console.log('ERROR: Invalid number of players');
     return;
