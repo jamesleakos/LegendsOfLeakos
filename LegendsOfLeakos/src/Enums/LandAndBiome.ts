@@ -26,4 +26,10 @@ enum BiomeDepth {
   deep,
 }
 
-export { LandType, BiomeType, BiomeDepth };
+enum BiomeAddCardEnum {
+  Success,
+  PartiallyAdded,
+  Failure,
+}
+
+export { LandType, BiomeType, BiomeDepth, BiomeAddCardEnum };

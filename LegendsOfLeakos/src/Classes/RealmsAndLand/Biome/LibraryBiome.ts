@@ -1,13 +1,9 @@
 import LibraryCardEntry from './LibraryCardEntry';
 import LibraryLandTile from '../LandTile/LibraryLandTile';
 import LibraryCard from '../../Cards/LibraryCard';
+import { BiomeAddCardEnum } from '../../../Enums/LandAndBiome';
 
-//#region Enums and Messages
-enum BiomeAddCardEnum {
-  Success,
-  PartiallyAdded,
-  Failure,
-}
+//#region Messages
 
 class BiomeAddCardMessage {
   result: BiomeAddCardEnum;
@@ -182,7 +178,7 @@ class LibraryBiome {
     }
   }
 
-  addCard(card: LibraryCard, amount: number): void {
+  private addCard(card: LibraryCard, amount: number): void {
     const existingCard = this.cards.find((x) => x.libraryId === card.libraryId);
     if (existingCard !== undefined) {
       existingCard.amount += amount;
