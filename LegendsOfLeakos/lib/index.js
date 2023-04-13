@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Constants_1 = __importDefault(require("./Constants"));
 var Enums_1 = __importDefault(require("./Enums"));
+var Classes_1 = __importDefault(require("./Classes"));
 var GameServer = /** @class */ (function () {
     function GameServer(room, sendToRoom, sendToPlayer, endGameCallback) {
         this.room = room;
@@ -13,10 +14,10 @@ var GameServer = /** @class */ (function () {
         this.endGameCallback = endGameCallback;
     }
     GameServer.prototype.startNewGame = function () {
-        console.log("Starting new game");
+        console.log('Starting new game');
     };
     GameServer.prototype.endGame = function () {
-        console.log("Ending game");
+        console.log('Ending game');
         this.endGameCallback('game statistics go here');
     };
     GameServer.prototype.listen = function (playerSockets) {
@@ -50,5 +51,6 @@ var GameServer = /** @class */ (function () {
 module.exports = {
     Constants: Constants_1.default,
     GameServer: GameServer,
-    Enums: Enums_1.default
+    Enums: Enums_1.default,
+    Classes: Classes_1.default,
 };

@@ -23,4 +23,9 @@ declare enum BiomeDepth {
     mid = 2,
     deep = 3
 }
-export { LandType, BiomeType, BiomeDepth };
+declare enum BiomeAddCardEnum {
+    Success = 0,
+    PartiallyAdded = 1,
+    Failure = 2
+}
+export { LandType, BiomeType, BiomeDepth, BiomeAddCardEnum };

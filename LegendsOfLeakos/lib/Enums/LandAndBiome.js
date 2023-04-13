@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BiomeDepth = exports.BiomeType = exports.LandType = void 0;
+exports.BiomeAddCardEnum = exports.BiomeDepth = exports.BiomeType = exports.LandType = void 0;
 var LandType;
 (function (LandType) {
     LandType[LandType["forest"] = 0] = "forest";
@@ -32,3 +32,10 @@ var BiomeDepth;
     BiomeDepth[BiomeDepth["deep"] = 3] = "deep";
 })(BiomeDepth || (BiomeDepth = {}));
 exports.BiomeDepth = BiomeDepth;
+var BiomeAddCardEnum;
+(function (BiomeAddCardEnum) {
+    BiomeAddCardEnum[BiomeAddCardEnum["Success"] = 0] = "Success";
+    BiomeAddCardEnum[BiomeAddCardEnum["PartiallyAdded"] = 1] = "PartiallyAdded";
+    BiomeAddCardEnum[BiomeAddCardEnum["Failure"] = 2] = "Failure";
+})(BiomeAddCardEnum || (BiomeAddCardEnum = {}));
+exports.BiomeAddCardEnum = BiomeAddCardEnum;

@@ -1,6 +1,7 @@
 // external
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Classes } from 'legends-of-leakos';
 
 // internal
 // components
