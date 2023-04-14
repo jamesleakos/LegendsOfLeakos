@@ -8,7 +8,7 @@ import RealmMap from '../Tiles/RealmMap.jsx';
 import { BiomeTileStyled } from './styles/BiomeTile.styled.js';
 
 const tilesFromBiome = function (biome) {
-  const landType = biome.terrain.landTiles[0].landType;
+  const landType = biome.landTiles[0].landType;
   const tempTiles = [];
   // TODO - this should come from a constant
   const realmSize = [7, 10, 11, 12, 11, 12, 11, 10, 7].reduce((a, b) => a + b);
@@ -34,7 +34,7 @@ function BiomeTile({ biome, isSelected, setSelectedBiome, mouseOverBiome }) {
       }}
     >
       <div className={`interior-border ${isSelected ? ' selected' : ''}`}></div>
-      <div className='title'>{biome?.terrain.name}</div>
+      <div className='title'>{biome?.name}</div>
       <div className='background'>
         <RealmMap tiles={tiles} />
       </div>

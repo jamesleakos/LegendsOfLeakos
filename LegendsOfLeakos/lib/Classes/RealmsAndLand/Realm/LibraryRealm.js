@@ -178,6 +178,28 @@ var LibraryRealm = /** @class */ (function () {
             _loop_3(neighbor);
         }
     };
+    // #endregion
+    // #region JSON Conversion
+    LibraryRealm.fromJSON = function (json) {
+        var realm = new LibraryRealm();
+        realm.name = json.name;
+        realm.biomes = [];
+        for (var _i = 0, _a = json.biomes; _i < _a.length; _i++) {
+            var biome = _a[_i];
+            realm.biomes.push(LibraryBiome_1.default.fromJSON(biome));
+        }
+        return realm;
+    };
+    LibraryRealm.prototype.toJSON = function (realm) {
+        var json = {};
+        json.name = realm.name;
+        json.biomes = [];
+        for (var _i = 0, _a = realm.biomes; _i < _a.length; _i++) {
+            var biome = _a[_i];
+            json.biomes.push(biome.toJSON());
+        }
+        return json;
+    };
     return LibraryRealm;
 }());
 exports.default = LibraryRealm;

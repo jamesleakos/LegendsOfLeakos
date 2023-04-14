@@ -22,16 +22,18 @@ declare class LibraryBiome {
     static copyBiome(oldBiome: LibraryBiome): LibraryBiome;
     wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage;
     areBiomeAndSubsValid(message?: BiomeValidMessage, cardLibrary?: LibraryCard[]): BiomeValidMessage;
+    private cardsCanBeAddedToBiomeOrSubbiome;
+    private cardsCanBeAddedToThisBiome;
     getCardsCount(): number;
     getCardsCountByLibraryID(libraryId: number): number;
     getCardsCountByCardType(config: any, cardTypeId: number): number;
     addCardsToBiomeOrSubbiome(card: LibraryCard, amount: number): BiomeAddCardMessage;
     private addCard;
+    deleteAllCards(): void;
+    removeSingleCardFromBiomeOrSubbiome(card: LibraryCard): void;
     removeCards(card: any): void;
     removeSingleCard(card: any): void;
-    private cardsCanBeAddedToBiomeOrSubbiome;
-    private cardsCanBeAddedToDeck;
-    recursiveSingleCardRemover(card: LibraryCard): void;
-    deleteAllCards(): void;
+    toJSON(): any;
+    static fromJSON(json: any): LibraryBiome;
 }
 export default LibraryBiome;

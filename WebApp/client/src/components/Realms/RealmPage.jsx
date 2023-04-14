@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Classes } from 'legends-of-leakos';
+const LibraryRealm = Classes.RealmsAndLand.LibraryRealm;
 
 // internal
 // components
@@ -24,18 +25,41 @@ function RealmPage() {
 
   const [realms, setRealms] = useState([]);
   const [selectedRealm, setSelectedRealm] = useState(null);
+  const [currentRuntimeLandTiles, setCurrentRuntimeLandTiles] = useState([]);
+
   useEffect(() => {
     console.log('getting realms...');
     axios
       .get('/realms')
       .then((res) => {
-        setRealms(res.data);
-        setSelectedRealm(res.data[0]);
+        setRealms(createRealmsFromJSON(res.data));
+        setSelectedRealm(createRealmFromJSON(res.data[0]));
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  const createRealmFromJSON = (json) => {
+    const realm = LibraryRealm.fromJSON(json);
+    // adding this for React keys
+    realm._id = json._id;
+    return realm;
+  };
+
+  const createRealmsFromJSON = (json) => {
+    const realms = [];
+    json.forEach((realm) => {
+      realms.push(createRealmFromJSON(realm));
+    });
+    return realms;
+  };
+
+  useEffect(() => {
+    console.log('selectedRealm changed: ', selectedRealm);
+    if (!selectedRealm) return;
+    setCurrentRuntimeLandTiles(selectedRealm.getRuntimeLandTiles());
+  }, [selectedRealm]);
 
   //#endregion
 
@@ -52,7 +76,7 @@ function RealmPage() {
 
   //#endregion
 
-  // #region BIOME FUNCTIONS
+  // #region OUTLINING BIOMES FUNCTIONS
 
   const [outlinedTileIndices, setOutlinedTileIndices] = useState([]);
   const mouseOverBiome = (biome) => {
@@ -63,7 +87,7 @@ function RealmPage() {
     if (displayState === 'select-realm') return;
 
     const tempIndices = [];
-    biome.terrain.landTiles.forEach((tile) => {
+    biome.landTiles.forEach((tile) => {
       tempIndices.push(tile.id);
     });
     // sort tiles by id in ascending order
@@ -73,7 +97,7 @@ function RealmPage() {
 
   // #endregion
 
-  // #region LAND TYPE SELECTOR
+  // #region LAND TYPE SELECTOR AND TRIGGERING REALM UPDATE
 
   const [landTypeSelected, setLandTypeSelected] = useState(0);
 
@@ -99,6 +123,14 @@ function RealmPage() {
   };
 
   //#endregion
+
+  // #region UPDATING REALM
+
+  const changeTileType = (tile_index, landType) => {
+    console.log('changeTileType', tile_index, landType);
+  };
+
+  // #endregion
 
   return (
     <RealmPageStyled

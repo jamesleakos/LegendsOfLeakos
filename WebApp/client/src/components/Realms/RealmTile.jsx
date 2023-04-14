@@ -9,7 +9,7 @@ function RealmTile({ realm, isSelected, setSelectedRealm }) {
   useEffect(() => {
     const tempTiles = [];
     realm.biomes.forEach((biome) => {
-      biome.terrain.landTiles.forEach((tile) => {
+      biome.landTiles.forEach((tile) => {
         tempTiles.push(tile);
       });
     });

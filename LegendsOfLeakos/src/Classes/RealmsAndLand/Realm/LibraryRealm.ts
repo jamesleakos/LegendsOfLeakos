@@ -38,6 +38,14 @@ class LibraryRealm {
     return tiles.sort((a, b) => a.id - b.id);
   }
 
+  getRuntimeLandTiles(): RuntimeLandTile[] {
+    const tiles: RuntimeLandTile[] = [];
+    for (const biome of this.biomes) {
+      tiles.push(...biome.getRuntimeLandTiles());
+    }
+    return tiles.sort((a, b) => a.id - b.id);
+  }
+
   // Realm Utilities
   isRealmValid(): boolean {
     for (const biome of this.biomes) {
@@ -185,7 +193,7 @@ class LibraryRealm {
     tempBiome: LibraryBiome
   ): void {
     tempBiome.landTiles.push(
-      LibraryLandTile.getRealmEntryFromLandTile(landTile)
+      LibraryLandTile.getLibraryLandTileFromRuntimeLandTile(landTile)
     );
     for (const neighbor of landTile.neighbors) {
       if (neighbor.landType === landTile.landType) {
@@ -197,6 +205,50 @@ class LibraryRealm {
         }
       }
     }
+  }
+
+  changeLandTileType(
+    tile_id: number,
+    newLandType: LandType,
+    cardLibrary: LibraryCard[],
+    realmLayout: any
+  ): void {
+    // get the runtimetiles
+    const runtimeTiles = this.getRuntimeLandTiles();
+    // get the tile we want to change
+    const tile = runtimeTiles.find((c) => c.id === tile_id);
+    if (tile === undefined) {
+      console.log('Error, tile not found');
+      return;
+    }
+    tile.landType = newLandType;
+    RuntimeLandTile.assignCoords(runtimeTiles);
+    RuntimeLandTile.assignNeighbors(runtimeTiles);
+    RuntimeLandTile.assignDepth(runtimeTiles);
+  }
+
+  // #endregion
+
+  // #region JSON Conversion
+
+  static fromJSON(json: any): LibraryRealm {
+    const realm = new LibraryRealm();
+    realm.name = json.name;
+    realm.biomes = [];
+    for (const biome of json.biomes) {
+      realm.biomes.push(LibraryBiome.fromJSON(biome));
+    }
+    return realm;
+  }
+
+  toJSON(realm: LibraryRealm): any {
+    const json: any = {};
+    json.name = realm.name;
+    json.biomes = [];
+    for (const biome of realm.biomes) {
+      json.biomes.push(biome.toJSON());
+    }
+    return json;
   }
 
   // #endregion

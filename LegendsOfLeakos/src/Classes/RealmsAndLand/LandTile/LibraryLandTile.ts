@@ -24,7 +24,31 @@ class LibraryLandTile {
     this.landType = landType;
   }
 
-  static getRealmEntryFromLandTile(landTile: RuntimeLandTile): LibraryLandTile {
+  toJSON() {
+    return {
+      id: this.id,
+      x: this.x,
+      y: this.y,
+      z: this.z,
+      depth: this.depth,
+      landType: this.landType,
+    };
+  }
+
+  static fromJSON = (json: any): LibraryLandTile => {
+    return new LibraryLandTile(
+      json.id,
+      json.x,
+      json.y,
+      json.z,
+      json.depth,
+      json.landType
+    );
+  };
+
+  static getLibraryLandTileFromRuntimeLandTile(
+    landTile: RuntimeLandTile
+  ): LibraryLandTile {
     const tempTile = new LibraryLandTile(
       landTile.id,
       landTile.x,
@@ -34,6 +58,17 @@ class LibraryLandTile {
       landTile.landType
     );
 
+    return tempTile;
+  }
+
+  getRuntimeLandTile(): RuntimeLandTile {
+    const tempTile = new RuntimeLandTile();
+    tempTile.id = this.id;
+    tempTile.x = this.x;
+    tempTile.y = this.y;
+    tempTile.z = this.z;
+    tempTile.depth = this.depth;
+    tempTile.landType = this.landType;
     return tempTile;
   }
 

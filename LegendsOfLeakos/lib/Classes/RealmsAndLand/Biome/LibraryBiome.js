@@ -28,7 +28,6 @@ var LibraryBiome = /** @class */ (function () {
         this.cards = [];
         this.landTiles = [];
         this.subBiomes = [];
-        // #endregion
     }
     LibraryBiome.copyBiome = function (oldBiome) {
         var tempBiome = new LibraryBiome();
@@ -38,9 +37,7 @@ var LibraryBiome = /** @class */ (function () {
         tempBiome.landTiles = [];
         for (var _i = 0, _a = oldBiome.cards; _i < _a.length; _i++) {
             var newCard = _a[_i];
-            var tempCardEntry = new LibraryCardEntry_1.default();
-            tempCardEntry.amount = newCard.amount;
-            tempCardEntry.libraryId = newCard.libraryId;
+            var tempCardEntry = new LibraryCardEntry_1.default(newCard.libraryId, newCard.amount);
             tempBiome.cards.push(tempCardEntry);
         }
         for (var _b = 0, _c = oldBiome.landTiles; _b < _c.length; _b++) {
@@ -57,7 +54,7 @@ var LibraryBiome = /** @class */ (function () {
     // #region Biome / Card Requirement Validity
     LibraryBiome.prototype.wouldRemovingThisCardCauseErrors = function (card) {
         var testBiome = LibraryBiome.copyBiome(this);
-        testBiome.recursiveSingleCardRemover(card);
+        testBiome.removeSingleCardFromBiomeOrSubbiome(card);
         return testBiome.areBiomeAndSubsValid();
     };
     LibraryBiome.prototype.areBiomeAndSubsValid = function (message, cardLibrary) {
@@ -92,100 +89,6 @@ var LibraryBiome = /** @class */ (function () {
         }
         return message;
     };
-    // #endregion
-    // #region CARDS
-    // #region getting and counting cards
-    LibraryBiome.prototype.getCardsCount = function () {
-        var count = 0;
-        // count here
-        for (var _i = 0, _a = this.cards; _i < _a.length; _i++) {
-            var card = _a[_i];
-            count += card.amount;
-        }
-        // add subbiome counts
-        for (var _b = 0, _c = this.subBiomes; _b < _c.length; _b++) {
-            var sub = _c[_b];
-            count += sub.getCardsCount();
-        }
-        // return
-        return count;
-    };
-    LibraryBiome.prototype.getCardsCountByLibraryID = function (libraryId) {
-        var count = 0;
-        // count here
-        var temp = this.cards.find(function (c) { return c.libraryId === libraryId; });
-        if (temp !== null)
-            count += temp.amount;
-        // add subbiome counts
-        for (var _i = 0, _a = this.subBiomes; _i < _a.length; _i++) {
-            var sub = _a[_i];
-            count += sub.getCardsCountByLibraryID(libraryId);
-        }
-        // return
-        return count;
-    };
-    // TODO : add corrent config type
-    LibraryBiome.prototype.getCardsCountByCardType = function (config, cardTypeId) {
-        var count = 0;
-        var _loop_2 = function (card) {
-            // TODO not sure what id meanns here
-            var libraryCard = config.cards.find(function (x) { return x.id == card.libraryId; });
-            if (libraryCard && libraryCard.cardTypeId === cardTypeId) {
-                count += card.amount;
-                return "break";
-            }
-        };
-        for (var _i = 0, _a = this.cards; _i < _a.length; _i++) {
-            var card = _a[_i];
-            var state_1 = _loop_2(card);
-            if (state_1 === "break")
-                break;
-        }
-        return count;
-    };
-    // #endregion
-    // #region adding cards
-    LibraryBiome.prototype.addCardsToBiomeOrSubbiome = function (card, amount) {
-        var result = this.cardsCanBeAddedToBiomeOrSubbiome(card, amount);
-        if (result.result === LandAndBiome_1.BiomeAddCardEnum.Failure)
-            return result;
-        result = this.cardsCanBeAddedToDeck(card, amount);
-        if (result.result !== LandAndBiome_1.BiomeAddCardEnum.Failure) {
-            this.addCard(card, result.numberAdded);
-            return result;
-        }
-        else {
-            var subbiome = this.subBiomes.find(function (c) { return c.biomeDepth === card.biomeDepth; });
-            return subbiome.addCardsToBiomeOrSubbiome(card, amount);
-        }
-    };
-    LibraryBiome.prototype.addCard = function (card, amount) {
-        var existingCard = this.cards.find(function (x) { return x.libraryId === card.libraryId; });
-        if (existingCard !== undefined) {
-            existingCard.amount += amount;
-        }
-        else {
-            this.cards.push({ libraryId: card.libraryId, amount: amount });
-        }
-    };
-    // #endregion
-    // #region removing cards
-    LibraryBiome.prototype.removeCards = function (card) {
-        var existingCard = this.cards.find(function (x) { return x.libraryId === card.libraryId; });
-        if (existingCard !== undefined) {
-            this.cards.splice(this.cards.indexOf(existingCard), 1);
-        }
-    };
-    LibraryBiome.prototype.removeSingleCard = function (card) {
-        var existingCard = this.cards.find(function (x) { return x.libraryId === card.libraryId; });
-        if (existingCard !== undefined) {
-            if (existingCard.amount === 1)
-                this.cards.splice(this.cards.indexOf(existingCard), 1);
-            else
-                existingCard.amount--;
-        }
-    };
-    // #endregion
     LibraryBiome.prototype.cardsCanBeAddedToBiomeOrSubbiome = function (card, amount) {
         if (card.biomeType !== this.biomeType) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, "".concat(card.name, " belongs in the ").concat(card.biomeType, " and this is a ").concat(this.biomeType));
@@ -193,16 +96,16 @@ var LibraryBiome = /** @class */ (function () {
         if (card.biomeDepth > Math.max.apply(Math, this.subBiomes.map(function (c) { return c.biomeDepth; }))) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, "".concat(card.name, " requires ").concat(card.biomeDepth, " ").concat(card.biomeType, " and this only has ").concat(this.biomeDepth, " ").concat(this.biomeType));
         }
-        var thisDeck = this.cardsCanBeAddedToDeck(card, amount);
+        var thisDeck = this.cardsCanBeAddedToThisBiome(card, amount);
         if (thisDeck.result !== LandAndBiome_1.BiomeAddCardEnum.Failure || card.biomeDepth === 0) {
             return thisDeck;
         }
         else {
             var rightSub = this.subBiomes.find(function (c) { return c.biomeDepth === card.biomeDepth; });
-            return rightSub.cardsCanBeAddedToDeck(card, amount);
+            return rightSub.cardsCanBeAddedToThisBiome(card, amount);
         }
     };
-    LibraryBiome.prototype.cardsCanBeAddedToDeck = function (card, amount) {
+    LibraryBiome.prototype.cardsCanBeAddedToThisBiome = function (card, amount) {
         if (card.biomeType !== this.biomeType) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, card.name +
                 ' belongs in the ' +
@@ -264,13 +167,84 @@ var LibraryBiome = /** @class */ (function () {
         }
         return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Success, addedToDeck, 'Complete success');
     };
-    LibraryBiome.prototype.recursiveSingleCardRemover = function (card) {
-        this.removeSingleCard(card);
+    // #endregion
+    // #region CARDS
+    // #region getting and counting cards
+    LibraryBiome.prototype.getCardsCount = function () {
+        var count = 0;
+        // count here
+        for (var _i = 0, _a = this.cards; _i < _a.length; _i++) {
+            var card = _a[_i];
+            count += card.amount;
+        }
+        // add subbiome counts
+        for (var _b = 0, _c = this.subBiomes; _b < _c.length; _b++) {
+            var sub = _c[_b];
+            count += sub.getCardsCount();
+        }
+        // return
+        return count;
+    };
+    LibraryBiome.prototype.getCardsCountByLibraryID = function (libraryId) {
+        var count = 0;
+        // count here
+        var temp = this.cards.find(function (c) { return c.libraryId === libraryId; });
+        if (temp !== null)
+            count += temp.amount;
+        // add subbiome counts
         for (var _i = 0, _a = this.subBiomes; _i < _a.length; _i++) {
             var sub = _a[_i];
-            sub.recursiveSingleCardRemover(card);
+            count += sub.getCardsCountByLibraryID(libraryId);
+        }
+        // return
+        return count;
+    };
+    // TODO : add corrent config type
+    LibraryBiome.prototype.getCardsCountByCardType = function (config, cardTypeId) {
+        var count = 0;
+        var _loop_2 = function (card) {
+            // TODO not sure what id meanns here
+            var libraryCard = config.cards.find(function (x) { return x.id == card.libraryId; });
+            if (libraryCard && libraryCard.cardTypeId === cardTypeId) {
+                count += card.amount;
+                return "break";
+            }
+        };
+        for (var _i = 0, _a = this.cards; _i < _a.length; _i++) {
+            var card = _a[_i];
+            var state_1 = _loop_2(card);
+            if (state_1 === "break")
+                break;
+        }
+        return count;
+    };
+    // #endregion
+    // #region adding cards
+    LibraryBiome.prototype.addCardsToBiomeOrSubbiome = function (card, amount) {
+        var result = this.cardsCanBeAddedToBiomeOrSubbiome(card, amount);
+        if (result.result === LandAndBiome_1.BiomeAddCardEnum.Failure)
+            return result;
+        result = this.cardsCanBeAddedToThisBiome(card, amount);
+        if (result.result !== LandAndBiome_1.BiomeAddCardEnum.Failure) {
+            this.addCard(card, result.numberAdded);
+            return result;
+        }
+        else {
+            var subbiome = this.subBiomes.find(function (c) { return c.biomeDepth === card.biomeDepth; });
+            return subbiome.addCardsToBiomeOrSubbiome(card, amount);
         }
     };
+    LibraryBiome.prototype.addCard = function (card, amount) {
+        var existingCard = this.cards.find(function (x) { return x.libraryId === card.libraryId; });
+        if (existingCard !== undefined) {
+            existingCard.amount += amount;
+        }
+        else {
+            this.cards.push(new LibraryCardEntry_1.default(card.libraryId, amount));
+        }
+    };
+    // #endregion
+    // #region removing cards
     LibraryBiome.prototype.deleteAllCards = function () {
         this.cards = [];
         for (var _i = 0, _a = this.subBiomes; _i < _a.length; _i++) {
@@ -278,7 +252,72 @@ var LibraryBiome = /** @class */ (function () {
             sub.deleteAllCards();
         }
     };
+    LibraryBiome.prototype.removeSingleCardFromBiomeOrSubbiome = function (card) {
+        this.removeSingleCard(card);
+        for (var _i = 0, _a = this.subBiomes; _i < _a.length; _i++) {
+            var sub = _a[_i];
+            sub.removeSingleCardFromBiomeOrSubbiome(card);
+        }
+    };
+    LibraryBiome.prototype.removeCards = function (card) {
+        var existingCard = this.cards.find(function (x) { return x.libraryId === card.libraryId; });
+        if (existingCard !== undefined) {
+            this.cards.splice(this.cards.indexOf(existingCard), 1);
+        }
+    };
+    LibraryBiome.prototype.removeSingleCard = function (card) {
+        var existingCard = this.cards.find(function (x) { return x.libraryId === card.libraryId; });
+        if (existingCard !== undefined) {
+            if (existingCard.amount === 1)
+                this.cards.splice(this.cards.indexOf(existingCard), 1);
+            else
+                existingCard.amount--;
+        }
+    };
+    // #endregion
+    // #endregion
+    // #region JSON
+    LibraryBiome.prototype.toJSON = function () {
+        var json = {};
+        json.biomeType = this.biomeType;
+        json.biomeDepth = this.biomeDepth;
+        json.cards = [];
+        for (var _i = 0, _a = this.cards; _i < _a.length; _i++) {
+            var card = _a[_i];
+            json.cards.push(card.toJSON());
+        }
+        json.subBiomes = [];
+        for (var _b = 0, _c = this.subBiomes; _b < _c.length; _b++) {
+            var sub = _c[_b];
+            json.subBiomes.push(sub.toJSON());
+        }
+        json.landTiles = [];
+        for (var _d = 0, _e = this.landTiles; _d < _e.length; _d++) {
+            var tile = _e[_d];
+            json.landTiles.push(tile.toJSON());
+        }
+        return json;
+    };
+    LibraryBiome.fromJSON = function (json) {
+        console.log('LibraryBiome.fromJSON json', json);
+        var biome = new LibraryBiome();
+        biome.biomeType = json.biomeType;
+        biome.biomeDepth = json.biomeDepth;
+        for (var _i = 0, _a = json.cards; _i < _a.length; _i++) {
+            var card = _a[_i];
+            biome.cards.push(LibraryCardEntry_1.default.fromJSON(card));
+        }
+        for (var _b = 0, _c = json.subBiomes; _b < _c.length; _b++) {
+            var sub = _c[_b];
+            biome.subBiomes.push(LibraryBiome.fromJSON(sub));
+        }
+        for (var _d = 0, _e = json.landTiles; _d < _e.length; _d++) {
+            var tile = _e[_d];
+            biome.landTiles.push(LibraryLandTile_1.default.fromJSON(tile));
+        }
+        return biome;
+    };
     return LibraryBiome;
 }());
-// exportt
+// export
 exports.default = LibraryBiome;

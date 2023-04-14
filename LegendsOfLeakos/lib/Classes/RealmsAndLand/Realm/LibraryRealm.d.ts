@@ -14,5 +14,7 @@ declare class LibraryRealm {
     static updateRealm(realm: LibraryRealm, landTiles: RuntimeLandTile[], cardLibrary: LibraryCard[]): void;
     static biomeAdder(landTile: RuntimeLandTile, landTiles: RuntimeLandTile[], biomeType: BiomeType, tempBiomes: LibraryBiome[]): void;
     static recursiveTileAdder(landTile: RuntimeLandTile, tempBiome: LibraryBiome): void;
+    static fromJSON(json: any): LibraryRealm;
+    toJSON(realm: LibraryRealm): any;
 }
 export default LibraryRealm;

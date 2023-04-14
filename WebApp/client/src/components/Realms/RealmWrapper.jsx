@@ -29,7 +29,7 @@ function RealmWrapper({
     // TODO: this should be replaced by a Realm class function
     const tempTiles = [];
     realm.biomes.forEach((biome) => {
-      biome.terrain.landTiles.forEach((tile) => {
+      biome.landTiles.forEach((tile) => {
         tempTiles.push(tile);
       });
     });
