@@ -1,6 +1,5 @@
 import LibraryBiome from '../Biome/LibraryBiome';
 import LibraryLandTile from '../LandTile/LibraryLandTile';
-import RuntimeLandTile from '../LandTile/RuntimeLandTile';
 import LibraryCard from '../../Cards/LibraryCard';
 // enums
 import {
@@ -38,12 +37,22 @@ class LibraryRealm {
     return tiles.sort((a, b) => a.id - b.id);
   }
 
-  getRuntimeLandTiles(): RuntimeLandTile[] {
-    const tiles: RuntimeLandTile[] = [];
-    for (const biome of this.biomes) {
-      tiles.push(...biome.getRuntimeLandTiles());
+  changeLandTileType(
+    tile_id: number,
+    newLandType: LandType,
+    cardLibrary: LibraryCard[],
+    realmLayout: any
+  ): void {
+    const tiles = this.getLandTiles();
+    // get the tile we want to change
+    const tile = tiles.find((c) => c.id === tile_id);
+    if (tile === undefined) {
+      console.log('Error, tile not found');
+      return;
     }
-    return tiles.sort((a, b) => a.id - b.id);
+    tile.landType = newLandType;
+    LibraryLandTile.assignDepth(tiles);
+    // TODO: update realm
   }
 
   // Realm Utilities
@@ -65,11 +74,7 @@ class LibraryRealm {
 
   // #region Updating Landtiles
 
-  static updateRealm(
-    realm: LibraryRealm,
-    landTiles: RuntimeLandTile[],
-    cardLibrary: LibraryCard[]
-  ): void {
+  updateRealm(cardLibrary: LibraryCard[] = []): void {
     const tempBiomes: LibraryBiome[] = [];
 
     const landTypeBiomeTypePairs: [LandType, BiomeType][] = [
@@ -82,6 +87,7 @@ class LibraryRealm {
       [LandType.tundra, BiomeType.tundra],
     ];
 
+    const landTiles = this.getLandTiles();
     for (const [landType, biomeType] of landTypeBiomeTypePairs) {
       for (const landTile of landTiles) {
         if (landTile.landType === landType) {
@@ -91,10 +97,10 @@ class LibraryRealm {
     }
 
     // TODO: what the heck is this for - we're wiping it and then trying to use it
-    realm.biomes = [];
+    this.biomes = [];
 
     for (let newBiome of tempBiomes) {
-      const oldBiomes = realm.biomes.filter(
+      const oldBiomes = this.biomes.filter(
         (c) => c.biomeType === newBiome.biomeType
       );
 
@@ -117,13 +123,13 @@ class LibraryRealm {
         }
       }
 
-      realm.biomes.push(LibraryBiome.copyBiome(newBiome));
+      this.biomes.push(LibraryBiome.copyBiome(newBiome));
     }
   }
 
   static biomeAdder(
-    landTile: RuntimeLandTile,
-    landTiles: RuntimeLandTile[],
+    landTile: LibraryLandTile,
+    landTiles: LibraryLandTile[],
     biomeType: BiomeType,
     tempBiomes: LibraryBiome[]
   ): void {
@@ -144,7 +150,7 @@ class LibraryRealm {
       tempBiomes.push(tempBiome);
 
       LibraryRealm.recursiveTileAdder(landTile, tempBiome);
-      RuntimeLandTile.assignDepth(landTiles);
+      LibraryLandTile.assignDepth(landTiles);
 
       // And then we add subBiomes
       const shallowBiome = new LibraryBiome();
@@ -189,42 +195,20 @@ class LibraryRealm {
   }
 
   public static recursiveTileAdder(
-    landTile: RuntimeLandTile,
+    landTile: LibraryLandTile,
     tempBiome: LibraryBiome
   ): void {
-    tempBiome.landTiles.push(
-      LibraryLandTile.getLibraryLandTileFromRuntimeLandTile(landTile)
-    );
+    tempBiome.landTiles.push(landTile);
     for (const neighbor of landTile.neighbors) {
       if (neighbor.landType === landTile.landType) {
         const sortedTile = tempBiome.landTiles.find(
           (c) => c.id === neighbor.id
         );
         if (sortedTile === undefined) {
-          this.recursiveTileAdder(neighbor, tempBiome);
+          this.recursiveTileAdder(neighbor as LibraryLandTile, tempBiome);
         }
       }
     }
-  }
-
-  changeLandTileType(
-    tile_id: number,
-    newLandType: LandType,
-    cardLibrary: LibraryCard[],
-    realmLayout: any
-  ): void {
-    // get the runtimetiles
-    const runtimeTiles = this.getRuntimeLandTiles();
-    // get the tile we want to change
-    const tile = runtimeTiles.find((c) => c.id === tile_id);
-    if (tile === undefined) {
-      console.log('Error, tile not found');
-      return;
-    }
-    tile.landType = newLandType;
-    RuntimeLandTile.assignCoords(runtimeTiles);
-    RuntimeLandTile.assignNeighbors(runtimeTiles);
-    RuntimeLandTile.assignDepth(runtimeTiles);
   }
 
   // #endregion
@@ -238,6 +222,11 @@ class LibraryRealm {
     for (const biome of json.biomes) {
       realm.biomes.push(LibraryBiome.fromJSON(biome));
     }
+    const tiles = realm.getLandTiles();
+
+    LibraryLandTile.assignNeighbors(tiles);
+    // should already have depth and coordinates assigned
+
     return realm;
   }
 

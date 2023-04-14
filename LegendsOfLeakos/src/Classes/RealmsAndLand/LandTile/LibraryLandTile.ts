@@ -1,28 +1,48 @@
-import RuntimeLandTile from './RuntimeLandTile';
+import BaseLandTile from './BaseLandTile';
 
-class LibraryLandTile {
-  public id: number;
-  public x: number;
-  public y: number;
-  public z: number;
-  public depth: number;
-  public landType: number;
+class LibraryLandTile extends BaseLandTile {
+  // this is all in BASELANDTILE
+  // public id: number;
+  // public x: number;
+  // public y: number;
+  // public z: number;
+  // public depth: number;
+  // public landType: number;
 
-  constructor(
+  //#region FACTORY AND COPY
+
+  static libraryLandTileFactory(
     id: number,
     x: number,
     y: number,
     z: number,
     depth: number,
     landType: number
-  ) {
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.depth = depth;
-    this.landType = landType;
+  ): LibraryLandTile {
+    const tempTile = new LibraryLandTile();
+    tempTile.id = id;
+    tempTile.x = x;
+    tempTile.y = y;
+    tempTile.z = z;
+    tempTile.depth = depth;
+    tempTile.landType = landType;
+    return tempTile;
   }
+
+  static copyLandTile(oldEntry: LibraryLandTile): LibraryLandTile {
+    return LibraryLandTile.libraryLandTileFactory(
+      oldEntry.id,
+      oldEntry.x,
+      oldEntry.y,
+      oldEntry.z,
+      oldEntry.depth,
+      oldEntry.landType
+    );
+  }
+
+  //#endregion
+
+  //#region JSON
 
   toJSON() {
     return {
@@ -36,7 +56,7 @@ class LibraryLandTile {
   }
 
   static fromJSON = (json: any): LibraryLandTile => {
-    return new LibraryLandTile(
+    return LibraryLandTile.libraryLandTileFactory(
       json.id,
       json.x,
       json.y,
@@ -46,42 +66,7 @@ class LibraryLandTile {
     );
   };
 
-  static getLibraryLandTileFromRuntimeLandTile(
-    landTile: RuntimeLandTile
-  ): LibraryLandTile {
-    const tempTile = new LibraryLandTile(
-      landTile.id,
-      landTile.x,
-      landTile.y,
-      landTile.z,
-      landTile.depth,
-      landTile.landType
-    );
-
-    return tempTile;
-  }
-
-  getRuntimeLandTile(): RuntimeLandTile {
-    const tempTile = new RuntimeLandTile();
-    tempTile.id = this.id;
-    tempTile.x = this.x;
-    tempTile.y = this.y;
-    tempTile.z = this.z;
-    tempTile.depth = this.depth;
-    tempTile.landType = this.landType;
-    return tempTile;
-  }
-
-  static copyLandTile(oldEntry: LibraryLandTile): LibraryLandTile {
-    return new LibraryLandTile(
-      oldEntry.id,
-      oldEntry.x,
-      oldEntry.y,
-      oldEntry.z,
-      oldEntry.depth,
-      oldEntry.landType
-    );
-  }
+  //#endregion
 }
 
 export default LibraryLandTile;

@@ -38,41 +38,6 @@ class LibraryBiome {
   landTiles: LibraryLandTile[] = [];
   subBiomes: LibraryBiome[] = [];
 
-  static copyBiome(oldBiome: LibraryBiome): LibraryBiome {
-    const tempBiome = new LibraryBiome();
-    tempBiome.biomeType = oldBiome.biomeType;
-    tempBiome.biomeDepth = oldBiome.biomeDepth;
-    tempBiome.cards = [];
-    tempBiome.landTiles = [];
-
-    for (const newCard of oldBiome.cards) {
-      const tempCardEntry = new LibraryCardEntry(
-        newCard.libraryId,
-        newCard.amount
-      );
-
-      tempBiome.cards.push(tempCardEntry);
-    }
-    for (const newLand of oldBiome.landTiles) {
-      const tempLandTile = new LibraryLandTile(
-        newLand.id,
-        newLand.x,
-        newLand.y,
-        newLand.z,
-        newLand.depth,
-        newLand.landType
-      );
-
-      tempBiome.landTiles.push(tempLandTile);
-    }
-
-    for (const subBiome of oldBiome.subBiomes) {
-      tempBiome.subBiomes.push(LibraryBiome.copyBiome(subBiome));
-    }
-
-    return tempBiome;
-  }
-
   // #region Biome / Card Requirement Validity
 
   wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage {
@@ -341,7 +306,7 @@ class LibraryBiome {
 
   // #endregion
 
-  // #region JSON
+  // #region JSON and COPY utils
 
   toJSON(): any {
     const json: any = {};
@@ -379,16 +344,39 @@ class LibraryBiome {
     return biome;
   }
 
-  // #endregion
+  static copyBiome(oldBiome: LibraryBiome): LibraryBiome {
+    const tempBiome = new LibraryBiome();
+    tempBiome.biomeType = oldBiome.biomeType;
+    tempBiome.biomeDepth = oldBiome.biomeDepth;
+    tempBiome.cards = [];
+    tempBiome.landTiles = [];
 
-  // #region LAND TILES
+    for (const newCard of oldBiome.cards) {
+      const tempCardEntry = new LibraryCardEntry(
+        newCard.libraryId,
+        newCard.amount
+      );
 
-  getRuntimeLandTiles(): RuntimeLandTile[] {
-    const tiles: RuntimeLandTile[] = [];
-    for (const tile of this.landTiles) {
-      tiles.push(tile.getRuntimeLandTile());
+      tempBiome.cards.push(tempCardEntry);
     }
-    return tiles;
+    for (const newLand of oldBiome.landTiles) {
+      const tempLandTile = LibraryLandTile.libraryLandTileFactory(
+        newLand.id,
+        newLand.x,
+        newLand.y,
+        newLand.z,
+        newLand.depth,
+        newLand.landType
+      );
+
+      tempBiome.landTiles.push(tempLandTile);
+    }
+
+    for (const subBiome of oldBiome.subBiomes) {
+      tempBiome.subBiomes.push(LibraryBiome.copyBiome(subBiome));
+    }
+
+    return tempBiome;
   }
 
   // #endregion
