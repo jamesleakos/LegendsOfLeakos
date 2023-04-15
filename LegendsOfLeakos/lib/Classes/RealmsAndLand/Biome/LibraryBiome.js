@@ -25,32 +25,12 @@ var BiomeValidMessage = /** @class */ (function () {
 //#endregion
 var LibraryBiome = /** @class */ (function () {
     function LibraryBiome() {
+        this.name = 'New Biome';
         this.cards = [];
         this.landTiles = [];
         this.subBiomes = [];
+        // #endregion
     }
-    LibraryBiome.copyBiome = function (oldBiome) {
-        var tempBiome = new LibraryBiome();
-        tempBiome.biomeType = oldBiome.biomeType;
-        tempBiome.biomeDepth = oldBiome.biomeDepth;
-        tempBiome.cards = [];
-        tempBiome.landTiles = [];
-        for (var _i = 0, _a = oldBiome.cards; _i < _a.length; _i++) {
-            var newCard = _a[_i];
-            var tempCardEntry = new LibraryCardEntry_1.default(newCard.libraryId, newCard.amount);
-            tempBiome.cards.push(tempCardEntry);
-        }
-        for (var _b = 0, _c = oldBiome.landTiles; _b < _c.length; _b++) {
-            var newLand = _c[_b];
-            var tempLandTile = new LibraryLandTile_1.default(newLand.id, newLand.x, newLand.y, newLand.z, newLand.depth, newLand.landType);
-            tempBiome.landTiles.push(tempLandTile);
-        }
-        for (var _d = 0, _e = oldBiome.subBiomes; _d < _e.length; _d++) {
-            var subBiome = _e[_d];
-            tempBiome.subBiomes.push(LibraryBiome.copyBiome(subBiome));
-        }
-        return tempBiome;
-    };
     // #region Biome / Card Requirement Validity
     LibraryBiome.prototype.wouldRemovingThisCardCauseErrors = function (card) {
         var testBiome = LibraryBiome.copyBiome(this);
@@ -276,7 +256,7 @@ var LibraryBiome = /** @class */ (function () {
     };
     // #endregion
     // #endregion
-    // #region JSON
+    // #region JSON and COPY utils
     LibraryBiome.prototype.toJSON = function () {
         var json = {};
         json.biomeType = this.biomeType;
@@ -299,7 +279,6 @@ var LibraryBiome = /** @class */ (function () {
         return json;
     };
     LibraryBiome.fromJSON = function (json) {
-        console.log('LibraryBiome.fromJSON json', json);
         var biome = new LibraryBiome();
         biome.biomeType = json.biomeType;
         biome.biomeDepth = json.biomeDepth;
@@ -316,6 +295,28 @@ var LibraryBiome = /** @class */ (function () {
             biome.landTiles.push(LibraryLandTile_1.default.fromJSON(tile));
         }
         return biome;
+    };
+    LibraryBiome.copyBiome = function (oldBiome) {
+        var tempBiome = new LibraryBiome();
+        tempBiome.biomeType = oldBiome.biomeType;
+        tempBiome.biomeDepth = oldBiome.biomeDepth;
+        tempBiome.cards = [];
+        tempBiome.landTiles = [];
+        for (var _i = 0, _a = oldBiome.cards; _i < _a.length; _i++) {
+            var newCard = _a[_i];
+            var tempCardEntry = new LibraryCardEntry_1.default(newCard.libraryId, newCard.amount);
+            tempBiome.cards.push(tempCardEntry);
+        }
+        for (var _b = 0, _c = oldBiome.landTiles; _b < _c.length; _b++) {
+            var newLand = _c[_b];
+            var tempLandTile = LibraryLandTile_1.default.libraryLandTileFactory(newLand.id, newLand.x, newLand.y, newLand.z, newLand.depth, newLand.landType);
+            tempBiome.landTiles.push(tempLandTile);
+        }
+        for (var _d = 0, _e = oldBiome.subBiomes; _d < _e.length; _d++) {
+            var subBiome = _e[_d];
+            tempBiome.subBiomes.push(LibraryBiome.copyBiome(subBiome));
+        }
+        return tempBiome;
     };
     return LibraryBiome;
 }());

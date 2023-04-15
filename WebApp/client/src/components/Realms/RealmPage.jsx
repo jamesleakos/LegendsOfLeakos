@@ -1,8 +1,10 @@
 // external
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Classes } from 'legends-of-leakos';
+import { Classes, Enums } from 'legends-of-leakos';
 const LibraryRealm = Classes.RealmsAndLand.LibraryRealm;
+const LandType = Enums.LandType;
+console.log(LandType);
 
 // internal
 // components
@@ -25,7 +27,7 @@ function RealmPage() {
 
   const [realms, setRealms] = useState([]);
   const [selectedRealm, setSelectedRealm] = useState(null);
-  const [currentRuntimeLandTiles, setCurrentRuntimeLandTiles] = useState([]);
+  // const [currentRuntimeLandTiles, setCurrentRuntimeLandTiles] = useState([]);
 
   useEffect(() => {
     console.log('getting realms...');
@@ -55,11 +57,11 @@ function RealmPage() {
     return realms;
   };
 
-  useEffect(() => {
-    console.log('selectedRealm changed: ', selectedRealm);
-    if (!selectedRealm) return;
-    setCurrentRuntimeLandTiles(selectedRealm.getRuntimeLandTiles());
-  }, [selectedRealm]);
+  // useEffect(() => {
+  //   console.log('selectedRealm changed: ', selectedRealm);
+  //   if (!selectedRealm) return;
+  //   setCurrentRuntimeLandTiles(selectedRealm.getRuntimeLandTiles());
+  // }, [selectedRealm]);
 
   //#endregion
 
@@ -107,30 +109,40 @@ function RealmPage() {
 
   const landTileClicked = (tile_index) => {
     if (displayState === 'select-realm') return;
-    console.log('landTileClicked', tile_index);
+    changeTileType(tile_index, landTypeSelected);
   };
 
   const isMouseDown = useMouseDown();
   const landTileEntered = (tile_index) => {
     if (displayState === 'select-realm') return;
     if (isMouseDown) {
-      console.log('landTileEntered', tile_index);
+      changeTileType(tile_index, landTypeSelected);
     }
   };
 
   const selfSelectorReturn = (tile_index, landType) => {
-    console.log('realm page.selfSelectorReturn: ', tile_index, landType);
+    changeTileType(tile_index, landType);
+  };
+
+  const changeTileType = (tile_index, landType) => {
+    const copy = LibraryRealm.copyRealm(selectedRealm);
+    // if we're making a new city, we need to remove any old ones
+    if (landType === LandType.city) {
+      const tile = copy
+        .getLandTiles()
+        .find((tile) => tile.landType === landType);
+      if (tile) copy.changeLandTileType(tile.id, tile.mostCommonNeighborType());
+    } else {
+      // if we're not making a new city, we can't overwrite an existing one
+      const tile = copy.getLandTiles().find((tile) => tile.id === tile_index);
+      if (tile.landType === LandType.city) return;
+    }
+    // change the tile type
+    copy.changeLandTileType(tile_index, landType);
+    setSelectedRealm(copy);
   };
 
   //#endregion
-
-  // #region UPDATING REALM
-
-  const changeTileType = (tile_index, landType) => {
-    console.log('changeTileType', tile_index, landType);
-  };
-
-  // #endregion
 
   return (
     <RealmPageStyled

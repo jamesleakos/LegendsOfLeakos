@@ -18,9 +18,14 @@ function BiomeList({
       <div className='underlined-title'>Biomes</div>
       <div className='biometile-holder'>
         {biomes.map((biome, index) => {
+          // to prevent key conflicts
+          const biomeID =
+            biome.biomeType +
+            index +
+            biome.landTiles.map((tile) => tile.id).join('-');
           return (
             <BiomeTile
-              key={biome.biomeType + index + ''}
+              key={biomeID}
               biome={biome}
               isSelected={biome === selectedBiome}
               setSelectedBiome={setSelectedBiome}

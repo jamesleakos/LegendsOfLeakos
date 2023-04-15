@@ -8,6 +8,7 @@ import TileText from './TileText.jsx';
 import TileImage from './TileImage.jsx';
 import TileHexagon from './TileHexagon.jsx';
 import LandTypeSelectorBar from '../Realms/LandTypeSelectorBar.jsx';
+import LandTypeSelector from '../Realms/LandTypeSelector.jsx';
 
 // css
 import { TileStyled } from './styles/Tile.styled.js';
@@ -43,7 +44,10 @@ function Tile({
   // #endregion
 
   // # region GETTING URL
-  const url = useMemo(() => intsToUrl(landType, depth), [landType, depth]);
+  const url = useMemo(
+    () => intsToUrl(landType, depth),
+    [landType, Math.min(depth, 3)]
+  );
 
   // #endregion
 
@@ -51,9 +55,11 @@ function Tile({
     <TileStyled
       // confusingly, pointer events are disabled for the parent, but enabled for the svg, but that triggers it here
       // we leave it like that though because the shape is correct like that. It works nicely, frankly
-      onClick={() => {
+      onMouseDown={(e) => {
         if (selfSelectorOn) return;
         if (!onClickTile) return;
+        // detect right click and return
+        if (e.nativeEvent.button === 2) return;
         onClickTile(id);
       }}
       onContextMenu={handleRightClick}
@@ -113,6 +119,23 @@ function SelfSelector({
           setSelfSelectorOn(false);
         }}
       ></div>
+      <div
+        className='city-selector'
+        style={{
+          position: 'absolute',
+          top: hexagonSize * -3,
+          left: hexagonSize * Math.sqrt(3) * 4.4,
+          height: '100%',
+          width: hexagonSize * 2,
+          zIndex: 999,
+        }}
+      >
+        <LandTypeSelector
+          landType={7}
+          setLandTypeSelected={setLandTypeSelected}
+          selected={landTypeSelected === 7}
+        />
+      </div>
       <LandTypeSelectorBar
         landTypeSelected={landTypeSelected}
         setLandTypeSelected={setLandTypeSelected}

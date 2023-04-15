@@ -2,20 +2,22 @@ enum LandType {
   forest,
   ocean,
   desert,
-  mountain,
   prairie,
   fells,
+  mountain,
   tundra,
+  city,
 }
 
 enum BiomeType {
   forest,
   ocean,
   desert,
-  mountain,
   prairie,
   fells,
+  mountain,
   tundra,
+  city,
   world,
 }
 

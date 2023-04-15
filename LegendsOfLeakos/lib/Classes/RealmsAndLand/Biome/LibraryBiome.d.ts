@@ -14,12 +14,12 @@ declare class BiomeValidMessage {
     constructor(isValid: boolean, message: string);
 }
 declare class LibraryBiome {
+    name: string;
     biomeType: number;
     biomeDepth: number;
     cards: LibraryCardEntry[];
     landTiles: LibraryLandTile[];
     subBiomes: LibraryBiome[];
-    static copyBiome(oldBiome: LibraryBiome): LibraryBiome;
     wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage;
     areBiomeAndSubsValid(message?: BiomeValidMessage, cardLibrary?: LibraryCard[]): BiomeValidMessage;
     private cardsCanBeAddedToBiomeOrSubbiome;
@@ -35,5 +35,6 @@ declare class LibraryBiome {
     removeSingleCard(card: any): void;
     toJSON(): any;
     static fromJSON(json: any): LibraryBiome;
+    static copyBiome(oldBiome: LibraryBiome): LibraryBiome;
 }
 export default LibraryBiome;

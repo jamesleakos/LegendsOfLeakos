@@ -1,22 +1,17 @@
-import RuntimeLandTile from './RuntimeLandTile';
-declare class LibraryLandTile {
-    id: number;
-    x: number;
-    y: number;
-    z: number;
-    depth: number;
-    landType: number;
-    constructor(id: number, x: number, y: number, z: number, depth: number, landType: number);
+import { LandType } from '../../../Enums/LandAndBiome';
+import BaseLandTile from './BaseLandTile';
+declare class LibraryLandTile extends BaseLandTile {
+    static libraryLandTileFactory(id: number, x: number, y: number, z: number, depth: number, landType: number): LibraryLandTile;
+    static copyLandTile(oldEntry: LibraryLandTile): LibraryLandTile;
     toJSON(): {
         id: number;
         x: number;
         y: number;
         z: number;
         depth: number;
-        landType: number;
+        landType: LandType;
     };
     static fromJSON: (json: any) => LibraryLandTile;
-    static getRealmEntryFromLandTile(landTile: RuntimeLandTile): LibraryLandTile;
-    static copyLandTile(oldEntry: LibraryLandTile): LibraryLandTile;
+    mostCommonNeighborType(): number;
 }
 export default LibraryLandTile;

@@ -2,20 +2,22 @@ declare enum LandType {
     forest = 0,
     ocean = 1,
     desert = 2,
-    mountain = 3,
-    prairie = 4,
-    fells = 5,
-    tundra = 6
+    prairie = 3,
+    fells = 4,
+    mountain = 5,
+    tundra = 6,
+    city = 7
 }
 declare enum BiomeType {
     forest = 0,
     ocean = 1,
     desert = 2,
-    mountain = 3,
-    prairie = 4,
-    fells = 5,
+    prairie = 3,
+    fells = 4,
+    mountain = 5,
     tundra = 6,
-    world = 7
+    city = 7,
+    world = 8
 }
 declare enum BiomeDepth {
     all = 0,

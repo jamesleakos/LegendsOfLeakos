@@ -40,8 +40,8 @@ class LibraryRealm {
   changeLandTileType(
     tile_id: number,
     newLandType: LandType,
-    cardLibrary: LibraryCard[],
-    realmLayout: any
+    cardLibrary: LibraryCard[] = [],
+    realmLayout: any = [7, 10, 11, 12, 11, 12, 11, 10, 7]
   ): void {
     const tiles = this.getLandTiles();
     // get the tile we want to change
@@ -51,12 +51,20 @@ class LibraryRealm {
       return;
     }
     tile.landType = newLandType;
-    LibraryLandTile.assignDepth(tiles);
+    this.initalizeLandTiles(realmLayout);
     // TODO: update realm
+    this.updateRealm(cardLibrary);
   }
 
   // Realm Utilities
   isRealmValid(): boolean {
+    // make sure there's exactly one city
+    const cities = this.getLandTiles().filter(
+      (c) => c.landType === LandType.city
+    );
+    if (cities.length !== 1) return false;
+
+    // make sure all biomes are valid
     for (const biome of this.biomes) {
       if (!biome.areBiomeAndSubsValid().isValid) return false;
     }
@@ -69,10 +77,20 @@ class LibraryRealm {
     for (const old of oldRealm.biomes) {
       newRealm.biomes.push(LibraryBiome.copyBiome(old));
     }
+    newRealm.initalizeLandTiles();
     return newRealm;
   }
 
   // #region Updating Landtiles
+
+  initalizeLandTiles(
+    realmLayout: any = [7, 10, 11, 12, 11, 12, 11, 10, 7]
+  ): void {
+    const tiles = this.getLandTiles();
+    LibraryLandTile.assignCoords(tiles, realmLayout);
+    LibraryLandTile.assignNeighbors(tiles);
+    LibraryLandTile.assignDepth(tiles);
+  }
 
   updateRealm(cardLibrary: LibraryCard[] = []): void {
     const tempBiomes: LibraryBiome[] = [];
@@ -85,6 +103,7 @@ class LibraryRealm {
       [LandType.prairie, BiomeType.prairie],
       [LandType.fells, BiomeType.fells],
       [LandType.tundra, BiomeType.tundra],
+      [LandType.city, BiomeType.city],
     ];
 
     const landTiles = this.getLandTiles();
@@ -222,9 +241,7 @@ class LibraryRealm {
     for (const biome of json.biomes) {
       realm.biomes.push(LibraryBiome.fromJSON(biome));
     }
-    const tiles = realm.getLandTiles();
-
-    LibraryLandTile.assignNeighbors(tiles);
+    realm.initalizeLandTiles();
     // should already have depth and coordinates assigned
 
     return realm;

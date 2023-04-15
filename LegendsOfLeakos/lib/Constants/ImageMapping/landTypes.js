@@ -5,6 +5,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Enums_1 = __importDefault(require("../../Enums"));
 var mapping = {
+    city: {
+        all: [
+            'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/city/all/hexPlainsTemple00.png',
+        ],
+        borders: {
+            desert: [],
+            fells: {},
+            forest: {},
+            mountain: [],
+            ocean: [],
+            prairie: [],
+            tundra: {},
+        },
+        deep: {},
+        mid: {},
+        shallow: {},
+    },
     desert: {
         all: [
             'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/desert/all/hexDesertDunes00.png',

@@ -328,7 +328,6 @@ class LibraryBiome {
   }
 
   static fromJSON(json: any): LibraryBiome {
-    console.log('LibraryBiome.fromJSON json', json);
     const biome = new LibraryBiome();
     biome.biomeType = json.biomeType;
     biome.biomeDepth = json.biomeDepth;

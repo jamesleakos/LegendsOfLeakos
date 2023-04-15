@@ -13,6 +13,11 @@ export const TileStyled = styled.div`
     z-index: 999;
   }
 
+  .self-selector .city-selector .land-type-selector {
+    height: 100%;
+    width: 100%;
+  }
+
   .self-selector .fader {
     position: absolute;
     top: -100vh;
@@ -23,4 +28,6 @@ export const TileStyled = styled.div`
     opacity: .5;
     z-index: 998;
   }
+
+
 `;

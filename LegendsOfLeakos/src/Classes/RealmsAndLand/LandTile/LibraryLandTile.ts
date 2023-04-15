@@ -1,3 +1,4 @@
+import { LandType } from '../../../Enums/LandAndBiome';
 import BaseLandTile from './BaseLandTile';
 
 class LibraryLandTile extends BaseLandTile {
@@ -67,6 +68,28 @@ class LibraryLandTile extends BaseLandTile {
   };
 
   //#endregion
+
+  //#region OTHER UTILITIES
+  mostCommonNeighborType() {
+    const typeCounts: { [key: string]: any } = {};
+    for (let neighbor of this.neighbors) {
+      if (neighbor.landType in typeCounts) {
+        typeCounts[neighbor.landType.toString()] += 1;
+      } else {
+        typeCounts[neighbor.landType.toString()] = 1;
+      }
+    }
+    let mostCommonType = 0;
+    let mostCommonCount = 0;
+
+    for (let type in typeCounts) {
+      if (typeCounts[type] > mostCommonCount) {
+        mostCommonType = parseInt(type);
+        mostCommonCount = typeCounts[type];
+      }
+    }
+    return mostCommonType;
+  }
 }
 
 export default LibraryLandTile;

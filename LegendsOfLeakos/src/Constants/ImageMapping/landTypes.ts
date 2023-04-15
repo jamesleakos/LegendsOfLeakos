@@ -1,5 +1,22 @@
 import Enums from '../../Enums';
 const mapping: any = {
+  city: {
+    all: [
+      'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/city/all/hexPlainsTemple00.png',
+    ],
+    borders: {
+      desert: [],
+      fells: {},
+      forest: {},
+      mountain: [],
+      ocean: [],
+      prairie: [],
+      tundra: {},
+    },
+    deep: {},
+    mid: {},
+    shallow: {},
+  },
   desert: {
     all: [
       'https://ik.imagekit.io/hfywj4j0a/LoL/LandTiles/desert/all/hexDesertDunes00.png',
