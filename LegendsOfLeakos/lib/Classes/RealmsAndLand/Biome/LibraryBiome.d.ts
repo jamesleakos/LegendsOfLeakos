@@ -20,6 +20,7 @@ declare class LibraryBiome {
     cards: LibraryCardEntry[];
     landTiles: LibraryLandTile[];
     subBiomes: LibraryBiome[];
+    getLandTiles(): LibraryLandTile[];
     wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage;
     areBiomeAndSubsValid(message?: BiomeValidMessage, cardLibrary?: LibraryCard[]): BiomeValidMessage;
     private cardsCanBeAddedToBiomeOrSubbiome;

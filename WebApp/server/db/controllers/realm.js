@@ -1,4 +1,9 @@
+// external
 const mongoose = require('mongoose');
+const lol = require('legends-of-leakos');
+const LibraryRealm = lol.Classes.RealmsAndLand.LibraryRealm;
+
+// internal
 const { Realm, DefaultRealm } = require('../models/Realm.js');
 const User = require('../models/Users.js');
 
@@ -16,18 +21,26 @@ const createRealm = async (req, res) => {
 
 const updateRealm = async (req, res) => {
   try {
-    const realmId = req.params.id;
+    const realmId = req.params.realm_id;
     const updates = req.body;
 
-    const realm = await Realm.findById(realmId);
-    if (!realm) {
+    // do a check on realm validity
+    const realm = LibraryRealm.fromJSON(updates);
+    if (!realm || !realm.isRealmValid()) {
+      return res.status(400).json({ message: 'Invalid realm' });
+    }
+
+    // Find the realm by ID and update it with the new data
+    const updatedRealm = await Realm.findByIdAndUpdate(realmId, updates, {
+      new: true, // This option returns the modified document rather than the original
+      runValidators: true, // This option applies the schema's validation rules before updating
+    });
+
+    if (!updatedRealm) {
       return res.status(404).json({ message: 'Realm not found' });
     }
 
-    Object.assign(realm, updates);
-    await realm.save();
-
-    res.status(200).json(realm);
+    res.status(200).json(updatedRealm);
   } catch (error) {
     res.status(500).json({ message: 'Error updating realm', error });
   }

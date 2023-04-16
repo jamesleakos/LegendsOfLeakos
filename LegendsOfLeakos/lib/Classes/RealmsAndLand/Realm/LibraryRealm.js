@@ -33,7 +33,7 @@ var LibraryRealm = /** @class */ (function () {
         var tiles = [];
         for (var _i = 0, _a = this.biomes; _i < _a.length; _i++) {
             var biome = _a[_i];
-            tiles.push.apply(tiles, biome.landTiles);
+            tiles.push.apply(tiles, biome.getLandTiles());
         }
         return tiles.sort(function (a, b) { return a.id - b.id; });
     };
@@ -53,16 +53,38 @@ var LibraryRealm = /** @class */ (function () {
         this.updateRealm(cardLibrary);
     };
     // Realm Utilities
-    LibraryRealm.prototype.isRealmValid = function () {
+    LibraryRealm.prototype.isRealmValid = function (realmLayout) {
+        // REALM STUFF
+        if (realmLayout === void 0) { realmLayout = [7, 10, 11, 12, 11, 12, 11, 10, 7]; }
         // make sure there's exactly one city
         var cities = this.getLandTiles().filter(function (c) { return c.landType === LandAndBiome_1.LandType.city; });
-        if (cities.length !== 1)
+        if (cities.length !== 1) {
+            console.log('Error, not exactly one city');
             return false;
+        }
+        // make sure that there are the right amount of land tiles
+        var landTiles = this.getLandTiles();
+        var layoutSum = realmLayout.reduce(function (a, b) { return a + b; }, 0);
+        if (landTiles.length !== layoutSum) {
+            console.log('Error, tiles dont match');
+            return false;
+        }
+        // just try to init the tiles
+        try {
+            this.initalizeLandTiles();
+        }
+        catch (_a) {
+            console.log('Error, couldnt init tiles');
+            return false;
+        }
+        // BIOME STUFF
         // make sure all biomes are valid
-        for (var _i = 0, _a = this.biomes; _i < _a.length; _i++) {
-            var biome = _a[_i];
-            if (!biome.areBiomeAndSubsValid().isValid)
+        for (var _i = 0, _b = this.biomes; _i < _b.length; _i++) {
+            var biome = _b[_i];
+            if (!biome.areBiomeAndSubsValid()) {
+                console.log('Error, biome not valid');
                 return false;
+            }
         }
         return true;
     };
@@ -223,11 +245,11 @@ var LibraryRealm = /** @class */ (function () {
         // should already have depth and coordinates assigned
         return realm;
     };
-    LibraryRealm.prototype.toJSON = function (realm) {
+    LibraryRealm.prototype.toJSON = function () {
         var json = {};
-        json.name = realm.name;
+        json.name = this.name;
         json.biomes = [];
-        for (var _i = 0, _a = realm.biomes; _i < _a.length; _i++) {
+        for (var _i = 0, _a = this.biomes; _i < _a.length; _i++) {
             var biome = _a[_i];
             json.biomes.push(biome.toJSON());
         }

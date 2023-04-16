@@ -5,18 +5,10 @@ import RealmMap from '../../../Tiles/RealmMap.jsx';
 
 function RealmTile({ realm, selectRealm, selected }) {
   const title = realm.name;
-  // TODO - relace with a Realm class function
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
-    const tempTiles = [];
-    realm.biomes.forEach((biome) => {
-      biome.terrain.landTiles.forEach((tile) => {
-        tempTiles.push(tile);
-      });
-    });
-    // sort tiles by id in ascending order
-    tempTiles.sort((a, b) => a.id - b.id);
-    setTiles(tempTiles);
+    if (!realm) return;
+    setTiles(realm.getLandTiles());
   }, []);
 
   return (

@@ -32,7 +32,7 @@ class LibraryRealm {
   getLandTiles(): LibraryLandTile[] {
     const tiles: LibraryLandTile[] = [];
     for (const biome of this.biomes) {
-      tiles.push(...biome.landTiles);
+      tiles.push(...biome.getLandTiles());
     }
     return tiles.sort((a, b) => a.id - b.id);
   }
@@ -57,16 +57,41 @@ class LibraryRealm {
   }
 
   // Realm Utilities
-  isRealmValid(): boolean {
+  isRealmValid(realmLayout: any = [7, 10, 11, 12, 11, 12, 11, 10, 7]): boolean {
+    // REALM STUFF
+
     // make sure there's exactly one city
     const cities = this.getLandTiles().filter(
       (c) => c.landType === LandType.city
     );
-    if (cities.length !== 1) return false;
+    if (cities.length !== 1) {
+      console.log('Error, not exactly one city');
+      return false;
+    }
 
+    // make sure that there are the right amount of land tiles
+    const landTiles = this.getLandTiles();
+    const layoutSum = realmLayout.reduce((a: number, b: number) => a + b, 0);
+    if (landTiles.length !== layoutSum) {
+      console.log('Error, tiles dont match');
+      return false;
+    }
+
+    // just try to init the tiles
+    try {
+      this.initalizeLandTiles();
+    } catch {
+      console.log('Error, couldnt init tiles');
+      return false;
+    }
+
+    // BIOME STUFF
     // make sure all biomes are valid
     for (const biome of this.biomes) {
-      if (!biome.areBiomeAndSubsValid().isValid) return false;
+      if (!biome.areBiomeAndSubsValid()) {
+        console.log('Error, biome not valid');
+        return false;
+      }
     }
     return true;
   }
@@ -247,11 +272,11 @@ class LibraryRealm {
     return realm;
   }
 
-  toJSON(realm: LibraryRealm): any {
+  toJSON(): any {
     const json: any = {};
-    json.name = realm.name;
+    json.name = this.name;
     json.biomes = [];
-    for (const biome of realm.biomes) {
+    for (const biome of this.biomes) {
       json.biomes.push(biome.toJSON());
     }
     return json;

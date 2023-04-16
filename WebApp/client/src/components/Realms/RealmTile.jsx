@@ -7,15 +7,8 @@ function RealmTile({ realm, isSelected, setSelectedRealm }) {
   // TODO - relace with a Realm class function
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
-    const tempTiles = [];
-    realm.biomes.forEach((biome) => {
-      biome.landTiles.forEach((tile) => {
-        tempTiles.push(tile);
-      });
-    });
-    // sort tiles by id in ascending order
-    tempTiles.sort((a, b) => a.id - b.id);
-    setTiles(tempTiles);
+    if (!realm) return;
+    setTiles(realm.getLandTiles());
   }, []);
 
   return (

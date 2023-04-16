@@ -9,21 +9,16 @@ const LandTileSchema = new mongoose.Schema({
   landType: Number,
 });
 
-const TerrainSchema = new mongoose.Schema({
-  name: String,
-  landTiles: [LandTileSchema],
-});
-
-const DeckSchema = new mongoose.Schema({
-  name: String,
-  cards: [String],
+const CardSchema = new mongoose.Schema({
+  libraryID: Number,
+  amount: Number,
 });
 
 const BiomeSchema = new mongoose.Schema({
   biomeType: Number,
   biomeDepth: Number,
-  deck: DeckSchema,
-  terrain: TerrainSchema,
+  cards: [CardSchema],
+  landTiles: [LandTileSchema],
   subBiomes: [this],
 });
 

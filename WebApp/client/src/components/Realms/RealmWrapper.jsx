@@ -26,16 +26,8 @@ function RealmWrapper({
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
     if (!realm) return;
-    // TODO: this should be replaced by a Realm class function
-    const tempTiles = [];
-    realm.biomes.forEach((biome) => {
-      biome.landTiles.forEach((tile) => {
-        tempTiles.push(tile);
-      });
-    });
-    // sort tiles by id in ascending order
-    tempTiles.sort((a, b) => a.id - b.id);
-    setTiles(tempTiles);
+    const tiles = realm.getLandTiles();
+    setTiles(realm.getLandTiles());
   }, [realm]);
 
   // #endregion

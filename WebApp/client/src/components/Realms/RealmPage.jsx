@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Classes, Enums } from 'legends-of-leakos';
 const LibraryRealm = Classes.RealmsAndLand.LibraryRealm;
 const LandType = Enums.LandType;
-console.log(LandType);
 
 // internal
 // components
@@ -30,7 +29,6 @@ function RealmPage() {
   // const [currentRuntimeLandTiles, setCurrentRuntimeLandTiles] = useState([]);
 
   useEffect(() => {
-    console.log('getting realms...');
     axios
       .get('/realms')
       .then((res) => {
@@ -41,6 +39,19 @@ function RealmPage() {
         console.log(err);
       });
   }, []);
+
+  const saveRealm = () => {
+    if (!selectedRealm) return;
+    const json = selectedRealm.toJSON();
+    axios
+      .put(`/realms/${selectedRealm._id}`, json)
+      .then((res) => {
+        console.log('saved');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const createRealmFromJSON = (json) => {
     const realm = LibraryRealm.fromJSON(json);
@@ -69,6 +80,9 @@ function RealmPage() {
 
   const [displayState, setDisplayState] = useState('select-realm');
   const handleBack = () => {
+    // save the realm
+    saveRealm();
+
     if (displayState === 'edit-realm') {
       setDisplayState('select-realm');
     } else if (displayState === 'edit-biome') {
@@ -126,6 +140,8 @@ function RealmPage() {
 
   const changeTileType = (tile_index, landType) => {
     const copy = LibraryRealm.copyRealm(selectedRealm);
+    // so we can save it with the server
+    copy._id = selectedRealm._id;
     // if we're making a new city, we need to remove any old ones
     if (landType === LandType.city) {
       const tile = copy

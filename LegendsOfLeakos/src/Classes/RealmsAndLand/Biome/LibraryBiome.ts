@@ -38,6 +38,16 @@ class LibraryBiome {
   landTiles: LibraryLandTile[] = [];
   subBiomes: LibraryBiome[] = [];
 
+  //#region Landtiles
+
+  getLandTiles(): LibraryLandTile[] {
+    const tiles: LibraryLandTile[] = [];
+    tiles.push(...this.landTiles);
+    return tiles;
+  }
+
+  //#endregion
+
   // #region Biome / Card Requirement Validity
 
   wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage {
@@ -331,14 +341,21 @@ class LibraryBiome {
     const biome = new LibraryBiome();
     biome.biomeType = json.biomeType;
     biome.biomeDepth = json.biomeDepth;
-    for (const card of json.cards) {
-      biome.cards.push(LibraryCardEntry.fromJSON(card));
+
+    if (json.cards) {
+      for (const card of json.cards) {
+        biome.cards.push(LibraryCardEntry.fromJSON(card));
+      }
     }
-    for (const sub of json.subBiomes) {
-      biome.subBiomes.push(LibraryBiome.fromJSON(sub));
+    if (json.subBiomes) {
+      for (const sub of json.subBiomes) {
+        biome.subBiomes.push(LibraryBiome.fromJSON(sub));
+      }
     }
-    for (const tile of json.landTiles) {
-      biome.landTiles.push(LibraryLandTile.fromJSON(tile));
+    if (json.landTiles) {
+      for (const tile of json.landTiles) {
+        biome.landTiles.push(LibraryLandTile.fromJSON(tile));
+      }
     }
     return biome;
   }

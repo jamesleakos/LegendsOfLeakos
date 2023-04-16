@@ -7,8 +7,7 @@ import RealmMap from '../Tiles/RealmMap.jsx';
 //css
 import { BiomeTileStyled } from './styles/BiomeTile.styled.js';
 
-const tilesFromBiome = function (biome) {
-  const landType = biome.landTiles[0].landType;
+const tilesFromBiome = function (landType) {
   const tempTiles = [];
   // TODO - this should come from a constant
   const realmSize = [7, 10, 11, 12, 11, 12, 11, 10, 7].reduce((a, b) => a + b);
@@ -19,7 +18,9 @@ const tilesFromBiome = function (biome) {
 };
 
 function BiomeTile({ biome, isSelected, setSelectedBiome, mouseOverBiome }) {
-  const [tiles, setTiles] = useState(tilesFromBiome(biome));
+  const [tiles, setTiles] = useState(
+    tilesFromBiome(biome.getLandTiles()[0].landType)
+  );
 
   return (
     <BiomeTileStyled
