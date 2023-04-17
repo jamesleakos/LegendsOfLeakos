@@ -46,6 +46,25 @@ const updateRealm = async (req, res) => {
   }
 };
 
+const deleteRealm = async (req, res) => {
+  try {
+    const realmId = req.params.realm_id;
+    if (!realmId) {
+      return res.status(400).json({ message: 'No realm ID provided' });
+    }
+    const deletedRealm = await Realm.findByIdAndDelete(realmId);
+
+    if (!deletedRealm) {
+      return res.status(404).json({ message: 'Realm not found' });
+    } else {
+      res.status(200).json(deletedRealm);
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting realm', error });
+  }
+};
+
+
 // get all the authenticated user's realms
 // if the user doesn't have an realms, get the default realms
 const getRealmsAPI = async (req, res) => {
@@ -162,6 +181,7 @@ const getUserSelectedRealm = async (userID) => {
 module.exports = {
   createRealm,
   updateRealm,
+  deleteRealm,
   getUserRealms,
   getRealmsAPI,
   getRealmByID,

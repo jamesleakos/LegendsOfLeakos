@@ -22,4 +22,9 @@ router.patch('/selected-realm', (req, res) => {
   UserController.updateSelectedRealm(req, res);
 });
 
+router.delete('/:realm_id', (req, res) => {
+  if (!req.query.realm_id) req.query.realm_id = req.params.realm_id;
+  RealmController.deleteRealm(req, res);
+});
+
 module.exports = router;
