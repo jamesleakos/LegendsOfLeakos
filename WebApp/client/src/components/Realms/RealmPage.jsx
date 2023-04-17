@@ -43,20 +43,31 @@ function RealmPage() {
   const saveRealm = () => {
     if (!selectedRealm) return;
     const json = selectedRealm.toJSON();
-    axios
-      .put(`/realms/${selectedRealm._id}`, json)
-      .then((res) => {
-        console.log('saved');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (selectedRealm._id) {
+      axios
+        .put(`/realms/${selectedRealm._id}`, json)
+        .then((res) => {
+          console.log('saved');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      axios
+        .post('/realms', json)
+        .then((res) => {
+          setSelectedRealm(createRealmFromJSON(res.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const createRealmFromJSON = (json) => {
     const realm = LibraryRealm.fromJSON(json);
     // adding this for React keys
-    realm._id = json._id;
+    realm._id = json._id || null;
     return realm;
   };
 
