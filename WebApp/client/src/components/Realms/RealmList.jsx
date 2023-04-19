@@ -7,7 +7,7 @@ import RealmTile from './RealmTile.jsx';
 //css
 import { RealmListStyled } from './styles/RealmList.styled.js';
 
-function RealmList({ realms, selectedRealm, setSelectedRealm }) {
+function RealmList({ realms, selectedRealm, setSelectedRealm, deleteRealm }) {
   return (
     <RealmListStyled>
       <div className='underlined-title'>Realms</div>
@@ -19,6 +19,7 @@ function RealmList({ realms, selectedRealm, setSelectedRealm }) {
               realm={realm}
               isSelected={realm._id === selectedRealm._id}
               setSelectedRealm={setSelectedRealm}
+              deleteRealm={deleteRealm}
             />
           );
         })}

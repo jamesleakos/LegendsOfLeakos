@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { RealmTileStyled } from './styles/RealmTile.styled.js';
 import RealmMap from '../Tiles/RealmMap.jsx';
 
-function RealmTile({ realm, isSelected, setSelectedRealm }) {
+function RealmTile({ realm, isSelected, setSelectedRealm, deleteRealm }) {
   // TODO - relace with a Realm class function
   const [tiles, setTiles] = useState([]);
   useEffect(() => {
@@ -22,7 +22,14 @@ function RealmTile({ realm, isSelected, setSelectedRealm }) {
       <div className='background'>
         <RealmMap tiles={tiles} />
       </div>
-      <div className='delete-button'>X</div>
+      <div
+        className='delete-button'
+        onClick={() => {
+          deleteRealm(realm._id);
+        }}
+      >
+        X
+      </div>
     </RealmTileStyled>
   );
 }

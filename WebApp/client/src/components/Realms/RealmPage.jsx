@@ -65,6 +65,10 @@ function RealmPage() {
   };
 
   const deleteRealm = (realm_id) => {
+    if (!realm_id) {
+      console.log('No realm id');
+      return;
+    }
     axios
       .delete(`/realms/${realm_id}`)
       .then((res) => {
@@ -205,6 +209,7 @@ function RealmPage() {
             realms={realms}
             selectedRealm={selectedRealm}
             setSelectedRealm={setSelectedRealm}
+            deleteRealm={deleteRealm}
           />
         )}
         {displayState === 'edit-realm' && (
