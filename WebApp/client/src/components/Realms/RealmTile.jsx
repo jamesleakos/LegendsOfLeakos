@@ -22,6 +22,7 @@ function RealmTile({ realm, isSelected, setSelectedRealm }) {
       <div className='background'>
         <RealmMap tiles={tiles} />
       </div>
+      <div className='delete-button'>X</div>
     </RealmTileStyled>
   );
 }

@@ -64,6 +64,17 @@ function RealmPage() {
     }
   };
 
+  const deleteRealm = (realm_id) => {
+    axios
+      .delete(`/realms/${realm_id}`)
+      .then((res) => {
+        console.log('deleted');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const createRealmFromJSON = (json) => {
     const realm = LibraryRealm.fromJSON(json);
     // adding this for React keys
