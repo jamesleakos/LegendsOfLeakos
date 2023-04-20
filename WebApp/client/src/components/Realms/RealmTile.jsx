@@ -9,7 +9,7 @@ function RealmTile({ realm, isSelected, setSelectedRealm, deleteRealm }) {
   useEffect(() => {
     if (!realm) return;
     setTiles(realm.getLandTiles());
-  }, []);
+  }, [realm]);
 
   return (
     <RealmTileStyled

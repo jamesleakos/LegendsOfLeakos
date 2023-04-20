@@ -9,20 +9,46 @@ const User = require('../models/Users.js');
 
 const createRealm = async (req, res) => {
   try {
-    const realmData = req.body;
+    // make sure the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
+    let realmData = req.body;
+
+    // if they didn't send a realm to create then use the default realm
+    if (!realmData.biomes) {
+      const defaultRealm = await DefaultRealm.findOne({}).lean();
+      console.log('defaultRealm', defaultRealm);
+      if (!defaultRealm) {
+        return res.status(500).json({ message: 'Error creating realm - no default realms' });
+      } else {
+        defaultRealm._id = new mongoose.Types.ObjectId();
+        realmData = defaultRealm;
+      }
+    }
+
     const newRealm = new Realm(realmData);
+    newRealm.user_id = req.user._id;
     await newRealm.save();
 
     res.status(201).json(newRealm);
   } catch (error) {
+    console.log('error: ', error);
     res.status(500).json({ message: 'Error creating realm', error });
   }
 };
 
 const updateRealm = async (req, res) => {
   try {
+    // make sure the user is authenticated
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not authenticated' });
+    }
+
     const realmId = req.params.realm_id;
     const updates = req.body;
+    updates.user_id = req.user._id;
 
     // do a check on realm validity
     const realm = LibraryRealm.fromJSON(updates);
@@ -31,13 +57,15 @@ const updateRealm = async (req, res) => {
     }
 
     // Find the realm by ID and update it with the new data
-    const updatedRealm = await Realm.findByIdAndUpdate(realmId, updates, {
+    const updatedRealm = await Realm.findOneAndUpdate({ _id: realmId, user_id: req.user._id }, updates, {
       new: true, // This option returns the modified document rather than the original
       runValidators: true, // This option applies the schema's validation rules before updating
     });
 
     if (!updatedRealm) {
-      return res.status(404).json({ message: 'Realm not found' });
+      console.log('could not find realm with id: ', realmId, ' and user id: ', req.user._id, ' so creating a new one');
+      createRealm(req, res);
+      return;
     }
 
     res.status(200).json(updatedRealm);
@@ -52,7 +80,7 @@ const deleteRealm = async (req, res) => {
     if (!realmId) {
       return res.status(400).json({ message: 'No realm ID provided' });
     }
-    const deletedRealm = await Realm.findByIdAndDelete(realmId);
+    const deletedRealm = await Realm.findOneAndDelete({ _id: realmId, user_id: req.user._id });
 
     if (!deletedRealm) {
       return res.status(404).json({ message: 'Realm not found' });
@@ -100,7 +128,7 @@ const getUserRealms = async (user) => {
   }
 };
 
-const getRealmByID = async (realmID) => {
+const _getRealmByID = async (realmID) => {
   try {
     const realms = await Realm.find({ _id: realmID });
     if (!realms) {
@@ -171,7 +199,7 @@ const getUserSelectedRealm = async (userID) => {
       console.log('ERROR: no user object');
       return null;
     } else {
-      return getRealmByID(user.selectedRealm);
+      return _getRealmByID(user.selectedRealm);
     }
   } catch (error) {
     console.log('Error getting user selected realm', error);
@@ -184,6 +212,5 @@ module.exports = {
   deleteRealm,
   getUserRealms,
   getRealmsAPI,
-  getRealmByID,
   getUserSelectedRealm,
 };

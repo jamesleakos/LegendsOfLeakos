@@ -85,3 +85,22 @@ body * {
 }
 
 /* #endregion */
+
+/* #region BUTTONS */
+
+.ui-button {
+  font-size: 0.8rem;
+  padding: 5px;
+  color: var(--text-color-secondary);
+  border: 1px solid var(--border-color-dim);
+  background-color: var(--color-background-navbar);
+  text-align: center;
+  line-height: var(--menu-button-height);
+  transition: 0.5s ease;
+}
+.ui-button:hover {
+  border: 1px solid var(--border-color-bright);
+  color: var(--text-color-accent);
+}
+
+/* #endregion */

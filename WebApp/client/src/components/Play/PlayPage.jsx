@@ -1,6 +1,10 @@
 // external
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { Classes, Enums } from 'legends-of-leakos';
+const LibraryRealm = Classes.RealmsAndLand.LibraryRealm;
+const LandType = Enums.LandType;
+
 // internal
 // css
 import { PlayPageStyled } from './styles/PlayPage.styled.js';
@@ -45,7 +49,7 @@ function PlayPage() {
     axios
       .get('/realms')
       .then((res) => {
-        setRealms(res.data);
+        setRealms(createRealmsFromJSON(res.data));
       })
       .catch((err) => {
         console.log(err);
@@ -62,6 +66,21 @@ function PlayPage() {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const createRealmFromJSON = (json) => {
+    const realm = LibraryRealm.fromJSON(json);
+    // adding this for React keys
+    realm._id = json._id || null;
+    return realm;
+  };
+
+  const createRealmsFromJSON = (json) => {
+    const realms = [];
+    json.forEach((realm) => {
+      realms.push(createRealmFromJSON(realm));
+    });
+    return realms;
   };
   //#endregion
 

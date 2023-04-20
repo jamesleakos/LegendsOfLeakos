@@ -20,6 +20,11 @@ export const BiomeTileStyled = styled.div`
   overflow: hidden;
   z-index: 2;
 
+  // background image
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
   .title {
     text-align: left;
     font-size: 1rem;
@@ -48,19 +53,5 @@ export const BiomeTileStyled = styled.div`
   }
   .interior-border.selected {
     border-color: gold;
-  }
-
-  .background {
-    position: absolute;
-    top: -100px;
-    left: -100px;
-    right: 0;
-    bottom: 0;
-    z-index: -1;
-  }
-
-  .realm-map {
-    height: 250%;
-    width: 250%;
   }
 `;

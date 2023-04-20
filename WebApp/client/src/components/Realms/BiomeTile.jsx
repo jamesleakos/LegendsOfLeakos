@@ -1,5 +1,7 @@
 // external
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Enums } from 'legends-of-leakos';
+const LandType = Enums.LandType;
 
 // internal
 // components
@@ -7,23 +9,19 @@ import RealmMap from '../Tiles/RealmMap.jsx';
 //css
 import { BiomeTileStyled } from './styles/BiomeTile.styled.js';
 
-const tilesFromBiome = function (landType) {
-  const tempTiles = [];
-  // TODO - this should come from a constant
-  const realmSize = [7, 10, 11, 12, 11, 12, 11, 10, 7].reduce((a, b) => a + b);
-  for (let i = 0; i < realmSize; i++) {
-    tempTiles.push({ id: i, landType: landType, depth: 3 });
-  }
-  return tempTiles;
+const formatImageLink = (link) => {
+  return `linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) ), url('${link}')`;
 };
 
 function BiomeTile({ biome, isSelected, setSelectedBiome, mouseOverBiome }) {
-  const [tiles, setTiles] = useState(
-    tilesFromBiome(biome.getLandTiles()[0].landType)
-  );
+  const landType = biome.getLandTiles()[0].landType;
+  const url = `https://ik.imagekit.io/hfywj4j0a/LoL/BiomeTileBackgrounds/${LandType[landType]}.png`;
 
   return (
     <BiomeTileStyled
+      style={{
+        backgroundImage: formatImageLink(url),
+      }}
       onClick={() => {
         setSelectedBiome(biome);
       }}
@@ -36,9 +34,6 @@ function BiomeTile({ biome, isSelected, setSelectedBiome, mouseOverBiome }) {
     >
       <div className={`interior-border ${isSelected ? ' selected' : ''}`}></div>
       <div className='title'>{biome?.name}</div>
-      <div className='background'>
-        <RealmMap tiles={tiles} />
-      </div>
     </BiomeTileStyled>
   );
 }

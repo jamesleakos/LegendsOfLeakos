@@ -1,6 +1,6 @@
 // external
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // internal
@@ -10,6 +10,7 @@ import AuthContext from '../../contexts/AuthContext.js';
 import { NavbarStyled } from './styles/Navbar.styled.js';
 
 function Navbar() {
+  const navigate = useNavigate();
   const soundContext = React.useContext(SoundContext);
   const authContext = React.useContext(AuthContext);
 
@@ -38,26 +39,22 @@ function Navbar() {
         <div
           className='navbar-item'
           style={{ gridColumn: 2, borderWidth: '0 1px' }}
+          onMouseDown={() => {
+            soundContext.playClick();
+            navigate('/play');
+          }}
         >
-          <Link
-            to='/play'
-            className='clickable-link'
-            onClick={soundContext.playClick}
-          >
-            Battle
-          </Link>
+          <div className='clickable-link'>Battle</div>
         </div>
         <div
           className='navbar-item'
           style={{ gridColumn: 3, borderWidth: '0 1px 0 0' }}
+          onMouseDown={() => {
+            soundContext.playClick();
+            navigate('/collections');
+          }}
         >
-          <Link
-            to='/collections'
-            className='clickable-link'
-            onClick={soundContext.playClick}
-          >
-            Realms
-          </Link>
+          <div className='clickable-link'>Realms</div>
         </div>
 
         {/* title */}
@@ -69,22 +66,22 @@ function Navbar() {
         <div
           className='navbar-item'
           style={{ gridColumn: 5, borderWidth: '0 1px' }}
+          onMouseDown={() => {
+            soundContext.playClick();
+            navigate('/test');
+          }}
         >
-          <Link
-            to='/test'
-            className='clickable-link'
-            onClick={soundContext.playClick}
-          >
-            Tidings
-          </Link>
+          <div className='clickable-link'>Tidings</div>
         </div>
         <div
           className='navbar-item'
           style={{ gridColumn: 6, borderWidth: '0 1px 0 0' }}
+          onMouseDown={() => {
+            soundContext.playClick();
+            navigate('/test');
+          }}
         >
-          <Link to='/test' className='clickable-link' onClick={logout}>
-            Flee
-          </Link>
+          <div className='clickable-link'>Flee</div>
         </div>
       </div>
     );

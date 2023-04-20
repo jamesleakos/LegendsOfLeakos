@@ -35,7 +35,7 @@ const DefaultRealmSchema = new mongoose.Schema({
 });
 
 const Realm = mongoose.model('realms', RealmSchema);
-const DefaultRealm = mongoose.model('defaultRealms', DefaultRealmSchema);
+const DefaultRealm = mongoose.model('defaultrealms', DefaultRealmSchema);
 
 module.exports = {
   Realm,

@@ -21,4 +21,8 @@ export const RealmListStyled = styled.div`
   .realmtile-holder::-webkit-scrollbar {
     display: none;
   }
+
+  .ui-button {
+    margin-bottom: 10px;
+  }
 `;

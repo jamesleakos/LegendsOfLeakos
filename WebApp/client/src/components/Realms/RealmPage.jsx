@@ -40,6 +40,17 @@ function RealmPage() {
       });
   }, []);
 
+  const createNewRealm = () => {
+    axios
+      .post('/realms')
+      .then((res) => {
+        _addRealmAndRefresh(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const saveRealm = () => {
     if (!selectedRealm) return;
     const json = selectedRealm.toJSON();
@@ -47,7 +58,7 @@ function RealmPage() {
       axios
         .put(`/realms/${selectedRealm._id}`, json)
         .then((res) => {
-          console.log('saved');
+          _addRealmAndRefresh(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -56,7 +67,7 @@ function RealmPage() {
       axios
         .post('/realms', json)
         .then((res) => {
-          setSelectedRealm(createRealmFromJSON(res.data));
+          _addRealmAndRefresh(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -64,16 +75,37 @@ function RealmPage() {
     }
   };
 
+  const _addRealmAndRefresh = (data) => {
+    const newRealm = createRealmFromJSON(data);
+    // add to realms if ._id is not already there
+    if (!realms.find((realm) => realm._id === newRealm._id)) {
+      setRealms([...realms, newRealm]);
+    } else {
+      const tempRealms = realms.map((realm) => {
+        if (realm._id === newRealm._id) {
+          return newRealm;
+        }
+        return realm;
+      });
+      setRealms(tempRealms);
+    }
+    setSelectedRealm(newRealm);
+  };
+
   const deleteRealm = (realm_id) => {
     if (!realm_id) {
-      console.log('No realm id');
+      console.log('Delete Realm - No realm id');
       return;
     }
+
+    // take out of realms
+    const tempRealms = realms.filter((realm) => realm._id !== realm_id);
+    setRealms(tempRealms);
+
+    // remove from server
     axios
       .delete(`/realms/${realm_id}`)
-      .then((res) => {
-        console.log('deleted');
-      })
+      .then((res) => {})
       .catch((err) => {
         console.log(err);
       });
@@ -83,6 +115,9 @@ function RealmPage() {
     const realm = LibraryRealm.fromJSON(json);
     // adding this for React keys
     realm._id = json._id || null;
+    if (!realm._id) {
+      console.log('create realm from json - no realm id');
+    }
     return realm;
   };
 
@@ -201,7 +236,14 @@ function RealmPage() {
             Back
           </div>
         )}
-        <div className='realm-title'>{selectedRealm?.name}</div>
+        <div
+          className='realm-title'
+          onDoubleClick={() => {
+            console.log('doubleclick');
+          }}
+        >
+          {selectedRealm?.name}
+        </div>
       </div>
       <div className='main-content'>
         {displayState === 'select-realm' && (
@@ -210,6 +252,7 @@ function RealmPage() {
             selectedRealm={selectedRealm}
             setSelectedRealm={setSelectedRealm}
             deleteRealm={deleteRealm}
+            createNewRealm={createNewRealm}
           />
         )}
         {displayState === 'edit-realm' && (
@@ -230,9 +273,6 @@ function RealmPage() {
           landTileLeft={() => {}}
           selfSelectorReturn={selfSelectorReturn}
         />
-        {displayState === 'select-realm' && (
-          <div className='select-realm-button'>Back</div>
-        )}
       </div>
     </RealmPageStyled>
   );
