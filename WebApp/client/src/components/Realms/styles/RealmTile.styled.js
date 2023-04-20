@@ -64,4 +64,16 @@ export const RealmTileStyled = styled.div`
     height: 250%;
     width: 250%;
   }
+
+  .delete-button {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    transition: 0.5s ease;
+  }
+  .delete-button:hover {
+    color: var(--text-color-accent);
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05);
+  }
 `;

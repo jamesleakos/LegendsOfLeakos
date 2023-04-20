@@ -12,7 +12,7 @@ export const RealmListStyled = styled.div`
   }
 
   .realmtile-holder {
-    height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - var(--title-bar-height) - 100px);
+    height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - var(--title-bar-height) - 40px);
     overflow-y: scroll;
     width: 100%;
     border-bottom: 1px solid var(--text-color-accent);
