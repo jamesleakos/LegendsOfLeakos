@@ -6,12 +6,16 @@ const LibraryRealm = Classes.RealmsAndLand.LibraryRealm;
 const LandType = Enums.LandType;
 
 // internal
+// hooks
+import useWindowDimensions from '../../hooks/useWindowDimensions.js';
+
 // components
 import Navbar from '../Home/Navbar.jsx';
 import RealmWrapper from './RealmWrapper.jsx';
 import RealmList from './RealmList.jsx';
 import BiomeList from './BiomeList.jsx';
 import CardDisplay from './CardDisplay.jsx';
+import TitleComponent from './TitleComponent.jsx';
 //css
 import { RealmPageStyled } from './styles/RealmPage.styled.js';
 // hooks
@@ -147,7 +151,10 @@ function RealmPage() {
     if (displayState === 'edit-realm') {
       setDisplayState('select-realm');
     } else if (displayState === 'edit-biome') {
+      console.log('handleBack - edit-biome switching to edit-realm');
       setDisplayState('edit-realm');
+      setSelectedBiome(null);
+      setSelectedSubbiome(null);
     }
   };
 
@@ -158,18 +165,18 @@ function RealmPage() {
   const [outlinedTileIndices, setOutlinedTileIndices] = useState([]);
   const mouseOverBiome = (biome) => {
     if (!biome) {
-      setOutlinedTileIndices([]);
+      if (!selectedSubbiome) {
+        setOutlinedTileIndices([]);
+      } else {
+        setOutlinedTileIndices(
+          selectedSubbiome.landTiles.map((tile) => tile.id)
+        );
+      }
       return;
     }
     if (displayState === 'select-realm') return;
 
-    const tempIndices = [];
-    biome.landTiles.forEach((tile) => {
-      tempIndices.push(tile.id);
-    });
-    // sort tiles by id in ascending order
-    tempIndices.sort((a, b) => a.id - b.id);
-    setOutlinedTileIndices(tempIndices);
+    setOutlinedTileIndices(biome.landTiles.map((tile) => tile.id));
   };
 
   // #endregion
@@ -221,6 +228,92 @@ function RealmPage() {
 
   //#endregion
 
+  // #region NAME CHANGER
+
+  const [editNameState, setEditNameState] = useState('display');
+  const editName = (newName) => {
+    console.log('editName: ', newName);
+    if (newName !== selectedRealm.name) {
+      console.log('got here');
+      const copy = LibraryRealm.copyRealm(selectedRealm);
+      copy._id = selectedRealm._id;
+      copy.name = newName;
+      setSelectedRealm(copy);
+    }
+  };
+
+  //#endregion
+
+  // #region BIOMES
+
+  const [selectedBiome, setSelectedBiome] = useState(null);
+  const [selectedSubbiome, setSelectedSubbiome] = useState(null);
+
+  useEffect(() => {
+    if (!selectedRealm) return;
+    if (!selectedBiome) return;
+    if (displayState === 'edit-realm') {
+      setDisplayState('edit-biome');
+    } else if (displayState === 'edit-biome') {
+      // here we'll parse cards or stuff like that maybe
+    }
+  }, [selectedBiome]);
+
+  useEffect(() => {
+    if (displayState === 'edit-biome' && selectedSubbiome) {
+      console.log('passed check');
+      const tempIndices = [];
+      selectedSubbiome.landTiles.forEach((tile) => {
+        tempIndices.push(tile.id);
+      });
+      // sort tiles by id in ascending order
+      tempIndices.sort((a, b) => a.id - b.id);
+      setOutlinedTileIndices(tempIndices);
+    } else {
+      setOutlinedTileIndices([]);
+    }
+  }, [selectedSubbiome]);
+
+  //#endregion
+
+  // #region HEIGHT CALC for BIOMELIST
+
+  const { windowHeight, windowWidth } = useWindowDimensions();
+  const [availableHeight, setAvailableHeight] = useState(0);
+  const [availableWidth, setAvailableWidth] = useState(0);
+  const [size, setSize] = useState(null);
+
+  useEffect(() => {
+    const handleResizeWindow = () => {
+      // this is calculating for the realm
+      setAvailableHeight(windowHeight - 400);
+      setAvailableWidth(windowWidth / 5);
+    };
+    window.addEventListener('resize', handleResizeWindow);
+    handleResizeWindow();
+    return () => {
+      window.removeEventListener('resize', handleResizeWindow);
+    };
+  }, [windowHeight, windowWidth]);
+
+  useEffect(() => {
+    // TODO - rows should come from a constant somewhere
+    const rows = [7, 10, 11, 12, 11, 12, 11, 10, 7];
+    // hexagon size is 1/2 of the row height
+    const sizeImpliedByHeight = ((availableHeight / rows.length) * 2) / 3;
+    // hexagon size is 1/sqrt(3) of the hexagon width
+    const sizeImpliedByWidth =
+      availableWidth / Math.max(...rows) / Math.sqrt(3);
+
+    const hexSize = Math.min(sizeImpliedByHeight, sizeImpliedByWidth);
+    setSize({
+      height: hexSize * rows.length * 2 * (3 / 4) + 'px',
+      width: hexSize * Math.max(...rows) * Math.sqrt(3) + 'px',
+    });
+  }, [availableHeight, availableWidth]);
+
+  // #endregion
+
   return (
     <RealmPageStyled
       style={{
@@ -236,14 +329,12 @@ function RealmPage() {
             Back
           </div>
         )}
-        <div
-          className='realm-title'
-          onDoubleClick={() => {
-            console.log('doubleclick');
-          }}
-        >
-          {selectedRealm?.name}
-        </div>
+        <TitleComponent
+          selectedRealm={selectedRealm}
+          editName={editName}
+          editState={editNameState}
+          setEditState={setEditNameState}
+        />
       </div>
       <div className='main-content'>
         {displayState === 'select-realm' && (
@@ -256,11 +347,16 @@ function RealmPage() {
           />
         )}
         {displayState === 'edit-realm' && (
-          <BiomeList
-            biomes={selectedRealm?.biomes}
-            mouseOverBiome={mouseOverBiome}
-          />
+          <div className='biome-list-wrapper'>
+            <BiomeList
+              biomes={selectedRealm?.biomes}
+              selectedBiome={selectedBiome}
+              setSelectedBiome={setSelectedBiome}
+              mouseOverBiome={mouseOverBiome}
+            />
+          </div>
         )}
+
         <RealmWrapper
           realm={selectedRealm}
           displayState={displayState}
@@ -273,6 +369,17 @@ function RealmPage() {
           landTileLeft={() => {}}
           selfSelectorReturn={selfSelectorReturn}
         />
+
+        {displayState === 'edit-biome' && (
+          <div className='subbiome-list-wrapper'>
+            <BiomeList
+              biomes={selectedBiome?.subBiomes}
+              selectedBiome={selectedSubbiome}
+              setSelectedBiome={setSelectedSubbiome}
+              mouseOverBiome={mouseOverBiome}
+            />
+          </div>
+        )}
       </div>
     </RealmPageStyled>
   );

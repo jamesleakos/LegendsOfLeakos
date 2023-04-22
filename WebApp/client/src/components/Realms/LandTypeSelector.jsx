@@ -12,7 +12,12 @@ import TileHexagon from '../Tiles/TileHexagon.jsx';
 //css
 import { LandTypeSelectorStyled } from './styles/LandTypeSelector.styled.js';
 
-function LandTypeSelector({ landType, setLandTypeSelected, selected }) {
+function LandTypeSelector({
+  landType,
+  setLandTypeSelected,
+  selected,
+  resizeTrigger,
+}) {
   const x = 0;
   const y = 0;
   const url = useMemo(() => intsToUrl(landType, 3), [landType]);
@@ -24,13 +29,14 @@ function LandTypeSelector({ landType, setLandTypeSelected, selected }) {
 
   //#region setting hexagonSize
   // setting availableHeight and availableWidth
-  useEffect(() => {
-    const handleResizeWindow = () => {
-      const selector = selectorRef.current;
-      setAvailableHeight(selector.clientHeight);
-      setAvailableWidth(selector.clientWidth);
-    };
 
+  const handleResizeWindow = () => {
+    const s = selectorRef.current;
+    setAvailableHeight(s.clientHeight);
+    setAvailableWidth(s.clientWidth);
+  };
+
+  useEffect(() => {
     window.addEventListener('resize', handleResizeWindow);
     handleResizeWindow();
     return () => {
@@ -38,7 +44,27 @@ function LandTypeSelector({ landType, setLandTypeSelected, selected }) {
     };
   }, []);
 
+  const resizePolling = (str, timeout, polltime) => {
+    const s = selectorRef.current;
+    const str2 = s.clientHeight + ' - ' + s.clientWidth;
+    if (str !== str2) {
+      handleResizeWindow();
+    } else {
+      timeout = timeout - polltime;
+      if (timeout <= 0) return;
+      setTimeout(() => {
+        resizePolling(str, timeout, polltime);
+      }, polltime);
+    }
+  };
+
   // setting hexagonSize based on changing availableHeight and availableWidth
+  useEffect(() => {
+    if (!resizeTrigger) return;
+    const s = selectorRef.current;
+    resizePolling(s.clientHeight + ' - ' + s.clientWidth, 1000, 100);
+  }, [resizeTrigger]);
+
   useEffect(() => {
     // hexagon size is 1/2 of the row height
     const sizeImpliedByHeight = (availableHeight * 2) / 3;

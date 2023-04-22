@@ -48,6 +48,7 @@ const updateRealm = async (req, res) => {
 
     const realmId = req.params.realm_id;
     const updates = req.body;
+    console.log('updates', updates);
     updates.user_id = req.user._id;
 
     // do a check on realm validity

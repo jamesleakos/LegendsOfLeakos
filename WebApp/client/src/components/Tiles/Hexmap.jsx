@@ -18,6 +18,7 @@ function Hexmap({
   outlineOnHover,
   outlinedTileIndices,
   selfSelectorReturn,
+  resizeTrigger,
 }) {
   // TODO - rows should come from a constant somewhere
   const rows = [7, 10, 11, 12, 11, 12, 11, 10, 7];
@@ -28,19 +29,39 @@ function Hexmap({
 
   //#region setting hexagonSize
   // setting availableHeight and availableWidth
-  useEffect(() => {
-    const handleResizeWindow = () => {
-      const hexmap = hexmapRef.current;
-      setAvailableHeight(hexmap.clientHeight);
-      setAvailableWidth(hexmap.clientWidth);
-    };
+  const handleResizeWindow = () => {
+    const hexmap = hexmapRef.current;
+    setAvailableHeight(hexmap.clientHeight);
+    setAvailableWidth(hexmap.clientWidth);
+  };
 
+  useEffect(() => {
     window.addEventListener('resize', handleResizeWindow);
     handleResizeWindow();
     return () => {
       window.removeEventListener('resize', handleResizeWindow);
     };
   }, []);
+
+  const resizePolling = (str, timeout, polltime) => {
+    const hexmap = hexmapRef.current;
+    const str2 = hexmap.clientHeight + ' - ' + hexmap.clientWidth;
+    if (str !== str2) {
+      handleResizeWindow();
+    } else {
+      timeout = timeout - polltime;
+      if (timeout <= 0) return;
+      setTimeout(() => {
+        resizePolling(str, timeout, polltime);
+      }, polltime);
+    }
+  };
+
+  useEffect(() => {
+    if (!resizeTrigger) return;
+    const hexmap = hexmapRef.current;
+    resizePolling(hexmap.clientHeight + ' - ' + hexmap.clientWidth, 1000, 100);
+  }, [resizeTrigger]);
 
   // setting hexagonSize based on changing availableHeight and availableWidth
   useEffect(() => {
@@ -55,7 +76,7 @@ function Hexmap({
   //#endregion
 
   return (
-    <HexmapStyled ref={hexmapRef}>
+    <HexmapStyled className='hex-map' ref={hexmapRef}>
       <div className='hex-area'>
         {rows.map((rowLength, rowIndex) => {
           const rowIndices = rows.slice(0, rowIndex).reduce((a, b) => a + b, 0);

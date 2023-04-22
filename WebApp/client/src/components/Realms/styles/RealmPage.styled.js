@@ -4,6 +4,7 @@ import '../../../styles/constants.css';
 export const RealmPageStyled = styled.div`
   --back-button-height: 30px;
 
+  position: relative;
   height: 100vh;
   overflow: hidden;
   // background-color: var(--color-background-light);
@@ -78,6 +79,25 @@ export const RealmPageStyled = styled.div`
   .select-realm-button:hover {
     border: 1px solid var(--border-color-bright);
     color: var(--text-color-accent);
+  }
+
+  // height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - var(--title-bar-height) - 100px);
+
+  .biome-list-wrapper {
+    grid-column: 1/1;
+  }
+
+  .biome-list-wrapper .biometile-holder {
+    height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - var(--title-bar-height) - 100px);
+  }
+
+  .subbiome-list-wrapper {
+    margin-top: 20px;
+    grid-column: 1/1;
+  }
+
+  .subbiome-list-wrapper .biometile-holder {
+    height: 100%;
   }
 
 `;

@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import '../../../styles/constants.css';
 
 export const RealmWrapperStyled = styled.div`
-  grid-column: 2;
-  height: calc(100vh - var(--navbar-height) - var(--title-bar-height));
+  // grid-column: dealt with inline, as is dependant on display state
+  // height: set based on available height inline
   width: 100%;
-  // transition: 0.5s ease;
+  display: block;
 
   .realm-map-wrapper {
     border: 3px solid gold;

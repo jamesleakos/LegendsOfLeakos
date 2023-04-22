@@ -13,7 +13,13 @@ const formatImageLink = (link) => {
   return `linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0) ), url('${link}')`;
 };
 
-function BiomeTile({ biome, isSelected, setSelectedBiome, mouseOverBiome }) {
+function BiomeTile({
+  name,
+  biome,
+  isSelected,
+  setSelectedBiome,
+  mouseOverBiome,
+}) {
   const landType = biome.getLandTiles()[0].landType;
   const url = `https://ik.imagekit.io/hfywj4j0a/LoL/BiomeTileBackgrounds/${LandType[landType]}.png`;
 
@@ -23,17 +29,24 @@ function BiomeTile({ biome, isSelected, setSelectedBiome, mouseOverBiome }) {
         backgroundImage: formatImageLink(url),
       }}
       onClick={() => {
-        setSelectedBiome(biome);
+        if (!isSelected) {
+          setSelectedBiome(biome);
+        } else {
+          setSelectedBiome(null);
+        }
       }}
       onMouseEnter={() => {
         mouseOverBiome(biome);
       }}
       onMouseLeave={() => {
-        mouseOverBiome(null);
+        if (!isSelected) {
+          mouseOverBiome(null);
+        }
       }}
     >
       <div className={`interior-border ${isSelected ? ' selected' : ''}`}></div>
-      <div className='title'>{biome?.name}</div>
+      {/* we used the passed name instead of the biome name to more easily get subbiomes without having to set them properly - maybe we'll change this */}
+      <div className='title'>{name}</div>
     </BiomeTileStyled>
   );
 }

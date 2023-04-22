@@ -14,6 +14,7 @@ const RealmMap = ({
   outlineOnHover,
   outlinedTileIndices,
   selfSelectorReturn,
+  resizeTrigger,
 }) => {
   return (
     <RealmMapStyled className='realm-map'>
@@ -29,6 +30,7 @@ const RealmMap = ({
           outlineOnHover={outlineOnHover}
           outlinedTileIndices={outlinedTileIndices}
           selfSelectorReturn={selfSelectorReturn}
+          resizeTrigger={resizeTrigger}
         />
       )}
     </RealmMapStyled>

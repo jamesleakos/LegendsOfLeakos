@@ -2,17 +2,17 @@ import styled from 'styled-components';
 import '../../../styles/constants.css';
 
 export const BiomeListStyled = styled.div`
-  grid-column: 1;
+  // this is always in a wrapper with grid-column set
+  // grid-column: 1;
   padding: 0 var(--margin-outside-main);
-  height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - 2px);
-  // border-right: 1px solid var(--border-color-dim);
 
   .underlined-title {
     margin-bottom: 20px;
   }
 
   .biometile-holder {
-    height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - var(--title-bar-height) - 100px);
+    // height set in realmpage css (.biome-list-wrapper .biometile-holder)
+    // height: calc(100vh - var(--navbar-height) - 2 * var(--margin-outside-main) - var(--title-bar-height) - 100px);
     overflow-y: scroll;
     width: 100%;
     border-bottom: 1px solid var(--text-color-accent);

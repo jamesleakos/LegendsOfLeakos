@@ -43,8 +43,15 @@ function RealmWrapper({
   useEffect(() => {
     const handleResizeWindow = () => {
       // based on the css
-      setAvailableHeight(windowHeight - 400);
-      setAvailableWidth((windowWidth * 3) / 5);
+      // when in the center
+      if (displayState !== 'edit-biome') {
+        setAvailableHeight(windowHeight - 400);
+        setAvailableWidth((windowWidth * 3) / 5);
+      } else {
+        // when in the left
+        setAvailableHeight(windowHeight / 3);
+        setAvailableWidth(windowWidth / 5);
+      }
     };
 
     window.addEventListener('resize', handleResizeWindow);
@@ -52,7 +59,7 @@ function RealmWrapper({
     return () => {
       window.removeEventListener('resize', handleResizeWindow);
     };
-  }, [windowHeight, windowWidth]);
+  }, [windowHeight, windowWidth, displayState]);
 
   useEffect(() => {
     // TODO - rows should come from a constant somewhere
@@ -86,6 +93,11 @@ function RealmWrapper({
       onContextMenu={(e) => {
         e.preventDefault();
       }}
+      style={
+        displayState === 'edit-biome'
+          ? { gridColumn: '1/1' }
+          : { gridColumn: '2/2' }
+      }
     >
       <div
         className={
@@ -107,11 +119,13 @@ function RealmWrapper({
           selfSelectorReturn={
             displayState === 'edit-realm' ? selfSelectorReturn : null
           }
+          resizeTrigger={displayState}
         />
         {displayState === 'edit-realm' && (
           <LandTypeSelectorBar
             landTypeSelected={landTypeSelected}
             setLandTypeSelected={setLandTypeSelected}
+            resizeTrigger={displayState}
           />
         )}
       </div>
