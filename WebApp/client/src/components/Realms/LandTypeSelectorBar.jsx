@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react';
 
 // internal
-import LandTypeSelector from './LandTypeSelector.jsx';
 // components
+import LandTypeSelector from './LandTypeSelector.jsx';
 //css
 import { LandTypeSelectorBarStyled } from './styles/LandTypeSelectorBar.styled.js';
 
