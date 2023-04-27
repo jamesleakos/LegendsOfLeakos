@@ -14,7 +14,7 @@ import Navbar from '../Home/Navbar.jsx';
 import RealmWrapper from './RealmWrapper.jsx';
 import RealmList from './RealmList.jsx';
 import BiomeList from './BiomeList.jsx';
-import CardDisplay from './CardDisplay.jsx';
+import CardDisplay from './Cards/CardDisplay.jsx';
 import TitleComponent from './TitleComponent.jsx';
 //css
 import { RealmPageStyled } from './styles/RealmPage.styled.js';
@@ -380,6 +380,8 @@ function RealmPage() {
             />
           </div>
         )}
+
+        {displayState === 'edit-biome' && <CardDisplay />}
       </div>
     </RealmPageStyled>
   );

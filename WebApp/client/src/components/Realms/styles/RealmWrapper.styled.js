@@ -5,8 +5,8 @@ export const RealmWrapperStyled = styled.div`
   // grid-column: dealt with inline, as is dependant on display state
   // height: set based on available height inline
   width: 100%;
-  display: block;
-
+  display: inline-block;
+  
   .realm-map-wrapper {
     border: 3px solid gold;
     border-radius: 25px;
