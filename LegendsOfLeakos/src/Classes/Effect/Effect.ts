@@ -1,7 +1,8 @@
-import { EffectType } from './EffectType';
-import { EffectValue } from './EffectValue';
-import { EffectValueType } from './EffectValueType';
-import { IntModifier } from './IntModifier';
+import { EffectType } from '../../Enums/Effect';
+import EffectValue from './EffectValue';
+import { EffectValueType } from '../../Enums/Effect';
+import ModifiableInt from './ModifiableInt';
+import IntModifier from './IntModifier';
 import { TargetType } from './TargetType';
 import { EffectValueCreatorInfo } from './EffectValueCreatorInfo';
 import { TargetTypeInfo } from './TargetTypeInfo';
@@ -9,6 +10,8 @@ import { GameState } from './GameState';
 import { AbilityKeywordRuntimeEntity } from './AbilityKeywordRuntimeEntity';
 import { TargetInfo } from './TargetInfo';
 
+// Base class of an effect. It consists of a type (which is associated with a child class, which holds the logic for execution of the effect),
+// a list of EffectValues,
 export abstract class Effect {
   public effectEnum: EffectType;
   public effectValueList: Array<EffectValue>;
