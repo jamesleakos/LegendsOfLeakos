@@ -3,7 +3,7 @@ import EffectValue from './EffectValue';
 import { EffectValueType } from '../../Enums/Effect';
 import ModifiableInt from './ModifiableInt';
 import IntModifier from './IntModifier';
-import { TargetType } from './TargetType';
+import { TargetType } from './Targets/TargetType';
 import { EffectValueCreatorInfo } from './EffectValueCreatorInfo';
 import { TargetTypeInfo } from './TargetTypeInfo';
 import { GameState } from './GameState';
