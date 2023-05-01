@@ -1,4 +1,5 @@
 import { ConditionType, ConditionValueType } from '../../../../Enums/Condition';
+import ConditionValue from './ConditionValue';
 
 abstract class Condition {
   public conditionType: ConditionType;
@@ -28,30 +29,5 @@ abstract class Condition {
     }
   }
 
-  /**
-   * Returns a readable string representing this condition.
-   * @param config The game's configuration.
-   * @returns A readable string that represents this condition.
-   */
-  public abstract getReadableString(config: GameConfiguration): string;
-
-  /**
-   * Returns a readable string representing the specified condition operator.
-   * @param op The condition operator.
-   * @returns A readable string that represents the specified condition operator.
-   */
-  public static getReadableConditionOperator(op: ConditionOperator): string {
-    switch (op) {
-      case ConditionOperator.LessThan:
-        return '<';
-      case ConditionOperator.LessThanOrEqualTo:
-        return '<=';
-      case ConditionOperator.EqualTo:
-        return '==';
-      case ConditionOperator.GreaterThanOrEqualTo:
-        return '>=';
-      default:
-        return '>';
-    }
-  }
+  public abstract getReadableString(gameProperties: any): string;
 }
