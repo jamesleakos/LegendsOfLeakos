@@ -10,4 +10,12 @@ enum KeywordType {
   Warleader,
 }
 
-export { KeywordType };
+enum KeywordValueType {
+  uses,
+  shieldingCardInstanceId,
+  shieldAmount,
+  statCardBuffAttack,
+  statCardBuffHealth,
+}
+
+export { KeywordType, KeywordValueType };

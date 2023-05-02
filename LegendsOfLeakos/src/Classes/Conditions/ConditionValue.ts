@@ -1,6 +1,6 @@
-import { ConditionType, ConditionValueType } from '../../../../Enums/Condition';
-import { ZoneEnum } from '../../../../Enums/Zone';
-import { KeywordType } from '../../../../Enums/Keyword';
+import { ConditionType, ConditionValueType } from '../../Enums/Condition';
+import { ZoneEnum } from '../../Enums/Zone';
+import { KeywordType } from '../../Enums/Keyword';
 
 class ConditionValue {
   conditionValueType: ConditionValueType;

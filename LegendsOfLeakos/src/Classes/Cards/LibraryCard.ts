@@ -1,3 +1,5 @@
+import LibraryKeyword from '../Keywords/LibraryKeyword';
+
 class LibraryCard {
   libraryId: number;
   cardTypeId: number;

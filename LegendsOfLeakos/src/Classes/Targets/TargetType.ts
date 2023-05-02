@@ -3,7 +3,7 @@ import {
   TargetTypeEnumMethods,
   TargetableTypeSelectionEnum,
   TargetableTypeSelectionEnumMethods,
-} from '../../../Enums/Target';
+} from '../../Enums/Target';
 
 class TargetType {
   name: string;
