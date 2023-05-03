@@ -1,27 +1,21 @@
-import AbilityKeywordRuntimeEntity from '../Entities/AbilityKeywordRuntimeEntity';
+import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
+import Effect from '../Effect/Effect';
+import Stat from '../Stat/Stat';
+import BattlecryAbility from '../Ability/BattlecryAbility';
+import RuntimeEnchantment from '../Enchantments/RuntimeEnchantment';
+import TargetInfo from '../Target/TargetInfo';
 
 class RuntimeCard extends AbilityKeywordRuntimeEntity {
   libraryId: number;
   upgradesApplied: number[] = [];
-  stats: Map<number, Stat> = new Map<number, Stat>();
-  namedStats: Map<string, Stat> = new Map<string, Stat>();
+  attack: Stat;
+  health: Stat;
+  priority: Stat;
   battlecryAbilities: BattlecryAbility[] = [];
   enchantments: RuntimeEnchantment[] = [];
 
   amBlocking: boolean;
   serverBlockOrder: number;
-
-  get cardType(): CardType {
-    const gameConfig: GameConfiguration = GameManager.Instance.config;
-    const libraryCard: Card = gameConfig.getCardFromLibraryId(this.libraryId);
-    return gameConfig.cardTypes.find((x) => x.id === libraryCard.cardTypeId);
-  }
-
-  get name(): string {
-    const gameConfig: GameConfiguration = GameManager.Instance.config;
-    const libraryCard: Card = gameConfig.getCardFromLibraryId(this.libraryId);
-    return libraryCard.name.value;
-  }
 
   preResolveEffect(
     e: Effect,

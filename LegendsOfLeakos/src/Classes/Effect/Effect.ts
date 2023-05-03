@@ -1,9 +1,9 @@
 import { EffectType } from '../../Enums/Effect';
 import EffectValue from './EffectValue';
 import { EffectValueType } from '../../Enums/Effect';
-import ModifiableInt from './ModifiableInt';
-import IntModifier from './IntModifier';
-import { TargetType } from '../Targets/TargetType';
+import ModifiableInt from '../ModifableInt/ModifiableInt';
+import IntModifier from '../ModifableInt/IntModifier';
+import { TargetType } from '../Target/TargetType';
 import { EffectValueCreatorInfo } from './EffectValueCreatorInfo';
 import { TargetTypeInfo } from './TargetTypeInfo';
 import { GameState } from './GameState';
@@ -132,3 +132,5 @@ export abstract class Effect {
     this.resetEffectValues();
   }
 }
+
+export default Effect;

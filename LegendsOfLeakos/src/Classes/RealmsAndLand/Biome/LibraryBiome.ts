@@ -1,6 +1,6 @@
 import LibraryCardEntry from './LibraryCardEntry';
 import LibraryLandTile from '../LandTile/LibraryLandTile';
-import LibraryCard from '../../Cards/LibraryCard';
+import LibraryCard from '../../Card/LibraryCard';
 import RuntimeLandTile from '../LandTile/RuntimeLandTile';
 import { BiomeAddCardEnum } from '../../../Enums/LandAndBiome';
 

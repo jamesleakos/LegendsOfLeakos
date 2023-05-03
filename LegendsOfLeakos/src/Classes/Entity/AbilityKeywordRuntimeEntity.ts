@@ -1,6 +1,6 @@
 import TargetableRuntimeEntity from './TargetableRuntimeEntity';
 import RuntimeZone from '../Zones/RuntimeZone';
-import RuntimeCard from '../Cards/RuntimeCard';
+import RuntimeCard from '../Card/RuntimeCard';
 
 /**
  * This class extends TargetableRuntimeEntity and provides abilities and keywords to that class. It is currently used by

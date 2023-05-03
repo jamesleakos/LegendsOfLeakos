@@ -1,6 +1,6 @@
 import LibraryBiome from '../Biome/LibraryBiome';
 import LibraryLandTile from '../LandTile/LibraryLandTile';
-import LibraryCard from '../../Cards/LibraryCard';
+import LibraryCard from '../../Card/LibraryCard';
 // enums
 import {
   BiomeType,

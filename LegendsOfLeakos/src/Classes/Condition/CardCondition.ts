@@ -1,5 +1,5 @@
 import { Condition } from './Condition';
-import RuntimeCard from '../Cards/RuntimeCard';
+import RuntimeCard from '../Card/RuntimeCard';
 
 abstract class CardCondition extends Condition {
   /**
