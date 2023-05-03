@@ -1,4 +1,4 @@
-import LibraryKeyword from '../Keywords/LibraryKeyword';
+import LibraryKeyword from '../Keyword/LibraryKeyword';
 
 class LibraryCard {
   libraryId: number;

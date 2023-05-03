@@ -9,3 +9,5 @@ abstract class CardCondition extends Condition {
    */
   public abstract isTrue(card: RuntimeCard): boolean;
 }
+
+export default CardCondition;

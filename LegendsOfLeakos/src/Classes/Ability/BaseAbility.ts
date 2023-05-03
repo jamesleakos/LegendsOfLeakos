@@ -1,8 +1,8 @@
 import { AbilityType } from '../../Enums/EntityFeatures';
-import { Effect } from './Effect';
+import Effect from '../Effect/Effect';
 import { PhaseEnum } from '../../Enums/Phase';
 
-export class Ability {
+class BaseAbility {
   public name: string;
   public iamge: string;
   public type: AbilityType;
@@ -10,3 +10,5 @@ export class Ability {
   public effect: Effect;
   public usableInPhases: PhaseEnum[];
 }
+
+export default BaseAbility;
