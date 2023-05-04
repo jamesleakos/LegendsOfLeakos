@@ -1,6 +1,6 @@
 import { KeywordType } from '../../Enums/Keyword';
 import LibraryKeywordValue from './LibraryKeywordValue';
-import { Condition } from '../Conditions/Condition';
+import { Condition } from '../Condition/Condition';
 
 class LibraryKeyword {
   keywordType: KeywordType;

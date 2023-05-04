@@ -1,4 +1,7 @@
 import LibraryKeyword from '../Keyword/LibraryKeyword';
+import ActivatedAbility from '../Ability/ActivatedAbility';
+import BattlecryAbility from '../Ability/BattlecryAbility';
+import CardUpgrade from '../CardUpgrade/CardUpgrade';
 
 class LibraryCard {
   libraryId: number;
