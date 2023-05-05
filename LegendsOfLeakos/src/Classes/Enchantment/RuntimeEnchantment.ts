@@ -50,8 +50,8 @@ class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
         keyword.keywordValueList,
         keyword.isActive,
         keyword.conditions,
-        keyword.imageName.value
-      ).getKeyword();
+        keyword.imageName
+      ).keyword;
       keywordCopy.myEntity = this;
       this.runtimeKeywords.push(keywordCopy);
     });
@@ -60,7 +60,7 @@ class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
       const abilityCopy = Ability.createActivatedAbility(
         activatedAbility.indexForUpgrades,
         activatedAbility.name,
-        EffectFactory.createEffect(
+        Effect.createEffect(
           activatedAbility.effect.effectEnum,
           activatedAbility.effect.effectValueList,
           activatedAbility.effect.targetTypes
@@ -70,7 +70,7 @@ class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
         activatedAbility.usesRemaining,
         activatedAbility.usableInPhases,
         activatedAbility.isActive,
-        activatedAbility.imageName.name
+        activatedAbility.imageName
       );
       this.activatedAbilities.push(abilityCopy);
     });

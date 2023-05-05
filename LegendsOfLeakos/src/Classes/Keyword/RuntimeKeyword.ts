@@ -1,3 +1,28 @@
+import { KeywordType, KeywordValueType } from '../../Enums/Keyword';
+import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
+import KeywordValue from './KeywordValue';
+import { Condition } from '../Condition/Condition';
+import Stat from '../Stat/Stat';
+import RuntimeCard from '../Card/RuntimeCard';
+import GameState from '../Game/GameState';
+import TargetableRuntimeEntity from '../Entity/TargetableRuntimeEntity';
+import Effect from '../Effect/Effect';
+import TargetInfo from '../Target/TargetInfo';
+import StatBuff from '../Stat/StatBuff';
+
+// child keywords
+import MeekKeyword from './Keywords/SimpleKeywords/MeekKeyword';
+import ImpetusKeyword from './Keywords/SimpleKeywords/ImpetusKeyword';
+import ProvokeKeyword from './Keywords/SimpleKeywords/ProvokeKeyword';
+import SkirmisherKeyword from './Keywords/SimpleKeywords/SkirmisherKeyword';
+import OverkillKeyword from './Keywords/SimpleKeywords/OverkillKeyword';
+
+type KeywordFactoryPackage = {
+  keyword: RuntimeKeyword;
+  wasSuccessful: boolean;
+  message: string;
+};
+
 class RuntimeKeyword {
   myEntityInstanceId: number;
   myEntity: AbilityKeywordRuntimeEntity;
@@ -8,7 +33,7 @@ class RuntimeKeyword {
   duration: number;
   keywordValueList: KeywordValue[] = [];
   isActive: boolean;
-  imageName: StringProperty = new StringProperty();
+  imageName: string;
 
   // conditions for stat buffs
   conditions: Condition[] = [];
@@ -45,15 +70,11 @@ class RuntimeKeyword {
 
     for (const c of conditions) {
       this.conditions.push(
-        ConditionFactory.createCondition(
-          c.conditionType,
-          c.conditionValues
-        ).getCondition()
+        Condition.createCondition(c.conditionType, c.conditionValues).condition
       );
     }
 
-    this.imageName.name = 'Image Name';
-    this.imageName.value = imageName;
+    this.imageName = imageName;
   }
 
   onEndTurn(): void {
@@ -101,6 +122,166 @@ class RuntimeKeyword {
     gameState: GameState,
     targetInfoList: TargetInfo[]
   ): void {}
+
+  static createRuntimeKeyword(
+    myEntityId: number,
+    keywordType: KeywordType,
+    indexForUpgrades: number | null,
+    setDescription: string,
+    isPermanent: boolean,
+    setDuration: number,
+    keywordValueList: KeywordValue[],
+    isActive: boolean,
+    conditions: Condition[],
+    imageName: string
+  ): KeywordFactoryPackage {
+    let outKeyword: RuntimeKeyword | null = null;
+    if (keywordType === KeywordType.Meek) {
+      if (setDescription === '')
+        setDescription = 'This unit does not prevent attacks into the back row';
+      outKeyword = new MeekKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.Impetus) {
+      if (setDescription === '')
+        setDescription = 'This unit can move and attack in the same turn';
+      outKeyword = new ImpetusKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.Provoke) {
+      if (setDescription === '')
+        setDescription = "I'm not sure what provoke is";
+      outKeyword = new ProvokeKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.Skirmisher) {
+      if (setDescription === '')
+        setDescription = 'This unit can move and attack in the same turn';
+      outKeyword = new SkirmisherKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.DivineShield) {
+      if (setDescription === '')
+        setDescription = 'When this unit takes damage, prevent it.';
+      outKeyword = new DivineShieldKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.Shielded) {
+      if (setDescription === '')
+        setDescription = 'Reduce damage that this unit takes by some amount';
+      outKeyword = new ShieldedKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.Overkill) {
+      if (setDescription === '')
+        setDescription =
+          "Damage in excess of blocker's health carries on to the next blocker or blocked unit";
+      outKeyword = new OverkillKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+    if (keywordType === KeywordType.Warleader) {
+      if (setDescription === '')
+        setDescription =
+          'This keyword buffs conditional card stats some set scalar amount';
+      outKeyword = new WarleaderKeyword(
+        myEntityId,
+        keywordType,
+        indexForUpgrades,
+        setDescription,
+        isPermanent,
+        setDuration,
+        keywordValueList,
+        isActive,
+        conditions,
+        imageName
+      );
+    }
+
+    // here we check for possible errors and possible bad passes of effectValueList and TargetTypes
+
+    let success = true;
+    let message = 'Keyword created successfully';
+
+    if (outKeyword === null) {
+      success = false;
+      message = 'Keyword was not created. Check if KeywordType was correct';
+    }
+    return {
+      keyword: outKeyword,
+      wasSuccessful: success,
+      message: message,
+    };
+  }
 }
 
 export default RuntimeKeyword;

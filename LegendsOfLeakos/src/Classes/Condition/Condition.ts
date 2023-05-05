@@ -1,6 +1,7 @@
 import { ConditionType, ConditionValueType } from '../../Enums/Condition';
 import ConditionValue from './ConditionValue';
-import CardCondition from './CardCondition';
+import HasKeywordCardCondition from './Conditions/HasKeywordCardCondition';
+import EntitiesInSameZoneCondition from './Conditions/EntitiesInSameZoneCondition';
 
 type ConditionFactoryPackage = {
   condition: Condition;
@@ -83,7 +84,7 @@ abstract class Condition {
   public static createConditionForDeckBuilder(
     conditionType: ConditionType
   ): Condition {
-    const condition = this.createCondition(conditionType, [])[0]; // output is a tuple, we only want the first element (the condition)
+    const condition = this.createCondition(conditionType, []).condition;
     for (const cv of condition.requiredConditionValues()) {
       const temp = new ConditionValue(cv, []);
       temp.values.push(0);
