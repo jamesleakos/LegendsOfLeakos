@@ -1,5 +1,5 @@
 import TargetableRuntimeEntity from './TargetableRuntimeEntity';
-import RuntimeZone from '../Zones/RuntimeZone';
+import RuntimeZone from '../Zone/RuntimeZone';
 import RuntimeCard from '../Card/RuntimeCard';
 
 /**

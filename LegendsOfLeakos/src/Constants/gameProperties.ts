@@ -1,5 +1,5 @@
 import { PhaseEnum } from '../Enums/Phase';
-import { GameZoneType } from '../Classes/Zones/GameZone';
+import { GameZoneType } from '../Classes/Zone/GameZone';
 import Phase from '../Classes/Phase/Phase';
 import {
   ZoneEnum,

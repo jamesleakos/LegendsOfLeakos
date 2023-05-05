@@ -6,7 +6,7 @@ import ActivatedAbility from '../Ability/ActivatedAbility';
 import RuntimeZone from '../Zone/RuntimeZone';
 import LibraryEnchantment from './LibraryEnchantment';
 
-export class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
+class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
   libraryID: number;
   creatingEntity: AbilityKeywordRuntimeEntity;
   residingCard: RuntimeCard | null;
@@ -76,3 +76,5 @@ export class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
     });
   }
 }
+
+export default RuntimeEnchantment;

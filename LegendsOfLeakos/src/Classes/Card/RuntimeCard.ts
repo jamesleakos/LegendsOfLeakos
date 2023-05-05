@@ -2,8 +2,9 @@ import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
 import Effect from '../Effect/Effect';
 import Stat from '../Stat/Stat';
 import BattlecryAbility from '../Ability/BattlecryAbility';
-import RuntimeEnchantment from '../Enchantments/RuntimeEnchantment';
+import RuntimeEnchantment from '../Enchantment/RuntimeEnchantment';
 import TargetInfo from '../Target/TargetInfo';
+import GameState from '../Game/GameState';
 
 class RuntimeCard extends AbilityKeywordRuntimeEntity {
   libraryId: number;
