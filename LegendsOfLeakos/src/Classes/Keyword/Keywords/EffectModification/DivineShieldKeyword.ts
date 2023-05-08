@@ -5,8 +5,9 @@ import GameState from '../../../Game/GameState';
 import Effect from '../../../Effect/Effect';
 import RuntimeCard from '../../../Card/RuntimeCard';
 import TargetInfo from '../../../Target/TargetInfo';
-import { KeywordType } from '../../../../Enums/Keyword';
+import { KeywordType, KeywordValueType } from '../../../../Enums/Keyword';
 import { Condition } from '../../../Condition/Condition';
+import NormalAttackEffect from '../../../Effect/Effects/AttackEffects/NormalAttackEffect';
 
 class DivineShieldKeyword extends RuntimeKeyword {
   constructor(
@@ -78,3 +79,5 @@ class DivineShieldKeyword extends RuntimeKeyword {
     }
   }
 }
+
+export default DivineShieldKeyword;

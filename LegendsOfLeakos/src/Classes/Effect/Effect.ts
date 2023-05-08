@@ -3,16 +3,21 @@ import EffectValue from './EffectValue';
 import { EffectValueType } from '../../Enums/Effect';
 import ModifiableInt from '../ModifableInt/ModifiableInt';
 import IntModifier from '../ModifableInt/IntModifier';
-import { TargetType } from '../Target/TargetType';
-import { EffectValueCreatorInfo } from './EffectValueCreatorInfo';
-import { TargetTypeInfo } from './TargetTypeInfo';
-import { GameState } from './GameState';
-import { AbilityKeywordRuntimeEntity } from './AbilityKeywordRuntimeEntity';
-import { TargetInfo } from './TargetInfo';
+import TargetType from '../Target/TargetType';
+import TargetInfo from '../Target/TargetInfo';
+import TargetTypeInfo from '../Target/TargetTypeInfo';
+import GameState from '../Game/GameState';
+import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
+
+type EffectFactoryPackage = {
+  effect: Effect;
+  wasSuccessful: boolean;
+  message: string;
+};
 
 // Base class of an effect. It consists of a type (which is associated with a child class, which holds the logic for execution of the effect),
 // a list of EffectValues,
-export abstract class Effect {
+abstract class Effect {
   public effectEnum: EffectType;
   public effectValueList: Array<EffectValue>;
   public targetTypes: Array<TargetType>;
@@ -130,6 +135,66 @@ export abstract class Effect {
 
   public onEndTurn(): void {
     this.resetEffectValues();
+  }
+
+  public static createEffect(
+    effectEnum: EffectType,
+    effectValueList: EffectValue[],
+    targetTypes: TargetType[]
+  ): EffectFactoryPackage {
+    let outEffect: Effect | null = null;
+    if (effectEnum === EffectType.DealSetDamage) {
+      outEffect = new DealSetDamageEffect(effectValueList, targetTypes);
+    }
+    if (effectEnum === EffectType.DealDamageEqualToAttack) {
+      outEffect = new DealDamageEqualToAttackEffect(
+        effectValueList,
+        targetTypes
+      );
+    }
+    if (effectEnum === EffectType.GiveShieldedKeyword) {
+      outEffect = new GiveShieldedKeywordEffect(effectValueList, targetTypes);
+    }
+    if (effectEnum === EffectType.GiveShieldedKeywordBasedOnOtherUnits) {
+      outEffect = new GiveShieldedKeywordBasedOnOtherUnitsEffect(
+        effectValueList,
+        targetTypes
+      );
+    }
+    if (effectEnum === EffectType.NormalAttack) {
+      outEffect = new NormalAttackEffect(effectValueList, targetTypes);
+    }
+    if (effectEnum === EffectType.EnchantCard) {
+      outEffect = new EnchantCardEffect(effectValueList, targetTypes);
+    }
+    if (effectEnum === EffectType.EnchantZone) {
+      outEffect = new EnchantZoneEffect(effectValueList, targetTypes);
+    }
+
+    let success = true;
+    let message = 'Effect created successfully';
+
+    if (outEffect === null) {
+      success = false;
+      message = 'Effect was not created. Check if EffectEnum was correct';
+    }
+    for (const ev of effectValueList) {
+      if (
+        outEffect
+          .myRequiredEffectValues()
+          .find((c) => c.effectValueType === ev.effectValueType) === null
+      ) {
+        success = false;
+        message =
+          'Missing required effectvalue ' + ev.effectValueType.toString();
+      }
+    }
+    if (outEffect.numberOfTargetTypes() !== targetTypes.length) {
+      success = false;
+      message = 'Number of target types do not match';
+    }
+
+    return { effect: outEffect, wasSuccessful: success, message: message };
   }
 }
 

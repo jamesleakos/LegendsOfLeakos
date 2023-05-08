@@ -3,7 +3,17 @@ import {
   TargetTypeEnumMethods,
   TargetableTypeSelectionEnum,
   TargetableTypeSelectionEnumMethods,
+  BroadTargetTypeEnum,
 } from '../../Enums/Target';
+
+import { Condition } from '../Condition/Condition';
+import CardCondition from '../Condition/CardCondition';
+import ZoneCondition from '../Condition/ZoneCondition';
+import PlayerInfo from '../Player/PlayerInfo';
+import RuntimeCard from '../Card/RuntimeCard';
+import GameState from '../Game/GameState';
+import TargetInfo from './TargetInfo';
+import RuntimeZone from '../Zone/RuntimeZone';
 
 class TargetType {
   name: string;
@@ -22,8 +32,8 @@ class TargetType {
     minSelectionsRequired: number,
     maxSelectionsAllowed: number,
     minSelectionsThatMustRemain: number,
-    targetableTypeSelectionEnum: TargetableTypeSelectionEnum
-    // conditions: Array<Condition>
+    targetableTypeSelectionEnum: TargetableTypeSelectionEnum,
+    conditions: Array<Condition>
   ) {
     this.name = name;
     this.targetTypeEnum = targetTypeEnum;
@@ -41,14 +51,12 @@ class TargetType {
       if (this.playerSelectsTarget) {
         console.log('Player can never select that target');
       }
-      // for (const c of conditions) {
-      //   this.conditions.push(
-      //     ConditionFactory.createCondition(
-      //       c.conditionType,
-      //       c.conditionValues
-      //     ).getCondition()
-      //   );
-      // }
+      for (const c of conditions) {
+        this.conditions.push(
+          Condition.createCondition(c.conditionType, c.conditionValues)
+            .condition
+        );
+      }
     }
   }
 
@@ -81,7 +89,8 @@ class TargetType {
     return new TargetInfo(
       outCardInts,
       outZoneInts,
-      this.targetTypeEnum.broadTargetType() === BroadTargetTypeEnum.zone,
+      TargetTypeEnumMethods.broadTargetType(this.targetTypeEnum) ===
+        BroadTargetTypeEnum.zone,
       cardInstanceIds.length === 0 && zoneInstanceIds.length === 0,
       false
     );
@@ -115,3 +124,5 @@ class TargetType {
     );
   }
 }
+
+export default TargetType;

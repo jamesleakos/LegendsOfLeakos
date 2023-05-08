@@ -1,3 +1,5 @@
+import Stat from '../Stat/Stat';
+
 class PlayerInfo {
   id: number;
   connectionId: number;

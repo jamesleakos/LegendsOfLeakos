@@ -16,6 +16,9 @@ import ImpetusKeyword from './Keywords/SimpleKeywords/ImpetusKeyword';
 import ProvokeKeyword from './Keywords/SimpleKeywords/ProvokeKeyword';
 import SkirmisherKeyword from './Keywords/SimpleKeywords/SkirmisherKeyword';
 import OverkillKeyword from './Keywords/SimpleKeywords/OverkillKeyword';
+import DivineShieldKeyword from './Keywords/EffectModification/DivineShieldKeyword';
+import ShieldedKeyword from './Keywords/EffectModification/ShieldedKeyword';
+import WarleaderKeyword from './Keywords/StatModification/WarleaderKeyword';
 
 type KeywordFactoryPackage = {
   keyword: RuntimeKeyword;
