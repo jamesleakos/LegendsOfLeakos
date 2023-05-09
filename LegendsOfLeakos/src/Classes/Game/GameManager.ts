@@ -1,3 +1,16 @@
+import LibraryCard from '../Card/LibraryCard';
+import LibraryEnchantment from '../Enchantment/LibraryEnchantment';
 //
-// I dont think we're using this - it doesn't quite make sense. The game manager as a central bank of db knowledge doens't seem to make all that much sense.
-// We'll keep the game config as a class, but it'll more be loaded as an object and then passed around where needed.
+// In-game entry point to all data outside of game state.
+// Includes hard-coded data from constants.properties, as well as library data from the database
+
+class GameManager {
+  // properties
+  gameProperties: any = {};
+
+  // library objects
+  cardLibrary: LibraryCard[] = [];
+  enchantmentLibrary: LibraryEnchantment[] = [];
+}
+
+export default GameManager;

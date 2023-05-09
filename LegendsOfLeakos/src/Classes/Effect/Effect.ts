@@ -8,6 +8,7 @@ import TargetInfo from '../Target/TargetInfo';
 import TargetTypeInfo from '../Target/TargetTypeInfo';
 import GameState from '../Game/GameState';
 import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
+import GameManager from '../Game/GameManager';
 
 type EffectFactoryPackage = {
   effect: Effect;
@@ -89,7 +90,9 @@ abstract class Effect {
   }
 
   // Card Builder Helpers for Human Creators
-  public abstract myRequiredEffectValues(): Array<EffectValueCreatorInfo>;
+  public myRequiredEffectValues(): Array<EffectValueCreatorInfo> {
+    return [];
+  }
 
   public abstract numberOfTargetTypes(): number;
 
@@ -128,7 +131,8 @@ abstract class Effect {
   public resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
-    targetInfoList: Array<TargetInfo>
+    targetInfoList: Array<TargetInfo>,
+    gameManager: GameManager
   ): void {
     // Optional override
   }
