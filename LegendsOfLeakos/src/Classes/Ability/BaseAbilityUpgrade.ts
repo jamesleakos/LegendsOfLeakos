@@ -1,4 +1,6 @@
 import BaseAbility from './BaseAbility';
+import EffectUpgrade from '../Effect/EffectUpgrade';
+import { PhaseEnum } from '../../Enums/Phase';
 
 class BaseAbilityUpgrade {
   abilityUpgradeIndex: number;

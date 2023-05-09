@@ -11,6 +11,17 @@ class GameManager {
   // library objects
   cardLibrary: LibraryCard[] = [];
   enchantmentLibrary: LibraryEnchantment[] = [];
+
+  // methods
+  public getCardFromLibraryId(libraryId: number): LibraryCard {
+    const card: LibraryCard | undefined = this.cardLibrary.find(
+      (x) => x.libraryId === libraryId
+    );
+    if (card === undefined) {
+      throw new Error(`Could not find card with libraryId ${libraryId}`);
+    }
+    return card;
+  }
 }
 
 export default GameManager;

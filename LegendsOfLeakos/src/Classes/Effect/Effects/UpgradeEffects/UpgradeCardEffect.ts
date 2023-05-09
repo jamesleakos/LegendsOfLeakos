@@ -6,7 +6,7 @@ import TargetTypeInfo from '../../../Target/TargetTypeInfo';
 import GameState from '../../../Game/GameState';
 import AbilityKeywordRuntimeEntity from '../../../Entity/AbilityKeywordRuntimeEntity';
 import RuntimeCard from '../../../Card/RuntimeCard';
-import Card from '../../../Card/Card';
+import LibraryCard from '../../../Card/LibraryCard';
 import CardUpgrade from '../../../Card/CardUpgrade';
 import GameManager from '../../../Game/GameManager';
 
@@ -57,11 +57,11 @@ class UpgradeCardEffect extends Effect {
     }
 
     const sourceCard: RuntimeCard = sourceEntity as RuntimeCard;
-    const libraryCard: Card = gameManager.getCardFromLibraryId(
+    const libraryCard: LibraryCard = gameManager.getCardFromLibraryId(
       sourceCard.libraryId
     );
     const upgrade: CardUpgrade = libraryCard.cardUpgrades.find(
-      (x: Card) => x.upgradeIndex === this.upgradeIndex
+      (x: CardUpgrade) => x.upgradeIndex === this.upgradeIndex
     );
 
     upgrade.upgradeCard(sourceCard);
