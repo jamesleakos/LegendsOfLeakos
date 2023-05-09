@@ -4,8 +4,8 @@ import GameManager from '../Game/GameManager';
 import PayResourceCost from '../PayResourceCost/PayResourceCost';
 PayResourceCost;
 import RuntimeCard from './RuntimeCard';
-import Stat from '../../Classes/Stat/Stat';
-import StatUpgrade from './StatUpgrade';
+import Stat from '../Stat/Stat';
+import StatUpgrade from '../Stat/StatUpgrade';
 import KeywordUpgrade from '../Keyword/KeywordUpgrade';
 
 class CardUpgrade {

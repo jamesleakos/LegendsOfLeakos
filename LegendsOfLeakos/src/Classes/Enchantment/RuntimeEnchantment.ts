@@ -5,6 +5,7 @@ import RuntimeKeyword from '../Keyword/RuntimeKeyword';
 import ActivatedAbility from '../Ability/ActivatedAbility';
 import RuntimeZone from '../Zone/RuntimeZone';
 import LibraryEnchantment from './LibraryEnchantment';
+import Effect from '../Effect/Effect';
 
 class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
   libraryID: number;
@@ -57,14 +58,14 @@ class RuntimeEnchantment extends AbilityKeywordRuntimeEntity {
     });
 
     abilities.forEach((activatedAbility) => {
-      const abilityCopy = Ability.createActivatedAbility(
+      const abilityCopy = ActivatedAbility.createActivatedAbility(
         activatedAbility.indexForUpgrades,
         activatedAbility.name,
         Effect.createEffect(
           activatedAbility.effect.effectEnum,
           activatedAbility.effect.effectValueList,
           activatedAbility.effect.targetTypes
-        ).getEffect(),
+        ).effect,
         activatedAbility.costs,
         activatedAbility.usesPerTurn,
         activatedAbility.usesRemaining,

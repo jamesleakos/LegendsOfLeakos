@@ -1,18 +1,25 @@
 import Stat from '../Stat/Stat';
+import RuntimeZone from '../Zone/RuntimeZone';
+import RuntimeCard from '../Card/RuntimeCard';
+import { ZoneEnum } from '../../Enums/Zone';
+import { LandType } from '../../Enums/LandAndBiome';
+import PayResourceCost from '../PayResourceCost/PayResourceCost';
+import RuntimeLandTile from '../RealmsAndLand/LandTile/RuntimeLandTile';
+import RuntimeRealm from '../RealmsAndLand/Realm/RuntimeRealm';
 
 class PlayerInfo {
   id: number;
   connectionId: number;
-  //TODO: figure out how to replace this
-  netId: NetworkInstanceId;
+  netId: number;
   nickname: string;
   isConnected: boolean;
   isHuman: boolean;
 
-  stats: Map<number, Stat> = new Map<number, Stat>();
-  namedStats: Map<string, Stat> = new Map<string, Stat>();
-  zones: Array<RuntimeZone> = new Array<RuntimeZone>();
-  realmSteward: RealmSteward = new RealmSteward();
+  stats: Stat[] = [];
+  nameToStat: Map<string, Stat>;
+  idToStat: Map<number, Stat>;
+  zones: RuntimeZone[];
+  landTiles: RuntimeLandTile[];
   realm: RuntimeRealm = new RuntimeRealm();
 
   currentEntityInstanceId: number;
@@ -65,36 +72,36 @@ class PlayerInfo {
   }
 
   setPlayerManaFromLand(): void {
-    this.namedStats.get('ForestMana')!.baseValue = 0;
-    this.namedStats.get('OceanMana')!.baseValue = 0;
-    this.namedStats.get('DesertMana')!.baseValue = 0;
-    this.namedStats.get('MountainMana')!.baseValue = 0;
-    this.namedStats.get('PrairieMana')!.baseValue = 0;
-    this.namedStats.get('FellsMana')!.baseValue = 0;
-    this.namedStats.get('TundraMana')!.baseValue = 0;
-    for (const landTile of this.realmSteward.landTiles) {
+    this.nameToStat.get('ForestMana')!.baseValue = 0;
+    this.nameToStat.get('OceanMana')!.baseValue = 0;
+    this.nameToStat.get('DesertMana')!.baseValue = 0;
+    this.nameToStat.get('MountainMana')!.baseValue = 0;
+    this.nameToStat.get('PrairieMana')!.baseValue = 0;
+    this.nameToStat.get('FellsMana')!.baseValue = 0;
+    this.nameToStat.get('TundraMana')!.baseValue = 0;
+    for (const landTile of this.landTiles) {
       if (landTile.explored) {
         switch (landTile.landType) {
           case LandType.forest:
-            this.namedStats.get('ForestMana')!.baseValue += 1;
+            this.nameToStat.get('ForestMana')!.baseValue += 1;
             break;
           case LandType.ocean:
-            this.namedStats.get('OceanMana')!.baseValue += 1;
+            this.nameToStat.get('OceanMana')!.baseValue += 1;
             break;
           case LandType.desert:
-            this.namedStats.get('DesertMana')!.baseValue += 1;
+            this.nameToStat.get('DesertMana')!.baseValue += 1;
             break;
           case LandType.mountain:
-            this.namedStats.get('MountainMana')!.baseValue += 1;
+            this.nameToStat.get('MountainMana')!.baseValue += 1;
             break;
           case LandType.prairie:
-            this.namedStats.get('PrairieMana')!.baseValue += 1;
+            this.nameToStat.get('PrairieMana')!.baseValue += 1;
             break;
           case LandType.fells:
-            this.namedStats.get('FellsMana')!.baseValue += 1;
+            this.nameToStat.get('FellsMana')!.baseValue += 1;
             break;
           case LandType.tundra:
-            this.namedStats.get('TundraMana')!.baseValue += 1;
+            this.nameToStat.get('TundraMana')!.baseValue += 1;
             break;
         }
       }
@@ -113,9 +120,9 @@ class PlayerInfo {
     const outList: Array<PayResourceCost> = new Array<PayResourceCost>();
 
     for (const cost of costs) {
-      if (this.namedStats.get('AnyMana')!.statId !== cost.statId) {
+      if (this.nameToStat.get('AnyMana')!.statId !== cost.statId) {
         this._payResourceCost(
-          this.stats.get(cost.statId)!,
+          this.idToStat.get(cost.statId)!,
           cost.value,
           outList
         );
@@ -123,7 +130,7 @@ class PlayerInfo {
     }
 
     const anyCost = costs.find(
-      (x) => x.statId === this.namedStats.get('AnyMana')!.statId
+      (x) => x.statId === this.nameToStat.get('AnyMana')!.statId
     );
     if (anyCost !== undefined) {
       let anyValueRemaining = anyCost.value;
@@ -131,7 +138,7 @@ class PlayerInfo {
         for (const cost of goalManaSpend) {
           if (anyValueRemaining > 0) {
             this._payResourceCost(
-              this.stats.get(cost.statId)!,
+              this.idToStat.get(cost.statId)!,
               Math.min(anyValueRemaining, cost.value),
               outList
             );
@@ -140,9 +147,9 @@ class PlayerInfo {
         }
       }
 
-      for (const stat of this.stats.values()) {
+      for (const stat of this.stats) {
         if (anyValueRemaining > 0) {
-          if (this.namedStats.get('Life')!.statId !== stat.statId) {
+          if (this.nameToStat.get('Life')!.statId !== stat.statId) {
             const reduceBy = Math.min(anyValueRemaining, stat.effectiveValue);
             this._payResourceCost(stat, reduceBy, outList);
             anyValueRemaining -= reduceBy;
@@ -180,7 +187,7 @@ class PlayerInfo {
   canPayResourceCosts(costs: Array<PayResourceCost>): boolean {
     const availableResources: Array<PayResourceCost> = [];
 
-    for (const playerResource of this.stats.values()) {
+    for (const playerResource of this.stats) {
       const tempPRC = new PayResourceCost(
         playerResource.statId,
         playerResource.effectiveValue
@@ -189,7 +196,7 @@ class PlayerInfo {
     }
 
     for (const cost of costs) {
-      if (this.namedStats['AnyMana'].statId !== cost.statId) {
+      if (this.nameToStat.get('AnyMana').statId !== cost.statId) {
         const availableResource = availableResources.find(
           (ar) => ar.statId === cost.statId
         );
@@ -204,13 +211,13 @@ class PlayerInfo {
 
     let remainingMana = 0;
     for (const c of availableResources) {
-      if (c.statId !== this.namedStats['Life'].statId) {
+      if (c.statId !== this.nameToStat.get('Life').statId) {
         remainingMana += c.value;
       }
     }
 
     const anyCost = costs.find(
-      (x) => x.statId === this.namedStats['AnyMana'].statId
+      (x) => x.statId === this.nameToStat.get('AnyMana').statId
     );
     if (anyCost !== undefined) {
       if (anyCost.value > remainingMana) {
