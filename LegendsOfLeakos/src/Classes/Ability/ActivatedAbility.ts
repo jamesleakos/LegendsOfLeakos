@@ -51,6 +51,31 @@ class ActivatedAbility extends BaseAbility {
     this.usesRemaining = this.usesPerTurn;
     this.effect.onEndTurn();
   }
+
+  public static createActivatedAbility(
+    indexForUpgrades: number,
+    abilityName: string,
+    effect: Effect,
+    costs: PayResourceCost[],
+    usesPerTurn: number,
+    usesRemaining: number,
+    usableInPhases: PhaseEnum[],
+    isActive: boolean,
+    imageName: string
+  ): ActivatedAbility {
+    let AA = new ActivatedAbility(
+      indexForUpgrades,
+      abilityName,
+      effect,
+      costs,
+      usesPerTurn,
+      usesRemaining,
+      usableInPhases,
+      isActive,
+      imageName
+    );
+    return AA;
+  }
 }
 
 export default ActivatedAbility;

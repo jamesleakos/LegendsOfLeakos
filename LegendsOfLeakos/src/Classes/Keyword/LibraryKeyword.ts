@@ -1,6 +1,13 @@
-import { KeywordType } from '../../Enums/Keyword';
+import { KeywordType, KeywordValueType } from '../../Enums/Keyword';
 import LibraryKeywordValue from './LibraryKeywordValue';
 import { Condition } from '../Condition/Condition';
+import KeywordValue from './KeywordValue';
+
+type RequiredKeywordValueReturner = {
+  list: LibraryKeywordValue[];
+  wasSuccessful: boolean;
+  message: string;
+};
 
 class LibraryKeyword {
   keywordType: KeywordType;
@@ -62,14 +69,112 @@ class LibraryKeyword {
     }
   }
 
-  static requiredKeywordValues(
+  public static requiredKeywordValues(
     keywordType: KeywordType
   ): RequiredKeywordValueReturner {
-    // Implement the method based on your application requirements
+    let requiredKeywordValues: LibraryKeywordValue[] = [];
+
+    switch (keywordType) {
+      case KeywordType.DivineShield:
+        let numberOfValuesNeeded = 1;
+        let setByDesigner = true;
+
+        let intList: number[] = [];
+        for (let i = 0; i < numberOfValuesNeeded; i++) {
+          intList.push(0);
+        }
+        let usesKV = new KeywordValue(KeywordValueType.uses, intList);
+        let usesLib = new LibraryKeywordValue(
+          usesKV,
+          numberOfValuesNeeded,
+          setByDesigner
+        );
+        requiredKeywordValues.push(usesLib);
+
+        return {
+          list: requiredKeywordValues,
+          wasSuccessful: true,
+          message: 'List successfully returned',
+        };
+
+      case KeywordType.Impetus:
+      case KeywordType.Skirmisher:
+      case KeywordType.Provoke:
+      case KeywordType.Meek:
+        return {
+          list: requiredKeywordValues,
+          wasSuccessful: true,
+          message: 'List successfully returned',
+        };
+      case KeywordType.Shielded:
+        return {
+          list: requiredKeywordValues,
+          wasSuccessful: false,
+          message: 'Creator can not assign this keyword type to a Library Card',
+        };
+      case KeywordType.Warleader:
+        let attackValuesNeeded = 1;
+
+        let attackInts: number[] = [];
+        for (let i = 0; i < attackValuesNeeded; i++) {
+          attackInts.push(0);
+        }
+        let attackStatBuff = new KeywordValue(
+          KeywordValueType.statCardBuffAttack,
+          attackInts
+        );
+        let libraryAttackStatBuff = new LibraryKeywordValue(
+          attackStatBuff,
+          attackValuesNeeded,
+          true
+        );
+        requiredKeywordValues.push(libraryAttackStatBuff);
+
+        let healthValuesNeeded = 1;
+
+        let healthInts: number[] = [];
+        for (let i = 0; i < healthValuesNeeded; i++) {
+          healthInts.push(0);
+        }
+        let healthStatBuff = new KeywordValue(
+          KeywordValueType.statCardBuffHealth,
+          healthInts
+        );
+        let libraryHealthStatBuff = new LibraryKeywordValue(
+          healthStatBuff,
+          healthValuesNeeded,
+          true
+        );
+        requiredKeywordValues.push(libraryHealthStatBuff);
+
+        return {
+          list: requiredKeywordValues,
+          wasSuccessful: true,
+          message: 'List successfully returned',
+        };
+
+      default:
+        throw new Error(
+          'This keyword is not in the list, you must design it here'
+        );
+    }
   }
 
-  getKeywordValueList(): Array<KeywordValue> {
-    // Implement the method based on your application requirements
+  public getKeywordValueList(): KeywordValue[] {
+    let KVList: KeywordValue[] = [];
+
+    for (let lkv of this.keywordValueList) {
+      let intlist: number[] = [];
+
+      for (let i of lkv.keywordValue.values) {
+        intlist.push(i);
+      }
+
+      let tempKV = new KeywordValue(lkv.keywordValue.keywordValueType, intlist);
+      KVList.push(tempKV);
+    }
+
+    return KVList;
   }
 }
 
