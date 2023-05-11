@@ -1,8 +1,18 @@
 import AttackBaseEffect from './AttackBaseEffect';
 import { EffectType } from '../../../../Enums/Effect';
+import EffectValue from '../../EffectValue';
+import TargetType from '../../../Target/TargetType';
+import TargetInfo from '../../../Target/TargetInfo';
+import TargetTypeInfo from '../../../Target/TargetTypeInfo';
+import GameState from '../../../Game/GameState';
+import AbilityKeywordRuntimeEntity from '../../../Entity/AbilityKeywordRuntimeEntity';
+import RuntimeCard from '../../../Card/RuntimeCard';
+import { ZoneEnum } from '../../../../Enums/Zone';
+import EffectValueCreatorInfo from '../../EffectValueCreatorInfo';
+import { EffectValueType } from '../../../../Enums/Effect';
 
 class NormalAttackEffect extends AttackBaseEffect {
-  static MyRequiredEffectValues(): EffectValueCreatorInfo[] {
+  public MyRequiredEffectValues(): EffectValueCreatorInfo[] {
     const tempList: EffectValueCreatorInfo[] = [];
     for (let x of super.MyRequiredEffectValues()) {
       tempList.push(x);
@@ -155,17 +165,97 @@ class NormalAttackEffect extends AttackBaseEffect {
     console.log('Here we need to implement this');
   }
 
-  SendToBlockingEffect(
+  public SendToBlockingEffect(
     state: GameState,
     sourceCard: RuntimeCard,
     attackedCard: RuntimeCard,
     blockingCards: RuntimeCard[]
-  ) {
+  ): void {
     blockingCards.sort((p, q) => p.serverBlockOrder - q.serverBlockOrder);
     console.log(
       'need to check here the order it was sorted in - ascending vs decending'
     );
 
-    // ... rest of your method ...
+    const targetTypes: TargetType[] = [];
+
+    targetTypes.push(
+      new TargetType(
+        'Attacked Card',
+        TargetTypeEnum.TargetOpponentCreature,
+        1,
+        1,
+        1,
+        TargetableTypeSelectionEnum.TargetableOnActivation,
+        []
+      )
+    );
+    targetTypes.push(
+      new TargetType(
+        'Blocking Cards',
+        TargetTypeEnum.TargetOpponentCreature,
+        0,
+        Number.MAX_SAFE_INTEGER,
+        0,
+        TargetableTypeSelectionEnum.AutoTarget,
+        []
+      )
+    );
+
+    const effectValues: EffectValue[] = [];
+
+    effectValues.push(
+      new EffectValue(EffectValueType.DamageToAttackedCard, 0, [])
+    );
+    effectValues.push(
+      new EffectValue(EffectValueType.DamageToAttackingCard, 0, [])
+    );
+    effectValues.push(
+      new EffectValue(EffectValueType.AttackedCardDamagePrevented, 0, [])
+    );
+    effectValues.push(
+      new EffectValue(EffectValueType.AttackingCardDamagePrevented, 0, [])
+    );
+    effectValues.push(
+      new EffectValue(EffectValueType.DamageToBlockingCards, 0, [])
+    );
+    effectValues.push(
+      new EffectValue(EffectValueType.BlockingCardInstanceIds, 0, [])
+    );
+    effectValues.push(
+      new EffectValue(EffectValueType.DamageToBlockingCardsPrevented, 0, [])
+    );
+
+    const tempTargetInfo: TargetInfo[] =
+      state.effectSolver.CreateFightTargetInfoList(attackedCard.instanceId);
+
+    const blockedTargetInfoList: TargetInfo[] = [];
+
+    const blockingCardList: number[] = [];
+    const zoneList: number[] = [];
+    for (const card of blockingCards) {
+      blockingCardList.push(card.instanceId);
+      zoneList.push(card.residingZone.instanceId);
+    }
+
+    const blockersTargetInfo = new TargetInfo(
+      blockingCardList,
+      zoneList,
+      false,
+      false,
+      false
+    );
+    tempTargetInfo.push(blockersTargetInfo);
+
+    state.effectSolver.DoEffect(
+      sourceCard,
+      EffectFactory.CreateEffect(
+        EffectType.BlockedAttack,
+        effectValues,
+        targetTypes
+      ).GetEffect(),
+      blockedTargetInfoList
+    );
   }
 }
+
+export default NormalAttackEffect;

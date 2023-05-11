@@ -9,6 +9,7 @@ import TargetTypeInfo from '../Target/TargetTypeInfo';
 import GameState from '../Game/GameState';
 import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
 import GameManager from '../Game/GameManager';
+import EffectValueCreatorInfo from './EffectValueCreatorInfo';
 
 type EffectFactoryPackage = {
   effect: Effect;
@@ -90,7 +91,7 @@ abstract class Effect {
   }
 
   // Card Builder Helpers for Human Creators
-  public myRequiredEffectValues(): Array<EffectValueCreatorInfo> {
+  public MyRequiredEffectValues(): Array<EffectValueCreatorInfo> {
     return [];
   }
 
