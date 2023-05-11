@@ -4,9 +4,14 @@ declare const _default: {
         maxPlayers: number;
         realmLayout: number[];
         upgradeTreeShape: {
-            x: number;
-            y: number;
+            width: number;
+            height: number;
         };
+        gameZones: import("../Classes/Zone/GameZone").GameZoneType[];
+        gamePhases: import("../Classes/Phase/Phase").default[];
+        phasesCardsCanUpdateIn: import("../Enums/Phase").PhaseEnum[];
+        phasesCardsCanBePlayedIn: import("../Enums/Phase").PhaseEnum[];
+        phasesCardsCanMoveRowsIn: import("../Enums/Phase").PhaseEnum[];
     };
     imageMapping: {
         landTypes: {

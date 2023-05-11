@@ -1,3 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //
-// I dont think we're using this - it doesn't quite make sense. The game manager as a central bank of db knowledge doens't seem to make all that much sense.
-// We'll keep the game config as a class, and but it'll more be loaded as an object and then passed around where needed.
+// In-game entry point to all data outside of game state.
+// Includes hard-coded data from constants.properties, as well as library data from the database
+var GameManager = /** @class */ (function () {
+    function GameManager() {
+        // properties
+        this.gameProperties = {};
+        // library objects
+        this.cardLibrary = [];
+        this.enchantmentLibrary = [];
+    }
+    // methods
+    GameManager.prototype.getCardFromLibraryId = function (libraryId) {
+        var card = this.cardLibrary.find(function (x) { return x.libraryId === libraryId; });
+        if (card === undefined) {
+            throw new Error("Could not find card with libraryId ".concat(libraryId));
+        }
+        return card;
+    };
+    return GameManager;
+}());
+exports.default = GameManager;

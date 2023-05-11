@@ -1,6 +1,6 @@
 import LibraryBiome from '../Biome/LibraryBiome';
 import LibraryLandTile from '../LandTile/LibraryLandTile';
-import LibraryCard from '../../Cards/LibraryCard';
+import LibraryCard from '../../Card/LibraryCard';
 import { BiomeType, LandType } from '../../../Enums/LandAndBiome';
 declare class LibraryRealm {
     name: string;

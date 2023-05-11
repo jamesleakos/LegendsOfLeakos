@@ -1,0 +1,30 @@
+import { ZoneEnum } from '../../Enums/Zone';
+import PlayerInfo from '../Player/PlayerInfo';
+import RuntimeCard from '../Card/RuntimeCard';
+import RuntimeEnchantment from '../Enchantment/RuntimeEnchantment';
+import TargetableRuntimeEntity from '../Entity/TargetableRuntimeEntity';
+import Effect from '../Effect/Effect';
+import GameState from '../Game/GameState';
+import TargetInfo from '../Target/TargetInfo';
+declare class RuntimeZone extends TargetableRuntimeEntity {
+    zoneId: number;
+    zoneEnum: ZoneEnum;
+    ownerPlayer: PlayerInfo;
+    cards: RuntimeCard[];
+    enchantments: RuntimeEnchantment[];
+    protected _numCards: number;
+    maxCards: number;
+    onZoneChanged: (numCards: number) => void;
+    onCardAdded: (card: RuntimeCard) => void;
+    onCardRemoved: (card: RuntimeCard) => void;
+    constructor(zoneId: number, instanceId: number, name: string, zoneEnum: ZoneEnum, ownerPlayer: PlayerInfo, maxCards: number);
+    get numCards(): number;
+    set numCards(value: number);
+    preResolveEffect(e: Effect, sourceCard: RuntimeCard, gameState: GameState, targetInfoList: TargetInfo[]): void;
+    postResolveEffect(e: Effect, sourceCard: RuntimeCard, gameState: GameState, targetInfoList: TargetInfo[]): void;
+    addCard(card: RuntimeCard): void;
+    addCardCreatedByEffect(card: RuntimeCard): void;
+    removeCard(card: RuntimeCard): void;
+    removeCards(amount: number): void;
+}
+export default RuntimeZone;
