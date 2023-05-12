@@ -1,5 +1,7 @@
+import Effect from './Effect';
+
 abstract class EntityEffect extends Effect {
-  public MyRequiredEffectValues(): EffectValueCreatorInfo[] {
+  public myRequiredEffectValues(): EffectValueCreatorInfo[] {
     let tempList: EffectValueCreatorInfo[] = [];
     for (let x of super.MyRequiredEffectValues()) {
       tempList.push(x);
@@ -7,7 +9,7 @@ abstract class EntityEffect extends Effect {
     return tempList;
   }
 
-  public IsTargetInfoStillValid(
+  public isTargetInfoStillValid(
     sourceEntity: AbilityKeywordRuntimeEntity,
     state: GameState,
     targetInfo: TargetInfo,
@@ -120,7 +122,7 @@ abstract class EntityEffect extends Effect {
     return validCount >= targetType.minSelectionsThatMustRemain;
   }
 
-  public AreAllSelectedTargetInfoItemsValid(
+  public areAllSelectedTargetInfoItemsValid(
     sourceEntity: AbilityKeywordRuntimeEntity,
     state: GameState,
     targetInfo: TargetInfo[],
@@ -131,7 +133,7 @@ abstract class EntityEffect extends Effect {
     for (let i = 0; i < targetInfo.length; i++) {
       if (targetInfo[i].noTargetWasSelected) continue;
       if (
-        !this.IsTargetInfoStillValid(
+        !this.isTargetInfoStillValid(
           sourceEntity,
           state,
           targetInfo[i],
@@ -144,7 +146,7 @@ abstract class EntityEffect extends Effect {
     return true;
   }
 
-  public IsCardStillInPlay(entity: AbilityKeywordRuntimeEntity): boolean {
+  public isCardStillInPlay(entity: AbilityKeywordRuntimeEntity): boolean {
     if (
       entity.residingZone.name === 'BattleBoard' ||
       entity.residingZone.name === 'FrontBoard' ||
@@ -154,7 +156,7 @@ abstract class EntityEffect extends Effect {
     return false;
   }
 
-  public Resolve(
+  public resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetInfoList: TargetInfo[]
@@ -162,7 +164,7 @@ abstract class EntityEffect extends Effect {
     // override this
   }
 
-  public AreTargetsAvailable(
+  public areTargetsAvailable(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetTypes: TargetType[]

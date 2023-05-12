@@ -12,9 +12,9 @@ import EffectValueCreatorInfo from '../../EffectValueCreatorInfo';
 import { EffectValueType } from '../../../../Enums/Effect';
 
 class NormalAttackEffect extends AttackBaseEffect {
-  public MyRequiredEffectValues(): EffectValueCreatorInfo[] {
+  public override myRequiredEffectValues(): EffectValueCreatorInfo[] {
     const tempList: EffectValueCreatorInfo[] = [];
-    for (let x of super.MyRequiredEffectValues()) {
+    for (let x of super.myRequiredEffectValues()) {
       tempList.push(x);
     }
     return tempList;
@@ -47,11 +47,11 @@ class NormalAttackEffect extends AttackBaseEffect {
   constructor(setEffectValues: EffectValue[], setTargetTypes: TargetType[]) {
     super();
     this.effectEnum = EffectType.NormalAttack;
-    this.SetEffectValueList(setEffectValues);
-    this.SetTargetTypeList(setTargetTypes);
+    this.setEffectValueList(setEffectValues);
+    this.setTargetTypeList(setTargetTypes);
   }
 
-  override PreEffect(
+  override preEffect(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetInfoList: TargetInfo[]
@@ -123,15 +123,15 @@ class NormalAttackEffect extends AttackBaseEffect {
 
     if (
       !(
-        this.IsCardStillInPlay(attackedCard) &&
-        this.IsCardStillInPlay(sourceCard)
+        this.isCardStillInPlay(attackedCard) &&
+        this.isCardStillInPlay(sourceCard)
       )
     )
       return false;
     return true;
   }
 
-  Resolve(
+  override resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetInfoList: TargetInfo[]

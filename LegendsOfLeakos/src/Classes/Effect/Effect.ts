@@ -91,7 +91,7 @@ abstract class Effect {
   }
 
   // Card Builder Helpers for Human Creators
-  public MyRequiredEffectValues(): Array<EffectValueCreatorInfo> {
+  public myRequiredEffectValues(): Array<EffectValueCreatorInfo> {
     return [];
   }
 

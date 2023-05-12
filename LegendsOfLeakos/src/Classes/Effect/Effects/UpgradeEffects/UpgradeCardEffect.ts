@@ -93,3 +93,5 @@ class UpgradeCardEffect extends Effect {
     return true;
   }
 }
+
+export default UpgradeCardEffect;
