@@ -6,7 +6,7 @@ import TargetInfo from '../../../Target/TargetInfo';
 import AbilityKeywordRuntimeEntity from '../../../Entity/AbilityKeywordRuntimeEntity';
 
 abstract class AttackBaseEffect extends EntityEffect {
-  public override myRequiredEffectValues(): EffectValueCreatorInfo[] {
+  override myRequiredEffectValues(): EffectValueCreatorInfo[] {
     let tempList: EffectValueCreatorInfo[] = [
       new EffectValueCreatorInfo(EffectValueType.DamageToAttackingCard, false),
       new EffectValueCreatorInfo(EffectValueType.DamageToAttackedCard, false),
@@ -26,7 +26,7 @@ abstract class AttackBaseEffect extends EntityEffect {
   }
 
   // Resolves this effect on the specified card.
-  public override resolve(
+  override resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetInfoList: TargetInfo[]

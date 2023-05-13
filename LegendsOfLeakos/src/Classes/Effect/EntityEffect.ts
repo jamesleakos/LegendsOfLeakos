@@ -1,15 +1,29 @@
 import Effect from './Effect';
+import EffectValueCreatorInfo from './EffectValueCreatorInfo';
+import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
+import GameState from '../Game/GameState';
+import TargetInfo from '../Target/TargetInfo';
+import TargetType from '../Target/TargetType';
+import RuntimeCard from '../Card/RuntimeCard';
+import RuntimeZone from '../Zone/RuntimeZone';
+import {
+  TargetTypeEnum,
+  BroadTargetTypeEnum,
+  TargetTypeEnumMethods,
+} from '../../Enums/Target';
+import CardCondition from '../Condition/CardCondition';
+import ZoneCondition from '../Condition/ZoneCondition';
 
 abstract class EntityEffect extends Effect {
-  public myRequiredEffectValues(): EffectValueCreatorInfo[] {
+  override myRequiredEffectValues(): EffectValueCreatorInfo[] {
     let tempList: EffectValueCreatorInfo[] = [];
-    for (let x of super.MyRequiredEffectValues()) {
+    for (let x of super.myRequiredEffectValues()) {
       tempList.push(x);
     }
     return tempList;
   }
 
-  public isTargetInfoStillValid(
+  override isTargetInfoStillValid(
     sourceEntity: AbilityKeywordRuntimeEntity,
     state: GameState,
     targetInfo: TargetInfo,
@@ -17,7 +31,8 @@ abstract class EntityEffect extends Effect {
   ): boolean {
     let validCount = 0;
     if (
-      targetType.targetTypeEnum.BroadTargetType() === BroadTargetTypeEnum.card
+      TargetTypeEnumMethods.broadTargetType(targetType.targetTypeEnum) ===
+      BroadTargetTypeEnum.card
     ) {
       // check if there are too many targets
       if (
@@ -26,7 +41,7 @@ abstract class EntityEffect extends Effect {
         return false;
 
       for (let j of targetInfo.cardInstanceIdList) {
-        let card = state.GetCardFromAnywhere(j);
+        let card = state.getCardFromAnywhere(j);
         if (card === null) continue;
 
         // checking if the targetTypeEnum is correct
@@ -47,14 +62,15 @@ abstract class EntityEffect extends Effect {
         // checking if the target satisfies the conditions
         for (let c of targetType.conditions) {
           if (!(c instanceof CardCondition)) continue;
-          if (!(c as CardCondition).IsTrue(card)) continue;
+          if (!(c as CardCondition).isTrue(card)) continue;
         }
 
         // count to satisfy min and max
         validCount += 1;
       }
     } else if (
-      targetType.targetTypeEnum.BroadTargetType() === BroadTargetTypeEnum.zone
+      TargetTypeEnumMethods.broadTargetType(targetType.targetTypeEnum) ===
+      BroadTargetTypeEnum.zone
     ) {
       // check if there are too many targets
       if (
@@ -62,7 +78,7 @@ abstract class EntityEffect extends Effect {
       )
         return false;
       for (let zoneInstanceId of targetInfo.zoneInstanceIdList) {
-        let zone = state.GetZone(zoneInstanceId);
+        let zone = state.getZone(zoneInstanceId);
         if (zone === null) continue;
 
         // checking if the targetTypeEnum is correct
@@ -111,7 +127,7 @@ abstract class EntityEffect extends Effect {
         // checking if the target satisfies the conditions
         for (let c of targetType.conditions) {
           if (!(c instanceof ZoneCondition)) continue;
-          if (!(c as ZoneCondition).IsTrue(zone)) continue;
+          if (!(c as ZoneCondition).isTrue(zone)) continue;
         }
 
         // count to satisfy min and max
@@ -122,7 +138,7 @@ abstract class EntityEffect extends Effect {
     return validCount >= targetType.minSelectionsThatMustRemain;
   }
 
-  public areAllSelectedTargetInfoItemsValid(
+  override areAllSelectedTargetInfoItemsValid(
     sourceEntity: AbilityKeywordRuntimeEntity,
     state: GameState,
     targetInfo: TargetInfo[],
@@ -146,7 +162,7 @@ abstract class EntityEffect extends Effect {
     return true;
   }
 
-  public isCardStillInPlay(entity: AbilityKeywordRuntimeEntity): boolean {
+  isCardStillInPlay(entity: AbilityKeywordRuntimeEntity): boolean {
     if (
       entity.residingZone.name === 'BattleBoard' ||
       entity.residingZone.name === 'FrontBoard' ||
@@ -156,7 +172,7 @@ abstract class EntityEffect extends Effect {
     return false;
   }
 
-  public resolve(
+  override resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetInfoList: TargetInfo[]
@@ -164,7 +180,7 @@ abstract class EntityEffect extends Effect {
     // override this
   }
 
-  public areTargetsAvailable(
+  override areTargetsAvailable(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetTypes: TargetType[]
@@ -173,7 +189,7 @@ abstract class EntityEffect extends Effect {
     let zones: RuntimeZone[] = [];
     for (let targetType of targetTypes) {
       if (targetType.minSelectionsRequired > 0) {
-        switch (targetType.GetTargetType()) {
+        switch (targetType.getTargetTypeEnum()) {
           case TargetTypeEnum.TargetCreature:
             for (let player of state.players) {
               for (let zone of player.zones) {
@@ -232,7 +248,7 @@ abstract class EntityEffect extends Effect {
           for (let condition of targetType.conditions) {
             switch (condition.constructor) {
               case CardCondition:
-                if (!(condition as CardCondition).IsTrue(card))
+                if (!(condition as CardCondition).isTrue(card))
                   cardGood = false;
                 break;
               default:
@@ -247,7 +263,7 @@ abstract class EntityEffect extends Effect {
           for (let condition of targetType.conditions) {
             switch (condition.constructor) {
               case ZoneCondition:
-                if (!(condition as ZoneCondition).IsTrue(zone))
+                if (!(condition as ZoneCondition).isTrue(zone))
                   zoneGood = false;
                 break;
               default:

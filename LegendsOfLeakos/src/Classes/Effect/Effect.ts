@@ -10,6 +10,13 @@ import GameState from '../Game/GameState';
 import AbilityKeywordRuntimeEntity from '../Entity/AbilityKeywordRuntimeEntity';
 import GameManager from '../Game/GameManager';
 import EffectValueCreatorInfo from './EffectValueCreatorInfo';
+import DealSetDamageEffect from './Effects/CardTargetEffects/DealSetDamageEffect';
+import DealDamageEqualToAttackEffect from './Effects/CardTargetEffects/DealDamageEqualToAttackEffect';
+import GiveShieldedKeywordEffect from './Effects/CardTargetEffects/GiveShieldedKeywordEffect';
+import GiveShieldedKeywordBasedOnOtherUnitsEffect from './Effects/CardTargetEffects/GiveShieldedKeywordBasedOnOtherUnitsEffect';
+import NormalAttackEffect from './Effects/AttackEffects/NormalAttackEffect';
+import EnchantCardEffect from './Effects/EnchantEffects/EnchantCardEffect';
+import EnchantZoneEffect from './Effects/EnchantEffects/EnchantZoneEffect';
 
 type EffectFactoryPackage = {
   effect: Effect;
@@ -25,7 +32,7 @@ abstract class Effect {
   public targetTypes: Array<TargetType>;
 
   // Get and Set Effect Values
-  public setEffectValueList(setEffectValueList: Array<EffectValue>): void {
+  setEffectValueList(setEffectValueList: Array<EffectValue>): void {
     this.effectValueList = [];
     for (const ev of setEffectValueList) {
       this.effectValueList.push(
@@ -34,11 +41,11 @@ abstract class Effect {
     }
   }
 
-  public getEffectValueList(): Array<EffectValue> {
+  getEffectValueList(): Array<EffectValue> {
     return this.effectValueList;
   }
 
-  public getEffectValue(effectValueType: EffectValueType): EffectValue {
+  getEffectValue(effectValueType: EffectValueType): EffectValue {
     const value = this.effectValueList.find(
       (x) => x.effectValueType === effectValueType
     );
@@ -49,7 +56,7 @@ abstract class Effect {
     return value;
   }
 
-  public modifyEffectValueInt(
+  modifyEffectValueInt(
     effectValueType: EffectValueType,
     index: number,
     modifyValue: number,
@@ -62,14 +69,14 @@ abstract class Effect {
       );
   }
 
-  public resetEffectValues(): void {
+  resetEffectValues(): void {
     for (const ev of this.effectValueList) {
       ev.postEffect();
     }
   }
 
   // Get and Set Target Types
-  public setTargetTypeList(setTargetTypeList: Array<TargetType>): void {
+  setTargetTypeList(setTargetTypeList: Array<TargetType>): void {
     this.targetTypes = [];
     for (const tt of setTargetTypeList) {
       this.targetTypes.push(
@@ -86,44 +93,44 @@ abstract class Effect {
     }
   }
 
-  public getTargetTypeList(): Array<TargetType> {
+  getTargetTypeList(): Array<TargetType> {
     return this.targetTypes;
   }
 
   // Card Builder Helpers for Human Creators
-  public myRequiredEffectValues(): Array<EffectValueCreatorInfo> {
+  myRequiredEffectValues(): Array<EffectValueCreatorInfo> {
     return [];
   }
 
-  public abstract numberOfTargetTypes(): number;
+  abstract numberOfTargetTypes(): number;
 
-  public abstract targetTypeInfoList(): Array<TargetTypeInfo>;
+  abstract targetTypeInfoList(): Array<TargetTypeInfo>;
 
   // Effect Card Text
-  public abstract effectToString(): string;
+  abstract effectToString(): string;
 
-  public abstract areTargetsAvailable(
+  abstract areTargetsAvailable(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetTypes: Array<TargetType>
   ): boolean;
 
   // Evaluating Targets
-  public abstract isTargetInfoStillValid(
+  abstract isTargetInfoStillValid(
     sourceEntity: AbilityKeywordRuntimeEntity,
     state: GameState,
     targetInfo: TargetInfo,
     targetType: TargetType
   ): boolean;
 
-  public abstract areAllSelectedTargetInfoItemsValid(
+  abstract areAllSelectedTargetInfoItemsValid(
     sourceEntity: AbilityKeywordRuntimeEntity,
     state: GameState,
     targetInfoList: Array<TargetInfo>,
     targetTypes: Array<TargetType>
   ): boolean;
 
-  public abstract preEffect(
+  abstract preEffect(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
     targetInfoList: Array<TargetInfo>

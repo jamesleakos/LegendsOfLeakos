@@ -4,15 +4,20 @@ import EffectValue from '../../EffectValue';
 import TargetType from '../../../Target/TargetType';
 import TargetInfo from '../../../Target/TargetInfo';
 import TargetTypeInfo from '../../../Target/TargetTypeInfo';
+import {
+  TargetTypeEnum,
+  TargetableTypeSelectionEnum,
+} from '../../../../Enums/Target';
 import GameState from '../../../Game/GameState';
 import AbilityKeywordRuntimeEntity from '../../../Entity/AbilityKeywordRuntimeEntity';
 import RuntimeCard from '../../../Card/RuntimeCard';
 import { ZoneEnum } from '../../../../Enums/Zone';
+import Effect from '../../Effect';
 import EffectValueCreatorInfo from '../../EffectValueCreatorInfo';
 import { EffectValueType } from '../../../../Enums/Effect';
 
 class NormalAttackEffect extends AttackBaseEffect {
-  public override myRequiredEffectValues(): EffectValueCreatorInfo[] {
+  override myRequiredEffectValues(): EffectValueCreatorInfo[] {
     const tempList: EffectValueCreatorInfo[] = [];
     for (let x of super.myRequiredEffectValues()) {
       tempList.push(x);
@@ -20,11 +25,11 @@ class NormalAttackEffect extends AttackBaseEffect {
     return tempList;
   }
 
-  static NumberOfTargetTypes(): number {
+  override numberOfTargetTypes(): number {
     return 1;
   }
 
-  static TargetTypeInfoList(): TargetTypeInfo[] {
+  override targetTypeInfoList(): TargetTypeInfo[] {
     const list: TargetTypeInfo[] = [];
     list.push(
       new TargetTypeInfo(
@@ -38,7 +43,7 @@ class NormalAttackEffect extends AttackBaseEffect {
     return list;
   }
 
-  static EffectToString(): string {
+  override effectToString(): string {
     const outText =
       "Unit attacks another unit. They both take damage equal to the other's attack.";
     return outText;
@@ -68,7 +73,7 @@ class NormalAttackEffect extends AttackBaseEffect {
     if (attackedCard.residingZone.zoneEnum === ZoneEnum.BackBoard) {
       for (let i = 0; i < state.effectSolver.blockedCards.length; i++) {
         if (state.effectSolver.blockedCards[i] === attackedCard.instanceId) {
-          const blockingCard = state.GetCardFromAnywhere(
+          const blockingCard = state.getCardFromAnywhere(
             state.effectSolver.blockingCards[i]
           );
           assignedBlockingCards.push(blockingCard);
@@ -89,27 +94,25 @@ class NormalAttackEffect extends AttackBaseEffect {
       return false;
     }
 
-    const damageToAttackedCardEV = this.GetEffectValue(
+    const damageToAttackedCardEV = this.getEffectValue(
       EffectValueType.DamageToAttackedCard
     );
-    const damageToAttackingCardEV = this.GetEffectValue(
+    const damageToAttackingCardEV = this.getEffectValue(
       EffectValueType.DamageToAttackingCard
     );
-    const attackedCardDamagePreventedEV = this.GetEffectValue(
+    const attackedCardDamagePreventedEV = this.getEffectValue(
       EffectValueType.AttackedCardDamagePrevented
     );
-    const attackingCardDamagePreventedEV = this.GetEffectValue(
+    const attackingCardDamagePreventedEV = this.getEffectValue(
       EffectValueType.AttackingCardDamagePrevented
     );
 
-    damageToAttackedCardEV.setValue =
-      sourceCard.namedStats['Attack'].effectiveValue;
-    damageToAttackingCardEV.setValue =
-      attackedCard.namedStats['Attack'].effectiveValue;
+    damageToAttackedCardEV.setValue = sourceCard.attack.effectiveValue;
+    damageToAttackingCardEV.setValue = attackedCard.attack.effectiveValue;
 
     const targetToBeAttacked = targetInfoList[0];
-    damageToAttackedCardEV.FitToTargetInfo(targetToBeAttacked);
-    attackedCardDamagePreventedEV.FitToTargetInfo(targetToBeAttacked);
+    damageToAttackedCardEV.fitToTargetInfo(targetToBeAttacked);
+    attackedCardDamagePreventedEV.fitToTargetInfo(targetToBeAttacked);
 
     const attacker = new TargetInfo(
       [sourceCard.instanceId],
@@ -118,8 +121,8 @@ class NormalAttackEffect extends AttackBaseEffect {
       false,
       false
     );
-    damageToAttackingCardEV.FitToTargetInfo(attacker);
-    attackingCardDamagePreventedEV.FitToTargetInfo(attacker);
+    damageToAttackingCardEV.fitToTargetInfo(attacker);
+    attackingCardDamagePreventedEV.fitToTargetInfo(attacker);
 
     if (
       !(
@@ -141,18 +144,37 @@ class NormalAttackEffect extends AttackBaseEffect {
     let sourceCard = sourceEntity as RuntimeCard;
 
     let attackedCard = this.GetAttackedCard(state, targetInfoList);
-    let damageToAttackedCard = this.GetEffectValue(
+    let damageToAttackedCard = this.getEffectValue(
       EffectValueType.DamageToAttackedCard
     ).modInts[0].effectiveValue;
-    let damageToAttackingCard = this.GetEffectValue(
+    let damageToAttackingCard = this.getEffectValue(
       EffectValueType.DamageToAttackingCard
     ).modInts[0].effectiveValue;
 
-    // ... rest of your method ...
+    if (
+      !(
+        this.isCardStillInPlay(attackedCard) &&
+        this.isCardStillInPlay(sourceCard)
+      )
+    )
+      return;
+
+    if (
+      this.getEffectValue(
+        EffectValueType.AttackedCardDamagePrevented
+      ).effectiveValues()[0] === 0
+    )
+      attackedCard.health.baseValue -= damageToAttackedCard;
+    if (
+      this.getEffectValue(
+        EffectValueType.AttackingCardDamagePrevented
+      ).effectiveValues()[0] === 0
+    )
+      sourceCard.health.baseValue -= damageToAttackingCard;
   }
 
   GetAttackedCard(state: GameState, targetInfoList: TargetInfo[]): RuntimeCard {
-    return state.GetCardFromAnywhere(targetInfoList[0].cardInstanceIdList[0]);
+    return state.getCardFromAnywhere(targetInfoList[0].cardInstanceIdList[0]);
   }
 
   ApplyShieldToAttackedCard(shieldAmount: number) {
@@ -226,7 +248,7 @@ class NormalAttackEffect extends AttackBaseEffect {
     );
 
     const tempTargetInfo: TargetInfo[] =
-      state.effectSolver.CreateFightTargetInfoList(attackedCard.instanceId);
+      state.effectSolver.createFightTargetInfoList(attackedCard.instanceId);
 
     const blockedTargetInfoList: TargetInfo[] = [];
 
@@ -246,13 +268,10 @@ class NormalAttackEffect extends AttackBaseEffect {
     );
     tempTargetInfo.push(blockersTargetInfo);
 
-    state.effectSolver.DoEffect(
+    state.effectSolver.doEffect(
       sourceCard,
-      EffectFactory.CreateEffect(
-        EffectType.BlockedAttack,
-        effectValues,
-        targetTypes
-      ).GetEffect(),
+      Effect.createEffect(EffectType.BlockedAttack, effectValues, targetTypes)
+        .effect,
       blockedTargetInfoList
     );
   }

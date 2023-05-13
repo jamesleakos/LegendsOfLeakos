@@ -1,6 +1,7 @@
 import { EffectValueType } from '../../Enums/Effect';
 import ModifiableInt from '../ModifableInt/ModifiableInt';
 import IntModifier from '../ModifableInt/IntModifier';
+import TargetInfo from '../Target/TargetInfo';
 
 class EffectValue {
   effectValueType: EffectValueType;

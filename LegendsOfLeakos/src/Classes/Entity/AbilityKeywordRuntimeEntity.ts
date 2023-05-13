@@ -1,6 +1,15 @@
 import TargetableRuntimeEntity from './TargetableRuntimeEntity';
 import RuntimeZone from '../Zone/RuntimeZone';
 import RuntimeCard from '../Card/RuntimeCard';
+import RuntimeKeyword from '../Keyword/RuntimeKeyword';
+import ActivatedAbility from '../Ability/ActivatedAbility';
+import PlayerInfo from '../Player/PlayerInfo';
+import { KeywordType } from '../../Enums/Keyword';
+import KeywordValue from '../Keyword/KeywordValue';
+import { Condition } from '../Condition/Condition';
+import Effect from '../Effect/Effect';
+import GameState from '../Game/GameState';
+import TargetInfo from '../Target/TargetInfo';
 
 /**
  * This class extends TargetableRuntimeEntity and provides abilities and keywords to that class. It is currently used by
@@ -46,7 +55,7 @@ class AbilityKeywordRuntimeEntity extends TargetableRuntimeEntity {
     conditions: Condition[],
     imageName: string
   ): void {
-    const k = RuntimeKeywordFactory.createRuntimeKeyword(
+    const k = RuntimeKeyword.createRuntimeKeyword(
       this.instanceId,
       keywordType,
       indexForUpgrades,
@@ -57,7 +66,7 @@ class AbilityKeywordRuntimeEntity extends TargetableRuntimeEntity {
       isActive,
       conditions,
       imageName
-    ).getKeyword();
+    ).keyword;
     k.myEntity = this;
     this.runtimeKeywords.push(k);
     if (this.onKeywordAdded) {
