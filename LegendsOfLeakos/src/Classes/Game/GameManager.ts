@@ -22,6 +22,15 @@ class GameManager {
     }
     return card;
   }
+
+  public getEnchantmentFromLibraryId(libraryId: number): LibraryEnchantment {
+    const enchantment: LibraryEnchantment | undefined =
+      this.enchantmentLibrary.find((x) => x.libraryId === libraryId);
+    if (enchantment === undefined) {
+      throw new Error(`Could not find enchantment with libraryId ${libraryId}`);
+    }
+    return enchantment;
+  }
 }
 
 export default GameManager;

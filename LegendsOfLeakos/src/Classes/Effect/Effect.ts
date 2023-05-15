@@ -107,7 +107,7 @@ abstract class Effect {
   abstract targetTypeInfoList(): Array<TargetTypeInfo>;
 
   // Effect Card Text
-  abstract effectToString(): string;
+  abstract effectToString(gameManager: GameManager): string;
 
   abstract areTargetsAvailable(
     state: GameState,
