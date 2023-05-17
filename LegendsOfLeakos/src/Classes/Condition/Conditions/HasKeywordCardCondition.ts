@@ -32,8 +32,9 @@ class HasKeywordCardCondition extends CardCondition {
       ConditionValueType.HasKeywordOfKeywordType
     ).values) {
       if (
-        card.runtimeKeywords.find((c) => c.keywordType === KeywordType[i]) ===
-        null
+        card.runtimeKeywords.find(
+          (c) => c.keywordType.toString() === KeywordType[i]
+        ) === null
       )
         hasAllRequired = false;
     }

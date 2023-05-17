@@ -33,3 +33,5 @@ class CardIsInAcceptableZoneCondition extends CardCondition {
     ).values.includes(card.residingZone.zoneId);
   }
 }
+
+export default CardIsInAcceptableZoneCondition;
