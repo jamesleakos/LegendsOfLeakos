@@ -3,9 +3,10 @@ import KeywordValue from '../../KeywordValue';
 import TargetableRuntimeEntity from '../../../Entity/TargetableRuntimeEntity';
 import GameState from '../../../Game/GameState';
 import Effect from '../../../Effect/Effect';
+import MoveCardEffect from '../../../Effect/Effects/MoveEffects/MoveCardEffect';
 import RuntimeCard from '../../../Card/RuntimeCard';
 import TargetInfo from '../../../Target/TargetInfo';
-import { KeywordType } from '../../../../Enums/Keyword';
+import { KeywordType, KeywordValueType } from '../../../../Enums/Keyword';
 import { Condition } from '../../../Condition/Condition';
 import NormalAttackEffect from '../../../Effect/Effects/AttackEffects/NormalAttackEffect';
 

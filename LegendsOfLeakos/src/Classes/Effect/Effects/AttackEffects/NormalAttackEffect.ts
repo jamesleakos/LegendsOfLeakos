@@ -66,7 +66,7 @@ class NormalAttackEffect extends AttackBaseEffect {
     const sourceCard = sourceEntity as RuntimeCard;
 
     // Rerouting Blocked Attacks
-    const attackedCard = this.GetAttackedCard(state, targetInfoList);
+    const attackedCard = this.getAttackedCard(state, targetInfoList);
     const actualBlockingCards: RuntimeCard[] = [];
     const assignedBlockingCards: RuntimeCard[] = [];
 
@@ -143,7 +143,7 @@ class NormalAttackEffect extends AttackBaseEffect {
       throw new Error('Why is non card entity attacking?');
     let sourceCard = sourceEntity as RuntimeCard;
 
-    let attackedCard = this.GetAttackedCard(state, targetInfoList);
+    let attackedCard = this.getAttackedCard(state, targetInfoList);
     let damageToAttackedCard = this.getEffectValue(
       EffectValueType.DamageToAttackedCard
     ).modInts[0].effectiveValue;
@@ -173,17 +173,17 @@ class NormalAttackEffect extends AttackBaseEffect {
       sourceCard.health.baseValue -= damageToAttackingCard;
   }
 
-  GetAttackedCard(state: GameState, targetInfoList: TargetInfo[]): RuntimeCard {
+  getAttackedCard(state: GameState, targetInfoList: TargetInfo[]): RuntimeCard {
     return state.getCardFromAnywhere(targetInfoList[0].cardInstanceIdList[0]);
   }
 
-  ApplyShieldToAttackedCard(shieldAmount: number) {
+  applyShieldToAttackedCard(shieldAmount: number) {
     console.log(
       'Here we need to add a modifier to the DamageToAttackedCardEffectValue'
     );
   }
 
-  HitDivineShield() {
+  hitDivineShield() {
     console.log('Here we need to implement this');
   }
 
