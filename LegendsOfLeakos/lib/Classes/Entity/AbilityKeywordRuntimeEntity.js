@@ -19,6 +19,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var TargetableRuntimeEntity_1 = __importDefault(require("./TargetableRuntimeEntity"));
+var RuntimeKeyword_1 = __importDefault(require("../Keyword/RuntimeKeyword"));
 /**
  * This class extends TargetableRuntimeEntity and provides abilities and keywords to that class. It is currently used by
  * cards and enchantments.
@@ -38,7 +39,7 @@ var AbilityKeywordRuntimeEntity = /** @class */ (function (_super) {
      * Adds a keyword to this card.
      */
     AbilityKeywordRuntimeEntity.prototype.addKeyword = function (keywordType, indexForUpgrades, description, isPermanent, duration, valueList, isActive, conditions, imageName) {
-        var k = RuntimeKeywordFactory.createRuntimeKeyword(this.instanceId, keywordType, indexForUpgrades, description, isPermanent, duration, valueList, isActive, conditions, imageName).getKeyword();
+        var k = RuntimeKeyword_1.default.createRuntimeKeyword(this.instanceId, keywordType, indexForUpgrades, description, isPermanent, duration, valueList, isActive, conditions, imageName).keyword;
         k.myEntity = this;
         this.runtimeKeywords.push(k);
         if (this.onKeywordAdded) {

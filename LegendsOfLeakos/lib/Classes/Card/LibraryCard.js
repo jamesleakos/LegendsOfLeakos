@@ -3,15 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var LibraryCard = /** @class */ (function () {
     function LibraryCard() {
         this.costs = [];
-        // TODO : add requirement class to replace 'any'
         this.deckRequirements = [];
-        // TODO: add keywords class to replace 'any'
         this.libraryKeywords = [];
-        // TODO: add abilities class to replace 'any'
         this.activatedAbilities = [];
-        // TODO: add abilities class to replace 'any'
         this.battlecryAbilities = [];
-        // TODO: add upgrades class to replace 'any'
         this.cardUpgrades = [];
     }
     LibraryCard.prototype.getCardUpgradeByUpgradeIndex = function (index) {

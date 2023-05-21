@@ -49,15 +49,14 @@ class UpgradeCardEffect extends Effect {
   public resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
-    targetInfoList: TargetInfo[],
-    gameManager: GameManager
+    targetInfoList: TargetInfo[]
   ): void {
     if (!(sourceEntity instanceof RuntimeCard)) {
       throw new Error('Why is non card entity attacking?');
     }
 
     const sourceCard: RuntimeCard = sourceEntity as RuntimeCard;
-    const libraryCard: LibraryCard = gameManager.getCardFromLibraryId(
+    const libraryCard: LibraryCard = state.gameManager.getCardFromLibraryId(
       sourceCard.libraryId
     );
     const upgrade: CardUpgrade = libraryCard.cardUpgrades.find(

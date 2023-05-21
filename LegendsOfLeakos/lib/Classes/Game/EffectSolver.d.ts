@@ -1,0 +1,30 @@
+import GameState from './GameState';
+import RuntimeCard from '../Card/RuntimeCard';
+import Effect from '../Effect/Effect';
+import TargetInfo from '../Target/TargetInfo';
+import { ZoneEnum } from '../../Enums/Zone';
+import TargetType from '../Target/TargetType';
+declare class EffectSolver {
+    gameState: GameState;
+    blockingCards: number[];
+    blockedCards: number[];
+    constructor(gameState: GameState, rngSeed: number);
+    onRecruitmentPhaseStarted(): void;
+    onRecruitmentPhaseEnded(): void;
+    onManeuverPhaseStarted(): void;
+    onManeuverPhaseEnded(): void;
+    onSkirmishPhaseStarted(): void;
+    onSkirmishPhaseEnded(): void;
+    onBattlePhaseStarted(): void;
+    onBattlePhaseEnded(): void;
+    protected resetBlockers(): void;
+    createMoveEffect(originZoneEnum: ZoneEnum, destinationZoneEnum: ZoneEnum): Effect;
+    createFightTargetInfoList(attackedCardInstanceId: number): TargetInfo[];
+    createUpgradeEffect(upgradeLevel: number): Effect;
+    areAllTargetsAvailable(effect: Effect, sourceCard: RuntimeCard, targets: TargetType[]): boolean;
+    getRandomNumber(max: number): number;
+    getRandomNumberInRange(min: number, max: number): number;
+    doEffect(sourceCard: RuntimeCard, effect: Effect, targetInfoList: TargetInfo[]): void;
+    updateStatBuffs(): void;
+}
+export default EffectSolver;

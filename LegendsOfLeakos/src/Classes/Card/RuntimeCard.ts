@@ -12,6 +12,7 @@ class RuntimeCard extends AbilityKeywordRuntimeEntity {
   attack: Stat;
   health: Stat;
   priority: Stat;
+  getStatList = (): Stat[] => [this.attack, this.health, this.priority];
   battlecryAbilities: BattlecryAbility[] = [];
   enchantments: RuntimeEnchantment[] = [];
 

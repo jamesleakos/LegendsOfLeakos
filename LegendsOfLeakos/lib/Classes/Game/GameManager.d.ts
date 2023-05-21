@@ -5,5 +5,6 @@ declare class GameManager {
     cardLibrary: LibraryCard[];
     enchantmentLibrary: LibraryEnchantment[];
     getCardFromLibraryId(libraryId: number): LibraryCard;
+    getEnchantmentFromLibraryId(libraryId: number): LibraryEnchantment;
 }
 export default GameManager;

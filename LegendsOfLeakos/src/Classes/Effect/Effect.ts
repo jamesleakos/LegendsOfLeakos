@@ -139,8 +139,7 @@ abstract class Effect {
   public resolve(
     state: GameState,
     sourceEntity: AbilityKeywordRuntimeEntity,
-    targetInfoList: Array<TargetInfo>,
-    gameManager: GameManager
+    targetInfoList: Array<TargetInfo>
   ): void {
     // Optional override
   }

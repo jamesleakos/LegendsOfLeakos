@@ -1,33 +1,31 @@
 import LibraryKeyword from '../Keyword/LibraryKeyword';
 import ActivatedAbility from '../Ability/ActivatedAbility';
 import BattlecryAbility from '../Ability/BattlecryAbility';
+import PayResourceCost from '../PayResourceCost/PayResourceCost';
 import CardUpgrade from './CardUpgrade';
+import { BiomeType, BiomeDepth } from '../../Enums/LandAndBiome';
 
 class LibraryCard {
   libraryId: number;
   cardTypeId: number;
   name: String;
-  biomeType: any;
-  biomeDepth: any;
+  biomeType: BiomeType;
+  biomeDepth: BiomeDepth;
   cardText: String;
   imageName: String;
-  costs: any[] = [];
-  // TODO : add requirement class to replace 'any'
+  costs: PayResourceCost[] = [];
+
   deckRequirements: any[] = [];
+
   // stats
   attack: number;
   health: number;
   priority: number;
-  // properties
-  description: String;
-  image: String;
-  // TODO: add keywords class to replace 'any'
+
   libraryKeywords: LibraryKeyword[] = [];
-  // TODO: add abilities class to replace 'any'
   activatedAbilities: ActivatedAbility[] = [];
-  // TODO: add abilities class to replace 'any'
   battlecryAbilities: BattlecryAbility[] = [];
-  // TODO: add upgrades class to replace 'any'
+
   cardUpgrades: CardUpgrade[] = [];
 
   getCardUpgradeByUpgradeIndex(index: number): any {

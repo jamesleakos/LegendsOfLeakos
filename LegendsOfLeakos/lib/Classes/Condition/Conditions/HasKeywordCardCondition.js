@@ -51,8 +51,7 @@ var HasKeywordCardCondition = /** @class */ (function (_super) {
     HasKeywordCardCondition.prototype.isTrue = function (card) {
         var hasAllRequired = true;
         var _loop_1 = function (i) {
-            if (card.runtimeKeywords.find(function (c) { return c.keywordType === Keyword_1.KeywordType[i]; }) ===
-                null)
+            if (card.runtimeKeywords.find(function (c) { return c.keywordType.toString() === Keyword_1.KeywordType[i]; }) === null)
                 hasAllRequired = false;
         };
         for (var _i = 0, _a = this.getConditionValue(Condition_1.ConditionValueType.HasKeywordOfKeywordType).values; _i < _a.length; _i++) {

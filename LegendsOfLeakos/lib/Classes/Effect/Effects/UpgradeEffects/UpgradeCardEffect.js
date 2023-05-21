@@ -46,13 +46,13 @@ var UpgradeCardEffect = /** @class */ (function (_super) {
     UpgradeCardEffect.prototype.preEffect = function (state, sourceEntity, targetInfoList) {
         return true;
     };
-    UpgradeCardEffect.prototype.resolve = function (state, sourceEntity, targetInfoList, gameManager) {
+    UpgradeCardEffect.prototype.resolve = function (state, sourceEntity, targetInfoList) {
         var _this = this;
         if (!(sourceEntity instanceof RuntimeCard_1.default)) {
             throw new Error('Why is non card entity attacking?');
         }
         var sourceCard = sourceEntity;
-        var libraryCard = gameManager.getCardFromLibraryId(sourceCard.libraryId);
+        var libraryCard = state.gameManager.getCardFromLibraryId(sourceCard.libraryId);
         var upgrade = libraryCard.cardUpgrades.find(function (x) { return x.upgradeIndex === _this.upgradeIndex; });
         upgrade.upgradeCard(sourceCard);
     };
@@ -67,3 +67,4 @@ var UpgradeCardEffect = /** @class */ (function (_super) {
     };
     return UpgradeCardEffect;
 }(Effect_1.default));
+exports.default = UpgradeCardEffect;

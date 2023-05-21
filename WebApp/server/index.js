@@ -19,6 +19,7 @@ const io = require('socket.io')(server, { cors: { origin: '*' } });
 const authRouter = require('./routers/auth.js');
 const realmRouter = require('./routers/realms.js');
 const waitlistRouter = require('./routers/waitlist.js');
+const cardRouter = require('./routers/cards.js');
 
 // auth
 const mongoURI = `mongodb+srv://${process.env.MONGO_CLOUD_ATLAS_USER}:${process.env.MONGO_CLOUD_ATLAS_PASSWORD}@${process.env.MONGO_CLOUD_ATLAS_URL}/${process.env.MONGO_CLOUD_ATLAS_DB}`;
@@ -49,6 +50,7 @@ app.use(cors({ origin: '*' }));
 app.use('/auth', authRouter);
 app.use('/realms', realmRouter);
 app.use('/waitlist', waitlistRouter);
+app.use('/cards', cardRouter);
 
 // io handlers
 const pregameHandler = require('./ioHandlers/pregameHandler.js');

@@ -1,0 +1,33 @@
+import GameState from '../Game/GameState';
+import EffectSolver from '../Game/EffectSolver';
+import Queueline from '../Queueline/Queueline';
+import ServerHandler from './ServerHandler';
+import Phase from '../Phase/Phase';
+import GameManager from '../Game/GameManager';
+declare class Server {
+    p0_readyToProgressPhase: boolean;
+    p1_readyToProgressPhase: boolean;
+    currentPhaseIndex: number;
+    phaseList: Phase[];
+    turnCoroutine: any;
+    turnDuration: number;
+    currentTurn: number;
+    gameState: GameState;
+    protected _effectSolver: EffectSolver;
+    get effectSolver(): EffectSolver;
+    protected set effectSolver(value: EffectSolver);
+    protected handlers: ServerHandler[];
+    currentQueueIndex: number;
+    protected queue: Queueline[];
+    targetInfoCode: number | null;
+    protected gameFinished: boolean;
+    onStartServer(gameManager: GameManager): void;
+    protected loadGameConfiguration(gameManager: GameManager): void;
+    protected addServerHandlers(): void;
+    protected registerServerHandlers(): void;
+    protected unregisterServerHandlers(): void;
+    protected onDestroy(): void;
+    onPlayerConnected(connectionId: number): void;
+    onPlayerDisconnected(connectionId: number): void;
+}
+export default Server;

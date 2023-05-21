@@ -19,6 +19,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var RuntimeKeyword_1 = __importDefault(require("../../RuntimeKeyword"));
+var MoveCardEffect_1 = __importDefault(require("../../../Effect/Effects/MoveEffects/MoveCardEffect"));
+var Keyword_1 = require("../../../../Enums/Keyword");
 var NormalAttackEffect_1 = __importDefault(require("../../../Effect/Effects/AttackEffects/NormalAttackEffect"));
 var ShieldedKeyword = /** @class */ (function (_super) {
     __extends(ShieldedKeyword, _super);
@@ -34,11 +36,11 @@ var ShieldedKeyword = /** @class */ (function (_super) {
             case NormalAttackEffect_1.default:
                 var attackEffect = e;
                 var target = attackEffect.getAttackedCard(gameState, targetInfoList);
-                var shieldingCard = gameState.getCardFromAnywhere(this.getKeywordValue(KeywordValueType.shieldingCardInstanceId));
+                var shieldingCard = gameState.getCardFromAnywhere(this.getKeywordValue(Keyword_1.KeywordValueType.shieldingCardInstanceId));
                 if (target.instanceId === this.myEntityInstanceId &&
                     (shieldingCard.residingZone.name === 'FrontBoard' ||
                         shieldingCard.residingZone.name === 'BackBoard')) {
-                    attackEffect.applyShieldToAttackedCard(this.getKeywordValue(KeywordValueType.shieldAmount));
+                    attackEffect.applyShieldToAttackedCard(this.getKeywordValue(Keyword_1.KeywordValueType.shieldAmount));
                 }
                 return;
             default:
@@ -49,11 +51,11 @@ var ShieldedKeyword = /** @class */ (function (_super) {
         if (!this.isActive)
             return;
         switch (e.constructor) {
-            case MoveCardEffect:
+            case MoveCardEffect_1.default:
                 var moveEffect = e;
                 if (sourceCard.instanceId ===
-                    this.getKeywordValue(KeywordValueType.shieldingCardInstanceId)) {
-                    var shieldingCard = gameState.getCardFromAnywhere(this.getKeywordValue(KeywordValueType.shieldingCardInstanceId));
+                    this.getKeywordValue(Keyword_1.KeywordValueType.shieldingCardInstanceId)) {
+                    var shieldingCard = gameState.getCardFromAnywhere(this.getKeywordValue(Keyword_1.KeywordValueType.shieldingCardInstanceId));
                     if (shieldingCard.residingZone.name === 'Frontboard' ||
                         shieldingCard.residingZone.name === 'BackBoard' ||
                         shieldingCard.residingZone.name === 'BattleBoard') {

@@ -13,6 +13,7 @@ function CardDisplay({ biome }) {
   const [filterSetting, setFilterSetting] = useState('all'); // ['all', 'landType', 'depth', 'addable']
   const [cardLibrary, setCardLibrary] = useState([]);
   const [filteredCardLibrary, setFilteredCardLibrary] = useState([]);
+
   useEffect(() => {
     axios
       .get('/cards')
@@ -26,6 +27,8 @@ function CardDisplay({ biome }) {
 
   // filter card library
   useEffect(() => {
+    if (!biome) return;
+
     if (filterSetting === 'all') {
       setFilteredCardLibrary(cardLibrary);
     } else if (filterSetting === 'landType') {
@@ -43,12 +46,14 @@ function CardDisplay({ biome }) {
     }
   }, [filterSetting, cardLibrary]);
 
+  console.log('cardLibrary', cardLibrary);
+
   return (
     <CardDisplayStyled>
       <div className='top-bar'>
         <div className='filter-label'>All</div>
-        <div className='filter-label'>{biome.landType}</div>
-        <div className='filter-label'>{biome.depth}</div>
+        <div className='filter-label'>{biome?.landType}</div>
+        <div className='filter-label'>{biome?.depth}</div>
         <div className='filter-label'>Addable</div>
       </div>
       <div className='card-container'>

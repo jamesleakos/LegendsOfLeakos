@@ -24,6 +24,7 @@ var RuntimeCard = /** @class */ (function (_super) {
     function RuntimeCard() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.upgradesApplied = [];
+        _this.getStatList = function () { return [_this.attack, _this.health, _this.priority]; };
         _this.battlecryAbilities = [];
         _this.enchantments = [];
         return _this;

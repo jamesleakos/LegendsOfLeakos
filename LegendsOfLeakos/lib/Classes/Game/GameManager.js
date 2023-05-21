@@ -19,6 +19,13 @@ var GameManager = /** @class */ (function () {
         }
         return card;
     };
+    GameManager.prototype.getEnchantmentFromLibraryId = function (libraryId) {
+        var enchantment = this.enchantmentLibrary.find(function (x) { return x.libraryId === libraryId; });
+        if (enchantment === undefined) {
+            throw new Error("Could not find enchantment with libraryId ".concat(libraryId));
+        }
+        return enchantment;
+    };
     return GameManager;
 }());
 exports.default = GameManager;

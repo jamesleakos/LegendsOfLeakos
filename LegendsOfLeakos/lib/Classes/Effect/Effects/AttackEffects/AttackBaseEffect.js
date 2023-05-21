@@ -26,21 +26,21 @@ var AttackBaseEffect = /** @class */ (function (_super) {
     function AttackBaseEffect() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    AttackBaseEffect.prototype.MyRequiredEffectValues = function () {
+    AttackBaseEffect.prototype.myRequiredEffectValues = function () {
         var tempList = [
             new EffectValueCreatorInfo_1.default(Effect_1.EffectValueType.DamageToAttackingCard, false),
             new EffectValueCreatorInfo_1.default(Effect_1.EffectValueType.DamageToAttackedCard, false),
             new EffectValueCreatorInfo_1.default(Effect_1.EffectValueType.AttackedCardDamagePrevented, false),
             new EffectValueCreatorInfo_1.default(Effect_1.EffectValueType.AttackingCardDamagePrevented, false),
         ];
-        for (var _i = 0, _a = _super.prototype.MyRequiredEffectValues.call(this); _i < _a.length; _i++) {
+        for (var _i = 0, _a = _super.prototype.myRequiredEffectValues.call(this); _i < _a.length; _i++) {
             var x = _a[_i];
             tempList.push(x);
         }
         return tempList;
     };
     // Resolves this effect on the specified card.
-    AttackBaseEffect.prototype.Resolve = function (state, sourceEntity, targetInfoList) { };
+    AttackBaseEffect.prototype.resolve = function (state, sourceEntity, targetInfoList) { };
     return AttackBaseEffect;
 }(EntityEffect_1.default));
 exports.default = AttackBaseEffect;

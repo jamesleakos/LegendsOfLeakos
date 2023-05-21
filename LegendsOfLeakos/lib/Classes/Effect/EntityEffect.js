@@ -14,40 +14,48 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var Effect_1 = __importDefault(require("./Effect"));
+var Target_1 = require("../../Enums/Target");
+var CardCondition_1 = __importDefault(require("../Condition/CardCondition"));
+var ZoneCondition_1 = __importDefault(require("../Condition/ZoneCondition"));
 var EntityEffect = /** @class */ (function (_super) {
     __extends(EntityEffect, _super);
     function EntityEffect() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    EntityEffect.prototype.MyRequiredEffectValues = function () {
+    EntityEffect.prototype.myRequiredEffectValues = function () {
         var tempList = [];
-        for (var _i = 0, _a = _super.prototype.MyRequiredEffectValues.call(this); _i < _a.length; _i++) {
+        for (var _i = 0, _a = _super.prototype.myRequiredEffectValues.call(this); _i < _a.length; _i++) {
             var x = _a[_i];
             tempList.push(x);
         }
         return tempList;
     };
-    EntityEffect.prototype.IsTargetInfoStillValid = function (sourceEntity, state, targetInfo, targetType) {
+    EntityEffect.prototype.isTargetInfoStillValid = function (sourceEntity, state, targetInfo, targetType) {
         var validCount = 0;
-        if (targetType.targetTypeEnum.BroadTargetType() === BroadTargetTypeEnum.card) {
+        if (Target_1.TargetTypeEnumMethods.broadTargetType(targetType.targetTypeEnum) ===
+            Target_1.BroadTargetTypeEnum.card) {
             // check if there are too many targets
             if (targetInfo.cardInstanceIdList.length > targetType.maxSelectionsAllowed)
                 return false;
             for (var _i = 0, _a = targetInfo.cardInstanceIdList; _i < _a.length; _i++) {
                 var j = _a[_i];
-                var card = state.GetCardFromAnywhere(j);
+                var card = state.getCardFromAnywhere(j);
                 if (card === null)
                     continue;
                 // checking if the targetTypeEnum is correct
                 switch (targetType.targetTypeEnum) {
-                    case TargetTypeEnum.TargetCreature:
+                    case Target_1.TargetTypeEnum.TargetCreature:
                         break;
-                    case TargetTypeEnum.TargetOpponentCreature:
+                    case Target_1.TargetTypeEnum.TargetOpponentCreature:
                         if (card.ownerPlayer === sourceEntity.ownerPlayer)
                             continue;
                         break;
-                    case TargetTypeEnum.TargetFriendlyCreature:
+                    case Target_1.TargetTypeEnum.TargetFriendlyCreature:
                         if (card.ownerPlayer !== sourceEntity.ownerPlayer)
                             continue;
                         break;
@@ -58,53 +66,54 @@ var EntityEffect = /** @class */ (function (_super) {
                 // checking if the target satisfies the conditions
                 for (var _b = 0, _c = targetType.conditions; _b < _c.length; _b++) {
                     var c = _c[_b];
-                    if (!(c instanceof CardCondition))
+                    if (!(c instanceof CardCondition_1.default))
                         continue;
-                    if (!c.IsTrue(card))
+                    if (!c.isTrue(card))
                         continue;
                 }
                 // count to satisfy min and max
                 validCount += 1;
             }
         }
-        else if (targetType.targetTypeEnum.BroadTargetType() === BroadTargetTypeEnum.zone) {
+        else if (Target_1.TargetTypeEnumMethods.broadTargetType(targetType.targetTypeEnum) ===
+            Target_1.BroadTargetTypeEnum.zone) {
             // check if there are too many targets
             if (targetInfo.zoneInstanceIdList.length > targetType.maxSelectionsAllowed)
                 return false;
             for (var _d = 0, _e = targetInfo.zoneInstanceIdList; _d < _e.length; _d++) {
                 var zoneInstanceId = _e[_d];
-                var zone = state.GetZone(zoneInstanceId);
+                var zone = state.getZone(zoneInstanceId);
                 if (zone === null)
                     continue;
                 // checking if the targetTypeEnum is correct
                 switch (targetType.targetTypeEnum) {
-                    case TargetTypeEnum.TargetRow:
+                    case Target_1.TargetTypeEnum.TargetRow:
                         // I think this is always fine?
                         break;
-                    case TargetTypeEnum.TargetOpponentRow:
+                    case Target_1.TargetTypeEnum.TargetOpponentRow:
                         if (zone.ownerPlayer === sourceEntity.ownerPlayer)
                             continue;
                         break;
-                    case TargetTypeEnum.TargetFriendlyRow:
+                    case Target_1.TargetTypeEnum.TargetFriendlyRow:
                         if (zone.ownerPlayer !== sourceEntity.ownerPlayer)
                             continue;
                         break;
-                    case TargetTypeEnum.OpponentFrontRow:
+                    case Target_1.TargetTypeEnum.OpponentFrontRow:
                         if (zone.ownerPlayer === sourceEntity.ownerPlayer ||
                             zone.name !== 'FrontRow')
                             continue;
                         break;
-                    case TargetTypeEnum.OpponentBackRow:
+                    case Target_1.TargetTypeEnum.OpponentBackRow:
                         if (zone.ownerPlayer === sourceEntity.ownerPlayer ||
                             zone.name !== 'BackRow')
                             continue;
                         break;
-                    case TargetTypeEnum.FriendlyFrontRow:
+                    case Target_1.TargetTypeEnum.FriendlyFrontRow:
                         if (zone.ownerPlayer !== sourceEntity.ownerPlayer ||
                             zone.name !== 'FrontRow')
                             continue;
                         break;
-                    case TargetTypeEnum.FriendlyBackRow:
+                    case Target_1.TargetTypeEnum.FriendlyBackRow:
                         if (zone.ownerPlayer !== sourceEntity.ownerPlayer ||
                             zone.name !== 'BackRow')
                             continue;
@@ -115,9 +124,9 @@ var EntityEffect = /** @class */ (function (_super) {
                 // checking if the target satisfies the conditions
                 for (var _f = 0, _g = targetType.conditions; _f < _g.length; _f++) {
                     var c = _g[_f];
-                    if (!(c instanceof ZoneCondition))
+                    if (!(c instanceof ZoneCondition_1.default))
                         continue;
-                    if (!c.IsTrue(zone))
+                    if (!c.isTrue(zone))
                         continue;
                 }
                 // count to satisfy min and max
@@ -127,35 +136,35 @@ var EntityEffect = /** @class */ (function (_super) {
         // check min conditions
         return validCount >= targetType.minSelectionsThatMustRemain;
     };
-    EntityEffect.prototype.AreAllSelectedTargetInfoItemsValid = function (sourceEntity, state, targetInfo, targetTypes) {
+    EntityEffect.prototype.areAllSelectedTargetInfoItemsValid = function (sourceEntity, state, targetInfo, targetTypes) {
         if (targetTypes.length !== targetInfo.length)
             return false;
         for (var i = 0; i < targetInfo.length; i++) {
             if (targetInfo[i].noTargetWasSelected)
                 continue;
-            if (!this.IsTargetInfoStillValid(sourceEntity, state, targetInfo[i], targetTypes[i]))
+            if (!this.isTargetInfoStillValid(sourceEntity, state, targetInfo[i], targetTypes[i]))
                 return false;
         }
         return true;
     };
-    EntityEffect.prototype.IsCardStillInPlay = function (entity) {
+    EntityEffect.prototype.isCardStillInPlay = function (entity) {
         if (entity.residingZone.name === 'BattleBoard' ||
             entity.residingZone.name === 'FrontBoard' ||
             entity.residingZone.name === 'BackBoard')
             return true;
         return false;
     };
-    EntityEffect.prototype.Resolve = function (state, sourceEntity, targetInfoList) {
+    EntityEffect.prototype.resolve = function (state, sourceEntity, targetInfoList) {
         // override this
     };
-    EntityEffect.prototype.AreTargetsAvailable = function (state, sourceEntity, targetTypes) {
+    EntityEffect.prototype.areTargetsAvailable = function (state, sourceEntity, targetTypes) {
         var cards = [];
         var zones = [];
         for (var _i = 0, targetTypes_1 = targetTypes; _i < targetTypes_1.length; _i++) {
             var targetType = targetTypes_1[_i];
             if (targetType.minSelectionsRequired > 0) {
-                switch (targetType.GetTargetType()) {
-                    case TargetTypeEnum.TargetCreature:
+                switch (targetType.getTargetTypeEnum()) {
+                    case Target_1.TargetTypeEnum.TargetCreature:
                         for (var _a = 0, _b = state.players; _a < _b.length; _a++) {
                             var player = _b[_a];
                             for (var _c = 0, _d = player.zones; _c < _d.length; _c++) {
@@ -167,7 +176,7 @@ var EntityEffect = /** @class */ (function (_super) {
                             }
                         }
                         break;
-                    case TargetTypeEnum.TargetFriendlyCreature:
+                    case Target_1.TargetTypeEnum.TargetFriendlyCreature:
                         for (var _g = 0, _h = state.players.find(function (c) { return c.id === sourceEntity.ownerPlayer.id; }).zones; _g < _h.length; _g++) {
                             var zone = _h[_g];
                             for (var _j = 0, _k = zone.cards; _j < _k.length; _j++) {
@@ -176,7 +185,7 @@ var EntityEffect = /** @class */ (function (_super) {
                             }
                         }
                         break;
-                    case TargetTypeEnum.TargetOpponentCreature:
+                    case Target_1.TargetTypeEnum.TargetOpponentCreature:
                         for (var _l = 0, _m = state.players.find(function (c) { return c.id !== sourceEntity.ownerPlayer.id; }).zones; _l < _m.length; _l++) {
                             var zone = _m[_l];
                             for (var _o = 0, _p = zone.cards; _o < _p.length; _o++) {
@@ -185,7 +194,7 @@ var EntityEffect = /** @class */ (function (_super) {
                             }
                         }
                         break;
-                    case TargetTypeEnum.TargetRow:
+                    case Target_1.TargetTypeEnum.TargetRow:
                         for (var _q = 0, _r = state.players; _q < _r.length; _q++) {
                             var player = _r[_q];
                             for (var _s = 0, _t = player.zones; _s < _t.length; _s++) {
@@ -194,13 +203,13 @@ var EntityEffect = /** @class */ (function (_super) {
                             }
                         }
                         break;
-                    case TargetTypeEnum.TargetFriendlyRow:
+                    case Target_1.TargetTypeEnum.TargetFriendlyRow:
                         for (var _u = 0, _v = state.players.find(function (c) { return c.netId === sourceEntity.ownerPlayer.netId; }).zones; _u < _v.length; _u++) {
                             var zone = _v[_u];
                             zones.push(zone);
                         }
                         break;
-                    case TargetTypeEnum.TargetOpponentRow:
+                    case Target_1.TargetTypeEnum.TargetOpponentRow:
                         for (var _w = 0, _x = state.players.find(function (c) { return c.netId !== sourceEntity.ownerPlayer.netId; }).zones; _w < _x.length; _w++) {
                             var zone = _x[_w];
                             zones.push(zone);
@@ -216,8 +225,8 @@ var EntityEffect = /** @class */ (function (_super) {
                     for (var _z = 0, _0 = targetType.conditions; _z < _0.length; _z++) {
                         var condition = _0[_z];
                         switch (condition.constructor) {
-                            case CardCondition:
-                                if (!condition.IsTrue(card))
+                            case CardCondition_1.default:
+                                if (!condition.isTrue(card))
                                     cardGood = false;
                                 break;
                             default:
@@ -233,8 +242,8 @@ var EntityEffect = /** @class */ (function (_super) {
                     for (var _2 = 0, _3 = targetType.conditions; _2 < _3.length; _2++) {
                         var condition = _3[_2];
                         switch (condition.constructor) {
-                            case ZoneCondition:
-                                if (!condition.IsTrue(zone))
+                            case ZoneCondition_1.default:
+                                if (!condition.isTrue(zone))
                                     zoneGood = false;
                                 break;
                             default:
@@ -251,5 +260,5 @@ var EntityEffect = /** @class */ (function (_super) {
         return true;
     };
     return EntityEffect;
-}(Effect));
+}(Effect_1.default));
 exports.default = EntityEffect;

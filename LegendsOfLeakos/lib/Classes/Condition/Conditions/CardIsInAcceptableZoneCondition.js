@@ -56,3 +56,4 @@ var CardIsInAcceptableZoneCondition = /** @class */ (function (_super) {
     };
     return CardIsInAcceptableZoneCondition;
 }(CardCondition_1.default));
+exports.default = CardIsInAcceptableZoneCondition;

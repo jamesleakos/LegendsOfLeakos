@@ -7,6 +7,13 @@ var Effect_1 = require("../../Enums/Effect");
 var EffectValue_1 = __importDefault(require("./EffectValue"));
 var IntModifier_1 = __importDefault(require("../ModifableInt/IntModifier"));
 var TargetType_1 = __importDefault(require("../Target/TargetType"));
+var DealSetDamageEffect_1 = __importDefault(require("./Effects/CardTargetEffects/DealSetDamageEffect"));
+var DealDamageEqualToAttackEffect_1 = __importDefault(require("./Effects/CardTargetEffects/DealDamageEqualToAttackEffect"));
+var GiveShieldedKeywordEffect_1 = __importDefault(require("./Effects/CardTargetEffects/GiveShieldedKeywordEffect"));
+var GiveShieldedKeywordBasedOnOtherUnitsEffect_1 = __importDefault(require("./Effects/CardTargetEffects/GiveShieldedKeywordBasedOnOtherUnitsEffect"));
+var NormalAttackEffect_1 = __importDefault(require("./Effects/AttackEffects/NormalAttackEffect"));
+var EnchantCardEffect_1 = __importDefault(require("./Effects/EnchantEffects/EnchantCardEffect"));
+var EnchantZoneEffect_1 = __importDefault(require("./Effects/EnchantEffects/EnchantZoneEffect"));
 // Base class of an effect. It consists of a type (which is associated with a child class, which holds the logic for execution of the effect),
 // a list of EffectValues,
 var Effect = /** @class */ (function () {
@@ -56,7 +63,7 @@ var Effect = /** @class */ (function () {
     Effect.prototype.myRequiredEffectValues = function () {
         return [];
     };
-    Effect.prototype.resolve = function (state, sourceEntity, targetInfoList, gameManager) {
+    Effect.prototype.resolve = function (state, sourceEntity, targetInfoList) {
         // Optional override
     };
     Effect.prototype.onEndTurn = function () {
@@ -65,25 +72,25 @@ var Effect = /** @class */ (function () {
     Effect.createEffect = function (effectEnum, effectValueList, targetTypes) {
         var outEffect = null;
         if (effectEnum === Effect_1.EffectType.DealSetDamage) {
-            outEffect = new DealSetDamageEffect(effectValueList, targetTypes);
+            outEffect = new DealSetDamageEffect_1.default(effectValueList, targetTypes);
         }
         if (effectEnum === Effect_1.EffectType.DealDamageEqualToAttack) {
-            outEffect = new DealDamageEqualToAttackEffect(effectValueList, targetTypes);
+            outEffect = new DealDamageEqualToAttackEffect_1.default(effectValueList, targetTypes);
         }
         if (effectEnum === Effect_1.EffectType.GiveShieldedKeyword) {
-            outEffect = new GiveShieldedKeywordEffect(effectValueList, targetTypes);
+            outEffect = new GiveShieldedKeywordEffect_1.default(effectValueList, targetTypes);
         }
         if (effectEnum === Effect_1.EffectType.GiveShieldedKeywordBasedOnOtherUnits) {
-            outEffect = new GiveShieldedKeywordBasedOnOtherUnitsEffect(effectValueList, targetTypes);
+            outEffect = new GiveShieldedKeywordBasedOnOtherUnitsEffect_1.default(effectValueList, targetTypes);
         }
         if (effectEnum === Effect_1.EffectType.NormalAttack) {
-            outEffect = new NormalAttackEffect(effectValueList, targetTypes);
+            outEffect = new NormalAttackEffect_1.default(effectValueList, targetTypes);
         }
         if (effectEnum === Effect_1.EffectType.EnchantCard) {
-            outEffect = new EnchantCardEffect(effectValueList, targetTypes);
+            outEffect = new EnchantCardEffect_1.default(effectValueList, targetTypes);
         }
         if (effectEnum === Effect_1.EffectType.EnchantZone) {
-            outEffect = new EnchantZoneEffect(effectValueList, targetTypes);
+            outEffect = new EnchantZoneEffect_1.default(effectValueList, targetTypes);
         }
         var success = true;
         var message = 'Effect created successfully';
