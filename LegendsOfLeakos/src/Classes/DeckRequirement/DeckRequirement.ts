@@ -10,10 +10,10 @@ abstract class DeckRequirement {
 
   abstract isRequirementMet(
     myBiome: LibraryBiome,
-    myCard: LibraryCard
+    libraryCardID: number
   ): boolean;
 
-  abstract requirementToText(): string;
+  abstract requirementToText(gameProperties: any): string;
 
   abstract myRequiredValues(): DeckReqVariableNames[];
 }

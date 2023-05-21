@@ -31,36 +31,38 @@ var CardDeckRequirement = /** @class */ (function (_super) {
     }
     CardDeckRequirement.prototype.myRequiredValues = function () {
         return [DeckRequirements_1.DeckReqVariableNames.Amount, DeckRequirements_1.DeckReqVariableNames.LibraryCardId];
-        return new DeckRequirementReturnTypes(mainList, stringList, intAndEnumList);
     };
-    CardDeckRequirement.prototype.canBeAdded = function (biome, myCard) {
-        return this.IsRequirementMet(biome, myCard.libraryId);
+    CardDeckRequirement.prototype.canBeAdded = function (myBiome, myCard) {
+        return this.isRequirementMet(myBiome, myCard.libraryId);
     };
-    CardDeckRequirement.prototype.isRequirementMet = function (biome, myCardLibraryId) {
+    CardDeckRequirement.prototype.isRequirementMet = function (myBiome, libraryCardID) {
         var _this = this;
         var counter = 0;
-        var deckEntry = biome.deck.cards.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.libraryId); });
-        if (deckEntry !== undefined) {
-            counter += deckEntry.amount;
+        var libraryCardEntry = myBiome.cards.find(function (c) {
+            return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
+        });
+        if (libraryCardEntry !== undefined) {
+            counter += libraryCardEntry.amount;
         }
-        for (var _i = 0, _a = biome.subBiomes; _i < _a.length; _i++) {
+        for (var _i = 0, _a = myBiome.subBiomes; _i < _a.length; _i++) {
             var subbiome = _a[_i];
-            var subDeckEntry = subbiome.deck.cards.find(function (c) {
-                return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.libraryId);
+            var subCardEntry = subbiome.cards.find(function (c) {
+                return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
             });
-            if (subDeckEntry !== undefined) {
-                counter += subDeckEntry.amount;
+            if (subCardEntry !== undefined) {
+                counter += subCardEntry.amount;
             }
         }
-        return counter >= this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.amount);
+        return counter >= this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount);
     };
-    CardDeckRequirement.prototype.requirementToText = function () {
+    CardDeckRequirement.prototype.requirementToText = function (gameManager) {
         var _this = this;
-        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.amount).toString() +
+        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount) +
             ' of ' +
-            GameManager.Instance.config.cards.find(function (c) {
-                return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.libraryId);
-            }).name.value);
+            gameManager.cardLibrary.find(function (c) {
+                return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
+            }).name);
     };
     return CardDeckRequirement;
 }(DeckRequirement_1.default));
+exports.default = CardDeckRequirement;

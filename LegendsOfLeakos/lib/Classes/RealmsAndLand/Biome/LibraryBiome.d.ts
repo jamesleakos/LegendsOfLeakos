@@ -2,6 +2,7 @@ import LibraryCardEntry from './LibraryCardEntry';
 import LibraryLandTile from '../LandTile/LibraryLandTile';
 import LibraryCard from '../../Card/LibraryCard';
 import { BiomeAddCardEnum } from '../../../Enums/LandAndBiome';
+import GameManager from '../../Game/GameManager';
 declare class BiomeAddCardMessage {
     result: BiomeAddCardEnum;
     numberAdded: number;
@@ -21,14 +22,14 @@ declare class LibraryBiome {
     landTiles: LibraryLandTile[];
     subBiomes: LibraryBiome[];
     getLandTiles(): LibraryLandTile[];
-    wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage;
-    areBiomeAndSubsValid(message?: BiomeValidMessage, cardLibrary?: LibraryCard[]): BiomeValidMessage;
+    wouldRemovingThisCardCauseErrors(card: LibraryCard, gameManager: GameManager): BiomeValidMessage;
+    areBiomeAndSubsValid(gameManager: GameManager, message?: BiomeValidMessage): BiomeValidMessage;
     private cardsCanBeAddedToBiomeOrSubbiome;
     private cardsCanBeAddedToThisBiome;
     getCardsCount(): number;
     getCardsCountByLibraryID(libraryId: number): number;
     getCardsCountByCardType(config: any, cardTypeId: number): number;
-    addCardsToBiomeOrSubbiome(card: LibraryCard, amount: number): BiomeAddCardMessage;
+    addCardsToBiomeOrSubbiome(card: LibraryCard, amount: number, gameManager: GameManager): BiomeAddCardMessage;
     private addCard;
     deleteAllCards(): void;
     removeSingleCardFromBiomeOrSubbiome(card: LibraryCard): void;

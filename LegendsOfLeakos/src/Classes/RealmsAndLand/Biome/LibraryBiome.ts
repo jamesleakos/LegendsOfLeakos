@@ -3,6 +3,7 @@ import LibraryLandTile from '../LandTile/LibraryLandTile';
 import LibraryCard from '../../Card/LibraryCard';
 import RuntimeLandTile from '../LandTile/RuntimeLandTile';
 import { BiomeAddCardEnum } from '../../../Enums/LandAndBiome';
+import GameManager from '../../Game/GameManager';
 
 //#region Messages
 
@@ -50,18 +51,23 @@ class LibraryBiome {
 
   // #region Biome / Card Requirement Validity
 
-  wouldRemovingThisCardCauseErrors(card: LibraryCard): BiomeValidMessage {
+  wouldRemovingThisCardCauseErrors(
+    card: LibraryCard,
+    gameManager: GameManager
+  ): BiomeValidMessage {
     const testBiome: LibraryBiome = LibraryBiome.copyBiome(this);
     testBiome.removeSingleCardFromBiomeOrSubbiome(card);
-    return testBiome.areBiomeAndSubsValid();
+    return testBiome.areBiomeAndSubsValid(gameManager);
   }
 
   areBiomeAndSubsValid(
-    message: BiomeValidMessage = new BiomeValidMessage(false, ''),
-    cardLibrary: LibraryCard[] = []
+    gameManager: GameManager,
+    message: BiomeValidMessage = new BiomeValidMessage(false, '')
   ): BiomeValidMessage {
     for (const entry of this.cards) {
-      const card = cardLibrary.find((c) => c.libraryId === entry.libraryId);
+      const card = gameManager.cardLibrary.find(
+        (c) => c.libraryId === entry.libraryId
+      );
       if (card === undefined) {
         throw new Error('The library is likely smaller than it used to be');
       }
@@ -70,13 +76,15 @@ class LibraryBiome {
         if (!req.isRequirementMet(this, card.libraryId)) {
           message.isValid = false;
           message.message +=
-            'The requirement of ' + req.requirementToText() + ' is not met; ';
+            'The requirement of ' +
+            req.requirementToText(gameManager) +
+            ' is not met; ';
         }
       }
     }
 
     for (const sub of this.subBiomes) {
-      const subResponse = sub.areBiomeAndSubsValid(message);
+      const subResponse = sub.areBiomeAndSubsValid(gameManager, message);
       if (!subResponse.isValid) {
         message.isValid = false;
         message.message += subResponse.message;
@@ -88,7 +96,8 @@ class LibraryBiome {
 
   private cardsCanBeAddedToBiomeOrSubbiome(
     card: LibraryCard,
-    amount: number
+    amount: number,
+    gameManager: GameManager
   ): BiomeAddCardMessage {
     if (card.biomeType !== this.biomeType) {
       return new BiomeAddCardMessage(
@@ -106,20 +115,21 @@ class LibraryBiome {
         `${card.name} requires ${card.biomeDepth} ${card.biomeType} and this only has ${this.biomeDepth} ${this.biomeType}`
       );
     }
-    const thisDeck = this.cardsCanBeAddedToThisBiome(card, amount);
+    const thisDeck = this.cardsCanBeAddedToThisBiome(card, amount, gameManager);
     if (thisDeck.result !== BiomeAddCardEnum.Failure || card.biomeDepth === 0) {
       return thisDeck;
     } else {
       const rightSub = this.subBiomes.find(
         (c) => c.biomeDepth === card.biomeDepth
       );
-      return rightSub.cardsCanBeAddedToThisBiome(card, amount);
+      return rightSub.cardsCanBeAddedToThisBiome(card, amount, gameManager);
     }
   }
 
   private cardsCanBeAddedToThisBiome(
     card: LibraryCard,
-    amount: number
+    amount: number,
+    gameManager: GameManager
   ): BiomeAddCardMessage {
     if (card.biomeType !== this.biomeType) {
       return new BiomeAddCardMessage(
@@ -155,7 +165,7 @@ class LibraryBiome {
       for (const req of card.deckRequirements) {
         if (!req.canBeAdded(this, card)) {
           canAdd = false;
-          message = req.requirementToText();
+          message = req.requirementToText(gameManager);
           break;
         }
       }
@@ -254,12 +264,17 @@ class LibraryBiome {
 
   addCardsToBiomeOrSubbiome(
     card: LibraryCard,
-    amount: number
+    amount: number,
+    gameManager: GameManager
   ): BiomeAddCardMessage {
-    let result = this.cardsCanBeAddedToBiomeOrSubbiome(card, amount);
+    let result = this.cardsCanBeAddedToBiomeOrSubbiome(
+      card,
+      amount,
+      gameManager
+    );
     if (result.result === BiomeAddCardEnum.Failure) return result;
 
-    result = this.cardsCanBeAddedToThisBiome(card, amount);
+    result = this.cardsCanBeAddedToThisBiome(card, amount, gameManager);
     if (result.result !== BiomeAddCardEnum.Failure) {
       this.addCard(card, result.numberAdded);
       return result;
@@ -267,7 +282,7 @@ class LibraryBiome {
       const subbiome = this.subBiomes.find(
         (c) => c.biomeDepth === card.biomeDepth
       );
-      return subbiome.addCardsToBiomeOrSubbiome(card, amount);
+      return subbiome.addCardsToBiomeOrSubbiome(card, amount, gameManager);
     }
   }
 

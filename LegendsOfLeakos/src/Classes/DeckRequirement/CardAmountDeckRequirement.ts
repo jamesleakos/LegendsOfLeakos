@@ -1,5 +1,9 @@
 import DeckRequirement from './DeckRequirement';
 import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import LibraryCard from '../Card/LibraryCard';
+import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
+import LibraryCardEntry from '../RealmsAndLand/Biome/LibraryCardEntry';
+import GameManager from '../Game/GameManager';
 
 class CardDeckRequirement extends DeckRequirement {
   constructor(libraryId: number, amount: number) {
@@ -11,43 +15,47 @@ class CardDeckRequirement extends DeckRequirement {
 
   override myRequiredValues(): DeckReqVariableNames[] {
     return [DeckReqVariableNames.Amount, DeckReqVariableNames.LibraryCardId];
-
-    return new DeckRequirementReturnTypes(mainList, stringList, intAndEnumList);
   }
 
-  override canBeAdded(biome: Biome, myCard: Card): boolean {
-    return this.IsRequirementMet(biome, myCard.libraryId);
+  override canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean {
+    return this.isRequirementMet(myBiome, myCard.libraryId);
   }
 
-  override isRequirementMet(biome: Biome, myCardLibraryId: number): boolean {
+  override isRequirementMet(
+    myBiome: LibraryBiome,
+    libraryCardID: number
+  ): boolean {
     let counter = 0;
-    let deckEntry = biome.deck.cards.find(
-      (c) => c.libraryId === this.reqValues.get(DeckReqVariableNames.libraryId)
+    let libraryCardEntry: LibraryCardEntry = myBiome.cards.find(
+      (c) =>
+        c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
     );
-    if (deckEntry !== undefined) {
-      counter += deckEntry.amount;
+    if (libraryCardEntry !== undefined) {
+      counter += libraryCardEntry.amount;
     }
-    for (let subbiome of biome.subBiomes) {
-      let subDeckEntry = subbiome.deck.cards.find(
+    for (let subbiome of myBiome.subBiomes) {
+      let subCardEntry = subbiome.cards.find(
         (c) =>
-          c.libraryId === this.reqValues.get(DeckReqVariableNames.libraryId)
+          c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
       );
-      if (subDeckEntry !== undefined) {
-        counter += subDeckEntry.amount;
+      if (subCardEntry !== undefined) {
+        counter += subCardEntry.amount;
       }
     }
 
-    return counter >= this.reqValues.get(DeckReqVariableNames.amount);
+    return counter >= this.reqValues.get(DeckReqVariableNames.Amount);
   }
 
-  override requirementToText(): string {
+  override requirementToText(gameManager: GameManager): string {
     return (
-      this.reqValues.get(DeckReqVariableNames.amount).toString() +
+      this.reqValues.get(DeckReqVariableNames.Amount) +
       ' of ' +
-      GameManager.Instance.config.cards.find(
+      gameManager.cardLibrary.find(
         (c) =>
-          c.libraryId === this.reqValues.get(DeckReqVariableNames.libraryId)
-      ).name.value
+          c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
+      ).name
     );
   }
 }
+
+export default CardDeckRequirement;

@@ -5,8 +5,8 @@ declare abstract class DeckRequirement {
     title: string;
     reqValues: Map<DeckReqVariableNames, number>;
     abstract canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean;
-    abstract isRequirementMet(myBiome: LibraryBiome, myCard: LibraryCard): boolean;
-    abstract requirementToText(): string;
+    abstract isRequirementMet(myBiome: LibraryBiome, libraryCardID: number): boolean;
+    abstract requirementToText(gameProperties: any): string;
     abstract myRequiredValues(): DeckReqVariableNames[];
 }
 export default DeckRequirement;

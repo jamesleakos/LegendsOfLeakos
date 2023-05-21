@@ -39,16 +39,15 @@ var LibraryBiome = /** @class */ (function () {
     };
     //#endregion
     // #region Biome / Card Requirement Validity
-    LibraryBiome.prototype.wouldRemovingThisCardCauseErrors = function (card) {
+    LibraryBiome.prototype.wouldRemovingThisCardCauseErrors = function (card, gameManager) {
         var testBiome = LibraryBiome.copyBiome(this);
         testBiome.removeSingleCardFromBiomeOrSubbiome(card);
-        return testBiome.areBiomeAndSubsValid();
+        return testBiome.areBiomeAndSubsValid(gameManager);
     };
-    LibraryBiome.prototype.areBiomeAndSubsValid = function (message, cardLibrary) {
+    LibraryBiome.prototype.areBiomeAndSubsValid = function (gameManager, message) {
         if (message === void 0) { message = new BiomeValidMessage(false, ''); }
-        if (cardLibrary === void 0) { cardLibrary = []; }
         var _loop_1 = function (entry) {
-            var card = cardLibrary.find(function (c) { return c.libraryId === entry.libraryId; });
+            var card = gameManager.cardLibrary.find(function (c) { return c.libraryId === entry.libraryId; });
             if (card === undefined) {
                 throw new Error('The library is likely smaller than it used to be');
             }
@@ -57,7 +56,9 @@ var LibraryBiome = /** @class */ (function () {
                 if (!req.isRequirementMet(this_1, card.libraryId)) {
                     message.isValid = false;
                     message.message +=
-                        'The requirement of ' + req.requirementToText() + ' is not met; ';
+                        'The requirement of ' +
+                            req.requirementToText(gameManager) +
+                            ' is not met; ';
                 }
             }
         };
@@ -68,7 +69,7 @@ var LibraryBiome = /** @class */ (function () {
         }
         for (var _b = 0, _c = this.subBiomes; _b < _c.length; _b++) {
             var sub = _c[_b];
-            var subResponse = sub.areBiomeAndSubsValid(message);
+            var subResponse = sub.areBiomeAndSubsValid(gameManager, message);
             if (!subResponse.isValid) {
                 message.isValid = false;
                 message.message += subResponse.message;
@@ -76,23 +77,23 @@ var LibraryBiome = /** @class */ (function () {
         }
         return message;
     };
-    LibraryBiome.prototype.cardsCanBeAddedToBiomeOrSubbiome = function (card, amount) {
+    LibraryBiome.prototype.cardsCanBeAddedToBiomeOrSubbiome = function (card, amount, gameManager) {
         if (card.biomeType !== this.biomeType) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, "".concat(card.name, " belongs in the ").concat(card.biomeType, " and this is a ").concat(this.biomeType));
         }
         if (card.biomeDepth > Math.max.apply(Math, this.subBiomes.map(function (c) { return c.biomeDepth; }))) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, "".concat(card.name, " requires ").concat(card.biomeDepth, " ").concat(card.biomeType, " and this only has ").concat(this.biomeDepth, " ").concat(this.biomeType));
         }
-        var thisDeck = this.cardsCanBeAddedToThisBiome(card, amount);
+        var thisDeck = this.cardsCanBeAddedToThisBiome(card, amount, gameManager);
         if (thisDeck.result !== LandAndBiome_1.BiomeAddCardEnum.Failure || card.biomeDepth === 0) {
             return thisDeck;
         }
         else {
             var rightSub = this.subBiomes.find(function (c) { return c.biomeDepth === card.biomeDepth; });
-            return rightSub.cardsCanBeAddedToThisBiome(card, amount);
+            return rightSub.cardsCanBeAddedToThisBiome(card, amount, gameManager);
         }
     };
-    LibraryBiome.prototype.cardsCanBeAddedToThisBiome = function (card, amount) {
+    LibraryBiome.prototype.cardsCanBeAddedToThisBiome = function (card, amount, gameManager) {
         if (card.biomeType !== this.biomeType) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, card.name +
                 ' belongs in the ' +
@@ -119,7 +120,7 @@ var LibraryBiome = /** @class */ (function () {
                 var req = _a[_i];
                 if (!req.canBeAdded(this, card)) {
                     canAdd = false;
-                    message = req.requirementToText();
+                    message = req.requirementToText(gameManager);
                     break;
                 }
             }
@@ -207,18 +208,18 @@ var LibraryBiome = /** @class */ (function () {
     };
     // #endregion
     // #region adding cards
-    LibraryBiome.prototype.addCardsToBiomeOrSubbiome = function (card, amount) {
-        var result = this.cardsCanBeAddedToBiomeOrSubbiome(card, amount);
+    LibraryBiome.prototype.addCardsToBiomeOrSubbiome = function (card, amount, gameManager) {
+        var result = this.cardsCanBeAddedToBiomeOrSubbiome(card, amount, gameManager);
         if (result.result === LandAndBiome_1.BiomeAddCardEnum.Failure)
             return result;
-        result = this.cardsCanBeAddedToThisBiome(card, amount);
+        result = this.cardsCanBeAddedToThisBiome(card, amount, gameManager);
         if (result.result !== LandAndBiome_1.BiomeAddCardEnum.Failure) {
             this.addCard(card, result.numberAdded);
             return result;
         }
         else {
             var subbiome = this.subBiomes.find(function (c) { return c.biomeDepth === card.biomeDepth; });
-            return subbiome.addCardsToBiomeOrSubbiome(card, amount);
+            return subbiome.addCardsToBiomeOrSubbiome(card, amount, gameManager);
         }
     };
     LibraryBiome.prototype.addCard = function (card, amount) {
