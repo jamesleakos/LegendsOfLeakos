@@ -23,5 +23,6 @@ declare class LibraryCard {
     battlecryAbilities: BattlecryAbility[];
     cardUpgrades: CardUpgrade[];
     getCardUpgradeByUpgradeIndex(index: number): any;
+    static fromJSON(json: any): LibraryCard;
 }
 export default LibraryCard;

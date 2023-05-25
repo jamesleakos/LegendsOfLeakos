@@ -1,0 +1,123 @@
+[
+  {
+    "libraryId": 0,
+    "cardTypeId": 0,
+    "name": "Elf",
+    "biomeType": "forest",
+    "biomeDepth": "all",
+    "cardText": {
+      "value": "Default Card Text",
+      "name": "Default Card Text"
+    },
+    "imageName": {
+      "value": "trollherds_4",
+      "name": "Image Name"
+    },
+    "costs": [
+      {
+        "statId": 1,
+        "value": 1
+      }
+    ],
+    "deckRequirements": [],
+    "stats": [
+      {
+        "baseValue": 1,
+        "statId": 0,
+        "name": "Attack",
+        "originalValue": 1,
+        "minValue": 0,
+        "maxValue": 99,
+        "modifiers": [],
+        "buffs": []
+      },
+      {
+        "baseValue": 5,
+        "statId": 1,
+        "name": "Life",
+        "originalValue": 5,
+        "minValue": 0,
+        "maxValue": 99,
+        "modifiers": [],
+        "buffs": []
+      },
+      {
+        "baseValue": 1,
+        "statId": 2,
+        "name": "Priority",
+        "originalValue": 1,
+        "minValue": 0,
+        "maxValue": 99,
+        "modifiers": [],
+        "buffs": []
+      }
+    ],
+    "libraryKeywords": [
+      {
+        "keywordType": "DivineShield",
+        "indexForUpgrades": 0,
+        "designerDescription": "New Description from CardBuilderScene.CreateNewKeyword",
+        "isPermanent": true,
+        "duration": 0,
+        "startsActive": false,
+        "keywordValueList": [
+          {
+            "keywordValue": {
+              "keywordValueType": "uses",
+              "values": [0]
+            },
+            "numberOfValuesNeeded": 1,
+            "setByDesigner": true
+          }
+        ],
+        "conditions": [],
+        "imageName": {
+          "value": "tower_1",
+          "name": "Image Name"
+        }
+      }
+    ],
+    "activatedAbilities": [
+      {
+        "indexForUpgrades": 0,
+        "isActive": true,
+        "costs": [],
+        "usesPerTurn": 1,
+        "usesRemaining": 1,
+        "name": "New Ability",
+        "imageName": {
+          "value": "river_towers_1.png",
+          "name": "Image Name"
+        },
+        "type": "Activated",
+        "effect": {
+          "effectEnum": "EnchantCard",
+          "effectValueList": [
+            {
+              "effectValueType": "CreateEnchantmentEnchantmentLibraryID",
+              "setValue": 0,
+              "modInts": []
+            }
+          ],
+          "targetTypes": [
+            {
+              "name": "Targets To Be Enchanted",
+              "targetTypeEnum": "TargetCreature",
+              "targetableTypeSelectionEnum": "TargetableOnActivation",
+              "minSelectionsRequired": 1,
+              "maxSelectionsAllowed": 1,
+              "minSelectionsThatMustRemain": 1,
+              "conditions": [],
+              "playerSelectsTarget": true
+            }
+          ],
+          "$type": "LegendsOfLeakos.EnchantCardEffect"
+        },
+        "usableInPhases": ["Battle", "Skirmish", "Maneuver", "Recruit"]
+      }
+    ],
+    "battlecryAbilities": [],
+    "cardUpgrades": [],
+    "id": 0
+  }
+]
