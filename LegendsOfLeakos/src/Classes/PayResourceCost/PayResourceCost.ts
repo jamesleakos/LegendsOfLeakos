@@ -16,6 +16,10 @@ class PayResourceCost {
     }
     return null;
   }
+
+  static fromJSON(json: any): PayResourceCost {
+    return new PayResourceCost(json.statId, json.value);
+  }
 }
 
 export default PayResourceCost;

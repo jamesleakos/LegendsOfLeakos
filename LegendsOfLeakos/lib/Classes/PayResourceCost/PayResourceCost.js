@@ -13,6 +13,9 @@ var PayResourceCost = /** @class */ (function () {
         }
         return null;
     };
+    PayResourceCost.fromJSON = function (json) {
+        return new PayResourceCost(json.statId, json.value);
+    };
     return PayResourceCost;
 }());
 exports.default = PayResourceCost;
