@@ -7,7 +7,7 @@ var ModifiableInt_1 = __importDefault(require("../ModifableInt/ModifiableInt"));
 var PayResourceCostUpgrade = /** @class */ (function () {
     function PayResourceCostUpgrade(statId, valueChange) {
         this.statId = statId;
-        this.valueChange = new ModifiableInt_1.default(valueChange.baseValue, valueChange.intModifiers);
+        this.valueChange = new ModifiableInt_1.default(valueChange.baseValue, valueChange.effectValueIntModifiers);
     }
     return PayResourceCostUpgrade;
 }());

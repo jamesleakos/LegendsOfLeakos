@@ -9,7 +9,7 @@ class EffectValueUpgrade {
     this.effectValueType = type;
     this.setValueChange = new ModifiableInt(
       modInt.baseValue,
-      modInt.intModifiers
+      modInt.effectValueIntModifiers
     );
   }
 }

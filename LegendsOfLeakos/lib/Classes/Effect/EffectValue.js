@@ -9,7 +9,7 @@ var EffectValue = /** @class */ (function () {
     function EffectValue(effectValueType, setValue, modInts) {
         this.effectValueType = effectValueType;
         this.setValue = setValue;
-        this.modInts = modInts.map(function (i) { return new ModifiableInt_1.default(i.baseValue, i.intModifiers); });
+        this.modInts = modInts.map(function (i) { return new ModifiableInt_1.default(i.baseValue, i.effectValueIntModifiers); });
     }
     EffectValue.prototype.fitToTargetInfo = function (targetInfo) {
         var numberOfTargets = targetInfo.targetsAreZones
@@ -21,11 +21,11 @@ var EffectValue = /** @class */ (function () {
         }
     };
     EffectValue.prototype.modifyEffectValueInt = function (index, modifyValue, modifyPermanent) {
-        this.modInts[index].intModifiers.push(new IntModifier_1.default(modifyValue, modifyPermanent));
+        this.modInts[index].effectValueIntModifiers.push(new IntModifier_1.default(modifyValue, modifyPermanent));
     };
     EffectValue.prototype.postEffect = function () {
         this.modInts.forEach(function (evInt) {
-            evInt.intModifiers = evInt.intModifiers.filter(function (c) { return c.permanent; });
+            evInt.effectValueIntModifiers = evInt.effectValueIntModifiers.filter(function (c) { return c.permanent; });
         });
     };
     EffectValue.prototype.contains = function (x) {

@@ -57,6 +57,37 @@ class CardUpgrade {
 
     card.upgradesApplied.push(this.upgradeIndex);
   }
+
+  static fromJSON(json: any): CardUpgrade {
+    const newCardUpgrade = new CardUpgrade();
+    newCardUpgrade.name = json.name;
+    newCardUpgrade.upgradeIndex = json.upgradeIndex;
+    newCardUpgrade.isStartingUpgrade = json.isStartingUpgrade;
+    newCardUpgrade.description = json.description;
+    newCardUpgrade.attackStatUpgrade = StatUpgrade.fromJSON(
+      json.attackStatUpgrade
+    );
+    newCardUpgrade.lifeStatUpgrade = StatUpgrade.fromJSON(json.lifeStatUpgrade);
+    newCardUpgrade.priorityStatUpgrade = StatUpgrade.fromJSON(
+      json.priorityStatUpgrade
+    );
+
+    for (const c of json.costs) {
+      newCardUpgrade.costs.push(PayResourceCost.fromJSON(c));
+    }
+
+    for (const c of json.keywordUpgrades) {
+      newCardUpgrade.keywordUpgrades.push(KeywordUpgrade.fromJSON(c));
+    }
+
+    for (const c of json.activatedAbilityUpgrades) {
+      newCardUpgrade.activatedAbilityUpgrades.push(
+        ActivatedAbilityUpgrade.fromJSON(c)
+      );
+    }
+
+    return newCardUpgrade;
+  }
 }
 
 export default CardUpgrade;

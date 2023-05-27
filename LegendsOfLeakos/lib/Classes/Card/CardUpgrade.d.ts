@@ -20,5 +20,6 @@ declare class CardUpgrade {
     activatedAbilityUpgrades: ActivatedAbilityUpgrade[];
     potentialNeighbors(gameManager: GameManager): number[];
     upgradeCard(card: RuntimeCard): void;
+    static fromJSON(json: any): CardUpgrade;
 }
 export default CardUpgrade;

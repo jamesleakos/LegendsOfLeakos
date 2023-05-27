@@ -5,5 +5,6 @@ export declare class StatUpgrade {
     value: ModifiableInt;
     constructor(statId: number, value: ModifiableInt);
     upgradeStat(stat: Stat): void;
+    static fromJSON(json: any): StatUpgrade;
 }
 export default StatUpgrade;

@@ -16,7 +16,7 @@ class EffectValue {
     this.effectValueType = effectValueType;
     this.setValue = setValue;
     this.modInts = modInts.map(
-      (i) => new ModifiableInt(i.baseValue, i.intModifiers)
+      (i) => new ModifiableInt(i.baseValue, i.effectValueIntModifiers)
     );
   }
 
@@ -36,14 +36,16 @@ class EffectValue {
     modifyValue: number,
     modifyPermanent: boolean
   ): void {
-    this.modInts[index].intModifiers.push(
+    this.modInts[index].effectValueIntModifiers.push(
       new IntModifier(modifyValue, modifyPermanent)
     );
   }
 
   postEffect(): void {
     this.modInts.forEach((evInt) => {
-      evInt.intModifiers = evInt.intModifiers.filter((c) => c.permanent);
+      evInt.effectValueIntModifiers = evInt.effectValueIntModifiers.filter(
+        (c) => c.permanent
+      );
     });
   }
 

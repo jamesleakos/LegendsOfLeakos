@@ -10,5 +10,6 @@ declare class ActivatedAbilityUpgrade extends BaseAbilityUpgrade {
     isActive: boolean;
     constructor(abilityIndex: number, effectUpgrade: EffectUpgrade, addUsablePhases: PhaseEnum[], removeUsablePhases: PhaseEnum[], costUpgrades: PayResourceCostUpgrade[], usesPerTurnChange: ModifiableInt, isActive: boolean);
     upgradeAbility(ability: BaseAbility): void;
+    static fromJSON(json: any): ActivatedAbilityUpgrade;
 }
 export default ActivatedAbilityUpgrade;

@@ -31,15 +31,15 @@ class TargetTypeUpgrade {
     this.newTargetableTypeSelectionEnum = newTargetableTypeSelectionEnum;
     this.minSelectionsRequiredChange = new ModifiableInt(
       minSelectionsRequiredChange.baseValue,
-      minSelectionsRequiredChange.intModifiers
+      minSelectionsRequiredChange.effectValueIntModifiers
     );
     this.maxSelectionsAllowedChange = new ModifiableInt(
       maxSelectionsAllowedChange.baseValue,
-      maxSelectionsAllowedChange.intModifiers
+      maxSelectionsAllowedChange.effectValueIntModifiers
     );
     this.minSelectionsThatMustRemainChange = new ModifiableInt(
       minSelectionsThatMustRemainChange.baseValue,
-      minSelectionsThatMustRemainChange.intModifiers
+      minSelectionsThatMustRemainChange.effectValueIntModifiers
     );
 
     this.newConditions = newConditions.map(

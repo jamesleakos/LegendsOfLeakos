@@ -64,7 +64,7 @@ abstract class Effect {
   ): void {
     this.effectValueList
       .find((x) => x.effectValueType === effectValueType)
-      .modInts[index].intModifiers.push(
+      .modInts[index].effectValueIntModifiers.push(
         new IntModifier(modifyValue, modifyPermanent)
       );
   }

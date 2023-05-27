@@ -39,7 +39,7 @@ var ActivatedAbilityUpgrade = /** @class */ (function (_super) {
         var _this = _super.call(this) || this;
         _this.abilityUpgradeIndex = abilityIndex;
         _this.effectUpgrade = new EffectUpgrade_1.default(effectUpgrade.effectEnum, effectUpgrade.effectValueUpgrades, effectUpgrade.targetTypeUpgrades);
-        _this.usesPerTurnChange = new ModifiableInt_1.default(usesPerTurnChange.baseValue, usesPerTurnChange.intModifiers);
+        _this.usesPerTurnChange = new ModifiableInt_1.default(usesPerTurnChange.baseValue, usesPerTurnChange.effectValueIntModifiers);
         _this.abilityUpgradeIndex = abilityIndex;
         _this.isActive = isActive;
         _this.addUsablePhases = __spreadArray([], addUsablePhases, true);
@@ -69,6 +69,9 @@ var ActivatedAbilityUpgrade = /** @class */ (function (_super) {
             _loop_1(costUpgrade);
         }
         ability.isActive = this.isActive;
+    };
+    ActivatedAbilityUpgrade.fromJSON = function (json) {
+        return new ActivatedAbilityUpgrade(json.abilityUpgradeIndex, EffectUpgrade_1.default.fromJSON(json.effectUpgrade), json.addUsablePhases, json.removeUsablePhases, json.costUpgrades.map(function (c) { return PayResourceCostUpgrade_1.default.fromJSON(c); }), ModifiableInt_1.default.fromJSON(json.usesPerTurnChange), json.isActive);
     };
     return ActivatedAbilityUpgrade;
 }(BaseAbilityUpgrade_1.default));

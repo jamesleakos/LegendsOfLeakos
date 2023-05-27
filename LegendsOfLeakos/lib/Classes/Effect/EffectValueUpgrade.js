@@ -7,7 +7,7 @@ var ModifiableInt_1 = __importDefault(require("../ModifableInt/ModifiableInt"));
 var EffectValueUpgrade = /** @class */ (function () {
     function EffectValueUpgrade(type, modInt) {
         this.effectValueType = type;
-        this.setValueChange = new ModifiableInt_1.default(modInt.baseValue, modInt.intModifiers);
+        this.setValueChange = new ModifiableInt_1.default(modInt.baseValue, modInt.effectValueIntModifiers);
     }
     return EffectValueUpgrade;
 }());

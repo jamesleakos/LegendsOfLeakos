@@ -19,9 +19,9 @@ var TargetTypeUpgrade = /** @class */ (function () {
         this.targetTypeIndex = targetTypeIndex;
         this.newTargetTypeEnum = newTargetTypeEnum;
         this.newTargetableTypeSelectionEnum = newTargetableTypeSelectionEnum;
-        this.minSelectionsRequiredChange = new ModifiableInt_1.default(minSelectionsRequiredChange.baseValue, minSelectionsRequiredChange.intModifiers);
-        this.maxSelectionsAllowedChange = new ModifiableInt_1.default(maxSelectionsAllowedChange.baseValue, maxSelectionsAllowedChange.intModifiers);
-        this.minSelectionsThatMustRemainChange = new ModifiableInt_1.default(minSelectionsThatMustRemainChange.baseValue, minSelectionsThatMustRemainChange.intModifiers);
+        this.minSelectionsRequiredChange = new ModifiableInt_1.default(minSelectionsRequiredChange.baseValue, minSelectionsRequiredChange.effectValueIntModifiers);
+        this.maxSelectionsAllowedChange = new ModifiableInt_1.default(maxSelectionsAllowedChange.baseValue, maxSelectionsAllowedChange.effectValueIntModifiers);
+        this.minSelectionsThatMustRemainChange = new ModifiableInt_1.default(minSelectionsThatMustRemainChange.baseValue, minSelectionsThatMustRemainChange.effectValueIntModifiers);
         this.newConditions = newConditions.map(function (c) {
             return Condition_1.Condition.createCondition(c.conditionType, c.conditionValues).condition;
         });

@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var ModifiableInt_1 = __importDefault(require("../ModifableInt/ModifiableInt"));
 var KeywordValueUpgrade_1 = __importDefault(require("./KeywordValueUpgrade"));
 var Condition_1 = require("../Condition/Condition");
 var KeywordUpgrade = /** @class */ (function () {
@@ -43,6 +44,17 @@ var KeywordUpgrade = /** @class */ (function () {
             _this.newConditions = _this.newConditions.filter(function (c) { return c.conditionType !== ct; });
         });
         keyword.isActive = this.isActive;
+    };
+    KeywordUpgrade.fromJSON = function (json) {
+        var keywordType = json.keywordType;
+        var keywordUpgradeIndex = json.keywordUpgradeIndex;
+        var isPermanent = json.isPermanent;
+        var durationChange = ModifiableInt_1.default.fromJSON(json.durationChange);
+        var keywordValueUpgrades = json.keywordValueUpgrades.map(function (k) {
+            return KeywordValueUpgrade_1.default.fromJSON(k);
+        });
+        var isActive = json.isActive;
+        return new KeywordUpgrade(keywordType, keywordUpgradeIndex, isPermanent, durationChange, keywordValueUpgrades, isActive);
     };
     return KeywordUpgrade;
 }());

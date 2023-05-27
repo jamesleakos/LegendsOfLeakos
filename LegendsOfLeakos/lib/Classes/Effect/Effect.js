@@ -40,7 +40,7 @@ var Effect = /** @class */ (function () {
     Effect.prototype.modifyEffectValueInt = function (effectValueType, index, modifyValue, modifyPermanent) {
         this.effectValueList
             .find(function (x) { return x.effectValueType === effectValueType; })
-            .modInts[index].intModifiers.push(new IntModifier_1.default(modifyValue, modifyPermanent));
+            .modInts[index].effectValueIntModifiers.push(new IntModifier_1.default(modifyValue, modifyPermanent));
     };
     Effect.prototype.resetEffectValues = function () {
         for (var _i = 0, _a = this.effectValueList; _i < _a.length; _i++) {

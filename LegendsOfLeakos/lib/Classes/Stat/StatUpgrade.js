@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StatUpgrade = void 0;
 var StatModifier_1 = __importDefault(require("./StatModifier"));
+var ModifiableInt_1 = __importDefault(require("../ModifableInt/ModifiableInt"));
 var StatUpgrade = /** @class */ (function () {
     function StatUpgrade(statId, value) {
         this.statId = statId;
@@ -15,6 +16,9 @@ var StatUpgrade = /** @class */ (function () {
             return;
         var mod = new StatModifier_1.default(this.value.effectiveValue);
         stat.addModifier(mod);
+    };
+    StatUpgrade.fromJSON = function (json) {
+        return new StatUpgrade(json.statId, ModifiableInt_1.default.fromJSON(json.value));
     };
     return StatUpgrade;
 }());

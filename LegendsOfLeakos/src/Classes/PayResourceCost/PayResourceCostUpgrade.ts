@@ -8,7 +8,7 @@ class PayResourceCostUpgrade {
     this.statId = statId;
     this.valueChange = new ModifiableInt(
       valueChange.baseValue,
-      valueChange.intModifiers
+      valueChange.effectValueIntModifiers
     );
   }
 }

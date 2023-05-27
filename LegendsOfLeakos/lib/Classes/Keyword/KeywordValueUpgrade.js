@@ -19,9 +19,16 @@ var KeywordValueUpgrade = /** @class */ (function () {
         this.valueChanges = [];
         this.keywordValueType = keywordValueType;
         valueChanges.forEach(function (c) {
-            _this.valueChanges.push(new ModifiableInt_1.default(c.baseValue, __spreadArray([], c.intModifiers, true)));
+            _this.valueChanges.push(new ModifiableInt_1.default(c.baseValue, __spreadArray([], c.effectValueIntModifiers, true)));
         });
     }
+    KeywordValueUpgrade.fromJSON = function (json) {
+        var newKeywordValueUpgrade = new KeywordValueUpgrade(json.keywordValueType, new Array());
+        json.valueChanges.forEach(function (c) {
+            newKeywordValueUpgrade.valueChanges.push(ModifiableInt_1.default.fromJSON(c));
+        });
+        return newKeywordValueUpgrade;
+    };
     return KeywordValueUpgrade;
 }());
 exports.default = KeywordValueUpgrade;

@@ -68,6 +68,25 @@ class KeywordUpgrade {
     });
     keyword.isActive = this.isActive;
   }
+
+  static fromJSON(json: any): KeywordUpgrade {
+    const keywordType = json.keywordType as KeywordType;
+    const keywordUpgradeIndex = json.keywordUpgradeIndex as number;
+    const isPermanent = json.isPermanent as boolean;
+    const durationChange = ModifiableInt.fromJSON(json.durationChange);
+    const keywordValueUpgrades = json.keywordValueUpgrades.map((k: any) =>
+      KeywordValueUpgrade.fromJSON(k)
+    );
+    const isActive = json.isActive as boolean;
+    return new KeywordUpgrade(
+      keywordType,
+      keywordUpgradeIndex,
+      isPermanent,
+      durationChange,
+      keywordValueUpgrades,
+      isActive
+    );
+  }
 }
 
 export default KeywordUpgrade;

@@ -31,7 +31,7 @@ class ActivatedAbilityUpgrade extends BaseAbilityUpgrade {
     );
     this.usesPerTurnChange = new ModifiableInt(
       usesPerTurnChange.baseValue,
-      usesPerTurnChange.intModifiers
+      usesPerTurnChange.effectValueIntModifiers
     );
     this.abilityUpgradeIndex = abilityIndex;
     this.isActive = isActive;
@@ -67,6 +67,18 @@ class ActivatedAbilityUpgrade extends BaseAbilityUpgrade {
       }
     }
     (ability as ActivatedAbility).isActive = this.isActive;
+  }
+
+  static fromJSON(json: any): ActivatedAbilityUpgrade {
+    return new ActivatedAbilityUpgrade(
+      json.abilityUpgradeIndex,
+      EffectUpgrade.fromJSON(json.effectUpgrade),
+      json.addUsablePhases,
+      json.removeUsablePhases,
+      json.costUpgrades.map((c: any) => PayResourceCostUpgrade.fromJSON(c)),
+      ModifiableInt.fromJSON(json.usesPerTurnChange),
+      json.isActive
+    );
   }
 }
 

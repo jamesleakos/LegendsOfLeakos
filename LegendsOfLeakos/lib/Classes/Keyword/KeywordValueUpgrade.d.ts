@@ -4,5 +4,6 @@ declare class KeywordValueUpgrade {
     keywordValueType: KeywordValueType;
     valueChanges: ModifiableInt[];
     constructor(keywordValueType: KeywordValueType, valueChanges: ModifiableInt[]);
+    static fromJSON(json: any): KeywordValueUpgrade;
 }
 export default KeywordValueUpgrade;

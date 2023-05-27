@@ -17,6 +17,10 @@ export class StatUpgrade {
 
     stat.addModifier(mod);
   }
+
+  static fromJSON(json: any): StatUpgrade {
+    return new StatUpgrade(json.statId, ModifiableInt.fromJSON(json.value));
+  }
 }
 
 export default StatUpgrade;
