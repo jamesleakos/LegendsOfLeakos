@@ -176,6 +176,30 @@ class LibraryKeyword {
 
     return KVList;
   }
+
+  static fromJSON(json: any): LibraryKeyword {
+    const keywordType: number = json.keywordType;
+    const indexForUpgrades: number = json.indexForUpgrades;
+    const designerDescription: string = json.designerDescription;
+    const isPermanent: boolean = json.isPermanent;
+    const duration: number = json.duration;
+    const startsActive: boolean = json.startsActive;
+    const conditions: Condition[] = json.conditions.map((c: any) => {
+      return Condition.fromJSON(c);
+    });
+    const imageName = json.imageName;
+
+    return new LibraryKeyword(
+      keywordType,
+      indexForUpgrades,
+      designerDescription,
+      isPermanent,
+      duration,
+      startsActive,
+      conditions,
+      imageName
+    );
+  }
 }
 
 export default LibraryKeyword;

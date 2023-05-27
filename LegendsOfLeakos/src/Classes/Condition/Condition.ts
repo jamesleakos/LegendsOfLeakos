@@ -92,6 +92,14 @@ abstract class Condition {
     }
     return condition;
   }
+
+  static fromJSON(json: any): Condition {
+    const condition = this.createCondition(
+      json.conditionType,
+      json.conditionValues.map((x: any) => ConditionValue.fromJSON(x))
+    ).condition;
+    return condition;
+  }
 }
 
 export { Condition, ConditionFactoryPackage };

@@ -31,6 +31,9 @@ var ConditionValue = /** @class */ (function () {
                 return 'Not found - Come Look for Error';
         }
     };
+    ConditionValue.fromJSON = function (json) {
+        return new ConditionValue(json.conditionValueType, json.values);
+    };
     return ConditionValue;
 }());
 exports.default = ConditionValue;

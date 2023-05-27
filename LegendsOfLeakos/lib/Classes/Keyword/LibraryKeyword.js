@@ -118,6 +118,19 @@ var LibraryKeyword = /** @class */ (function () {
         }
         return KVList;
     };
+    LibraryKeyword.fromJSON = function (json) {
+        var keywordType = json.keywordType;
+        var indexForUpgrades = json.indexForUpgrades;
+        var designerDescription = json.designerDescription;
+        var isPermanent = json.isPermanent;
+        var duration = json.duration;
+        var startsActive = json.startsActive;
+        var conditions = json.conditions.map(function (c) {
+            return Condition_1.Condition.fromJSON(c);
+        });
+        var imageName = json.imageName;
+        return new LibraryKeyword(keywordType, indexForUpgrades, designerDescription, isPermanent, duration, startsActive, conditions, imageName);
+    };
     return LibraryKeyword;
 }());
 exports.default = LibraryKeyword;

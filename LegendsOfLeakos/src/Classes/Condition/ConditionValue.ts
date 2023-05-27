@@ -32,6 +32,10 @@ class ConditionValue {
         return 'Not found - Come Look for Error';
     }
   }
+
+  static fromJSON(json: any): ConditionValue {
+    return new ConditionValue(json.conditionValueType, json.values);
+  }
 }
 
 export default ConditionValue;

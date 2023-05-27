@@ -62,6 +62,10 @@ var Condition = /** @class */ (function () {
         }
         return condition;
     };
+    Condition.fromJSON = function (json) {
+        var condition = this.createCondition(json.conditionType, json.conditionValues.map(function (x) { return ConditionValue_1.default.fromJSON(x); })).condition;
+        return condition;
+    };
     return Condition;
 }());
 exports.Condition = Condition;

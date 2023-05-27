@@ -21,5 +21,6 @@ declare class LibraryKeyword {
     canBeAssignedToCardByPlayer(): boolean;
     static requiredKeywordValues(keywordType: KeywordType): RequiredKeywordValueReturner;
     getKeywordValueList(): KeywordValue[];
+    static fromJSON(json: any): LibraryKeyword;
 }
 export default LibraryKeyword;
