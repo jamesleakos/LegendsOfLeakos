@@ -123,6 +123,18 @@ class TargetType {
       []
     );
   }
+
+  static fromJSON(targetTypeJSON: any): TargetType {
+    return new TargetType(
+      targetTypeJSON.name,
+      targetTypeJSON.targetTypeEnum,
+      targetTypeJSON.minSelectionsRequired,
+      targetTypeJSON.maxSelectionsAllowed,
+      targetTypeJSON.minSelectionsThatMustRemain,
+      targetTypeJSON.targetableTypeSelectionEnum,
+      targetTypeJSON.conditions.map((c: any) => Condition.fromJSON(c))
+    );
+  }
 }
 
 export default TargetType;

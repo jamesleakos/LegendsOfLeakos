@@ -20,6 +20,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseAbility_1 = __importDefault(require("./BaseAbility"));
 var PayResourceCost_1 = __importDefault(require("../PayResourceCost/PayResourceCost"));
+var Effect_1 = __importDefault(require("../Effect/Effect"));
 var Ability_1 = require("../../Enums/Ability");
 // Import other required classes and types
 var ActivatedAbility = /** @class */ (function (_super) {
@@ -51,6 +52,9 @@ var ActivatedAbility = /** @class */ (function (_super) {
     ActivatedAbility.createActivatedAbility = function (indexForUpgrades, abilityName, effect, costs, usesPerTurn, usesRemaining, usableInPhases, isActive, imageName) {
         var AA = new ActivatedAbility(indexForUpgrades, abilityName, effect, costs, usesPerTurn, usesRemaining, usableInPhases, isActive, imageName);
         return AA;
+    };
+    ActivatedAbility.fromJSON = function (json) {
+        return ActivatedAbility.createActivatedAbility(json.indexForUpgrades, json.name, Effect_1.default.fromJSON(json.effect), json.costs.map(function (cost) { return PayResourceCost_1.default.fromJSON(cost); }), json.usesPerTurn, json.usesRemaining, json.usableInPhases, json.isActive, json.imageName);
     };
     return ActivatedAbility;
 }(BaseAbility_1.default));

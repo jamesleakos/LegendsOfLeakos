@@ -12,6 +12,13 @@ class EffectValueUpgrade {
       modInt.effectValueIntModifiers
     );
   }
+
+  static fromJSON(json: any): EffectValueUpgrade {
+    return new EffectValueUpgrade(
+      json.effectValueType,
+      ModifiableInt.fromJSON(json.setValueChange)
+    );
+  }
 }
 
 export default EffectValueUpgrade;

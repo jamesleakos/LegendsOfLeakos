@@ -27,6 +27,9 @@ var TargetTypeUpgrade = /** @class */ (function () {
         });
         this.removeCondtionsOfType = __spreadArray([], removeCondtionsOfType, true);
     }
+    TargetTypeUpgrade.fromJSON = function (json) {
+        return new TargetTypeUpgrade(json.targetTypeIndex, json.newTargetTypeEnum, json.newTargetableTypeSelectionEnum, ModifiableInt_1.default.fromJSON(json.minSelectionsRequiredChange), ModifiableInt_1.default.fromJSON(json.maxSelectionsAllowedChange), ModifiableInt_1.default.fromJSON(json.minSelectionsThatMustRemainChange), json.newConditions.map(function (c) { return Condition_1.Condition.fromJSON(c); }), json.removeCondtionsOfType);
+    };
     return TargetTypeUpgrade;
 }());
 exports.default = TargetTypeUpgrade;

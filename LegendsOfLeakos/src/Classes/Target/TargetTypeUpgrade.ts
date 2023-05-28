@@ -49,6 +49,19 @@ class TargetTypeUpgrade {
 
     this.removeCondtionsOfType = [...removeCondtionsOfType];
   }
+
+  static fromJSON(json: any): TargetTypeUpgrade {
+    return new TargetTypeUpgrade(
+      json.targetTypeIndex,
+      json.newTargetTypeEnum,
+      json.newTargetableTypeSelectionEnum,
+      ModifiableInt.fromJSON(json.minSelectionsRequiredChange),
+      ModifiableInt.fromJSON(json.maxSelectionsAllowedChange),
+      ModifiableInt.fromJSON(json.minSelectionsThatMustRemainChange),
+      json.newConditions.map((c: any) => Condition.fromJSON(c)),
+      json.removeCondtionsOfType
+    );
+  }
 }
 
 export default TargetTypeUpgrade;

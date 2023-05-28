@@ -56,6 +56,14 @@ class EffectValue {
   effectiveValues(): number[] {
     return this.modInts.map((evInt) => evInt.effectiveValue);
   }
+
+  static fromJSON(json: any): EffectValue {
+    return new EffectValue(
+      json.effectValueType,
+      json.setValue,
+      json.modInts.map((i: any) => ModifiableInt.fromJSON(i))
+    );
+  }
 }
 
 export default EffectValue;

@@ -59,6 +59,11 @@ var EffectUpgrade = /** @class */ (function () {
             }
         }
     };
+    EffectUpgrade.fromJSON = function (json) {
+        return new EffectUpgrade(json.effectEnum, json.effectValueUpgrades.map(function (evu) {
+            return EffectValueUpgrade_1.default.fromJSON(evu);
+        }), json.targetTypeUpgrades.map(function (ttu) { return TargetTypeUpgrade_1.default.fromJSON(ttu); }));
+    };
     return EffectUpgrade;
 }());
 exports.default = EffectUpgrade;

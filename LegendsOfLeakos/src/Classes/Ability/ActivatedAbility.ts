@@ -76,6 +76,20 @@ class ActivatedAbility extends BaseAbility {
     );
     return AA;
   }
+
+  static fromJSON(json: any): ActivatedAbility {
+    return ActivatedAbility.createActivatedAbility(
+      json.indexForUpgrades,
+      json.name,
+      Effect.fromJSON(json.effect),
+      json.costs.map((cost: any) => PayResourceCost.fromJSON(cost)),
+      json.usesPerTurn,
+      json.usesRemaining,
+      json.usableInPhases,
+      json.isActive,
+      json.imageName
+    );
+  }
 }
 
 export default ActivatedAbility;

@@ -35,5 +35,6 @@ declare abstract class Effect {
     resolve(state: GameState, sourceEntity: AbilityKeywordRuntimeEntity, targetInfoList: Array<TargetInfo>): void;
     onEndTurn(): void;
     static createEffect(effectEnum: EffectType, effectValueList: EffectValue[], targetTypes: TargetType[]): EffectFactoryPackage;
+    static fromJSON(json: any): Effect;
 }
 export default Effect;

@@ -74,6 +74,9 @@ var TargetType = /** @class */ (function () {
     TargetType.getFightTargetType = function () {
         return new TargetType('Attacking Target Type', Target_1.TargetTypeEnum.TargetOpponentCreature, 1, 1, 1, Target_1.TargetableTypeSelectionEnum.TargetableOnActivation, []);
     };
+    TargetType.fromJSON = function (targetTypeJSON) {
+        return new TargetType(targetTypeJSON.name, targetTypeJSON.targetTypeEnum, targetTypeJSON.minSelectionsRequired, targetTypeJSON.maxSelectionsAllowed, targetTypeJSON.minSelectionsThatMustRemain, targetTypeJSON.targetableTypeSelectionEnum, targetTypeJSON.conditions.map(function (c) { return Condition_1.Condition.fromJSON(c); }));
+    };
     return TargetType;
 }());
 exports.default = TargetType;

@@ -71,6 +71,16 @@ class EffectUpgrade {
       }
     }
   }
+
+  static fromJSON(json: any): EffectUpgrade {
+    return new EffectUpgrade(
+      json.effectEnum,
+      json.effectValueUpgrades.map((evu: any) =>
+        EffectValueUpgrade.fromJSON(evu)
+      ),
+      json.targetTypeUpgrades.map((ttu: any) => TargetTypeUpgrade.fromJSON(ttu))
+    );
+  }
 }
 
 export default EffectUpgrade;

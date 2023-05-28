@@ -34,6 +34,9 @@ var EffectValue = /** @class */ (function () {
     EffectValue.prototype.effectiveValues = function () {
         return this.modInts.map(function (evInt) { return evInt.effectiveValue; });
     };
+    EffectValue.fromJSON = function (json) {
+        return new EffectValue(json.effectValueType, json.setValue, json.modInts.map(function (i) { return ModifiableInt_1.default.fromJSON(i); }));
+    };
     return EffectValue;
 }());
 exports.default = EffectValue;

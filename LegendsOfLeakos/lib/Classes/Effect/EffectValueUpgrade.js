@@ -9,6 +9,9 @@ var EffectValueUpgrade = /** @class */ (function () {
         this.effectValueType = type;
         this.setValueChange = new ModifiableInt_1.default(modInt.baseValue, modInt.effectValueIntModifiers);
     }
+    EffectValueUpgrade.fromJSON = function (json) {
+        return new EffectValueUpgrade(json.effectValueType, ModifiableInt_1.default.fromJSON(json.setValueChange));
+    };
     return EffectValueUpgrade;
 }());
 exports.default = EffectValueUpgrade;

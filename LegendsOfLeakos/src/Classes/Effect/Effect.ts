@@ -207,6 +207,28 @@ abstract class Effect {
 
     return { effect: outEffect, wasSuccessful: success, message: message };
   }
+
+  static fromJSON(json: any): Effect {
+    const effectEnum = json.effectEnum;
+    const effectValueList = json.effectValueList.map((ev: any) =>
+      EffectValue.fromJSON(ev)
+    );
+    const targetTypes = json.targetTypes.map((tt: any) =>
+      TargetType.fromJSON(tt)
+    );
+
+    const { effect, wasSuccessful, message } = Effect.createEffect(
+      effectEnum,
+      effectValueList,
+      targetTypes
+    );
+
+    if (!wasSuccessful) {
+      throw new Error(message);
+    }
+
+    return effect;
+  }
 }
 
 export default Effect;

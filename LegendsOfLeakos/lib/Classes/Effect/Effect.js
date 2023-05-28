@@ -117,6 +117,20 @@ var Effect = /** @class */ (function () {
         }
         return { effect: outEffect, wasSuccessful: success, message: message };
     };
+    Effect.fromJSON = function (json) {
+        var effectEnum = json.effectEnum;
+        var effectValueList = json.effectValueList.map(function (ev) {
+            return EffectValue_1.default.fromJSON(ev);
+        });
+        var targetTypes = json.targetTypes.map(function (tt) {
+            return TargetType_1.default.fromJSON(tt);
+        });
+        var _a = Effect.createEffect(effectEnum, effectValueList, targetTypes), effect = _a.effect, wasSuccessful = _a.wasSuccessful, message = _a.message;
+        if (!wasSuccessful) {
+            throw new Error(message);
+        }
+        return effect;
+    };
     return Effect;
 }());
 exports.default = Effect;

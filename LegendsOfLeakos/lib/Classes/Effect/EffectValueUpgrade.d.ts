@@ -4,5 +4,6 @@ declare class EffectValueUpgrade {
     effectValueType: EffectValueType;
     setValueChange: ModifiableInt;
     constructor(type: EffectValueType, modInt: ModifiableInt);
+    static fromJSON(json: any): EffectValueUpgrade;
 }
 export default EffectValueUpgrade;
