@@ -9,6 +9,9 @@ var PayResourceCostUpgrade = /** @class */ (function () {
         this.statId = statId;
         this.valueChange = new ModifiableInt_1.default(valueChange.baseValue, valueChange.effectValueIntModifiers);
     }
+    PayResourceCostUpgrade.fromJSON = function (json) {
+        return new PayResourceCostUpgrade(json.statId, ModifiableInt_1.default.fromJSON(json.valueChange));
+    };
     return PayResourceCostUpgrade;
 }());
 exports.default = PayResourceCostUpgrade;

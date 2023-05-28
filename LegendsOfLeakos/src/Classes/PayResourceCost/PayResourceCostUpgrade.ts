@@ -11,6 +11,13 @@ class PayResourceCostUpgrade {
       valueChange.effectValueIntModifiers
     );
   }
+
+  static fromJSON(json: any): PayResourceCostUpgrade {
+    return new PayResourceCostUpgrade(
+      json.statId,
+      ModifiableInt.fromJSON(json.valueChange)
+    );
+  }
 }
 
 export default PayResourceCostUpgrade;
