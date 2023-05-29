@@ -16,6 +16,8 @@ abstract class DeckRequirement {
   abstract requirementToText(gameProperties: any): string;
 
   abstract myRequiredValues(): DeckReqVariableNames[];
+
+  static fromJSON(json: any): DeckRequirement {}
 }
 
 export default DeckRequirement;

@@ -11,6 +11,15 @@ class BattlecryAbility extends BaseAbility {
     this.effect = setEffect;
     this.usableInPhases = [...usableInPhases];
   }
+
+  static fromJSON(json: any): BattlecryAbility {
+    const temp = new BattlecryAbility(
+      json.name,
+      Effect.fromJSON(json.effect),
+      json.usableInPhases
+    );
+    return temp;
+  }
 }
 
 export default BattlecryAbility;

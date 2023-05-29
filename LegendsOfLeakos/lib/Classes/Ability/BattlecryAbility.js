@@ -28,6 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseAbility_1 = __importDefault(require("./BaseAbility"));
+var Effect_1 = __importDefault(require("../Effect/Effect"));
 var Ability_1 = require("../../Enums/Ability");
 var BattlecryAbility = /** @class */ (function (_super) {
     __extends(BattlecryAbility, _super);
@@ -39,6 +40,10 @@ var BattlecryAbility = /** @class */ (function (_super) {
         _this.usableInPhases = __spreadArray([], usableInPhases, true);
         return _this;
     }
+    BattlecryAbility.fromJSON = function (json) {
+        var temp = new BattlecryAbility(json.name, Effect_1.default.fromJSON(json.effect), json.usableInPhases);
+        return temp;
+    };
     return BattlecryAbility;
 }(BaseAbility_1.default));
 exports.default = BattlecryAbility;

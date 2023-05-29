@@ -8,5 +8,6 @@ declare abstract class DeckRequirement {
     abstract isRequirementMet(myBiome: LibraryBiome, libraryCardID: number): boolean;
     abstract requirementToText(gameProperties: any): string;
     abstract myRequiredValues(): DeckReqVariableNames[];
+    static fromJSON(json: any): DeckRequirement;
 }
 export default DeckRequirement;
