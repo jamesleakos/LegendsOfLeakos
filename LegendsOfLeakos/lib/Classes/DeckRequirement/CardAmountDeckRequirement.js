@@ -20,49 +20,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var DeckRequirement_1 = __importDefault(require("./DeckRequirement"));
 var DeckRequirements_1 = require("../../Enums/DeckRequirements");
-var CardDeckRequirement = /** @class */ (function (_super) {
-    __extends(CardDeckRequirement, _super);
-    function CardDeckRequirement(libraryId, amount) {
+var CardAmountDeckRequirement = /** @class */ (function (_super) {
+    __extends(CardAmountDeckRequirement, _super);
+    function CardAmountDeckRequirement(libraryId, amount) {
         var _this = _super.call(this) || this;
-        _this.title = 'Card Req';
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.Amount, amount);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.LibraryCardId, libraryId);
+        _this.type = DeckRequirements_1.DeckReqType.CardAmount;
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.Amount, amount);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.LibraryCardId, libraryId);
         return _this;
     }
-    CardDeckRequirement.prototype.myRequiredValues = function () {
-        return [DeckRequirements_1.DeckReqVariableNames.Amount, DeckRequirements_1.DeckReqVariableNames.LibraryCardId];
+    CardAmountDeckRequirement.prototype.myRequiredValues = function () {
+        return [DeckRequirements_1.DeckReqVariable.Amount, DeckRequirements_1.DeckReqVariable.LibraryCardId];
     };
-    CardDeckRequirement.prototype.canBeAdded = function (myBiome, myCard) {
+    CardAmountDeckRequirement.prototype.canBeAdded = function (myBiome, myCard) {
         return this.isRequirementMet(myBiome, myCard.libraryId);
     };
-    CardDeckRequirement.prototype.isRequirementMet = function (myBiome, libraryCardID) {
+    CardAmountDeckRequirement.prototype.isRequirementMet = function (myBiome, libraryCardID) {
         var _this = this;
         var counter = 0;
-        var libraryCardEntry = myBiome.cards.find(function (c) {
-            return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
-        });
+        var libraryCardEntry = myBiome.cards.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.LibraryCardId); });
         if (libraryCardEntry !== undefined) {
             counter += libraryCardEntry.amount;
         }
         for (var _i = 0, _a = myBiome.subBiomes; _i < _a.length; _i++) {
             var subbiome = _a[_i];
-            var subCardEntry = subbiome.cards.find(function (c) {
-                return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
-            });
+            var subCardEntry = subbiome.cards.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.LibraryCardId); });
             if (subCardEntry !== undefined) {
                 counter += subCardEntry.amount;
             }
         }
-        return counter >= this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount);
+        return counter >= this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount);
     };
-    CardDeckRequirement.prototype.requirementToText = function (gameManager) {
+    CardAmountDeckRequirement.prototype.requirementToText = function (gameManager) {
         var _this = this;
-        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount) +
+        return (this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount) +
             ' of ' +
-            gameManager.cardLibrary.find(function (c) {
-                return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
-            }).name);
+            gameManager.cardLibrary.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.LibraryCardId); }).name);
     };
-    return CardDeckRequirement;
+    CardAmountDeckRequirement.fromJSON = function (json) {
+        var libraryId = json.reqValues.libraryId;
+        var amount = json.reqValues.amount;
+        if (!libraryId || !amount)
+            throw new Error('Missing value in json');
+        return new CardAmountDeckRequirement(libraryId, amount);
+    };
+    return CardAmountDeckRequirement;
 }(DeckRequirement_1.default));
-exports.default = CardDeckRequirement;
+exports.default = CardAmountDeckRequirement;

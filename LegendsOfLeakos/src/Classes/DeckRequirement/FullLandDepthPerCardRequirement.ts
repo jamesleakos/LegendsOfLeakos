@@ -1,5 +1,5 @@
 import DeckRequirement from './DeckRequirement';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqType, DeckReqVariable } from '../../Enums/DeckRequirements';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
 import LibraryCard from '../Card/LibraryCard';
 import GameManager from '../Game/GameManager';
@@ -13,19 +13,19 @@ class FullLandDepthPerCardRequirement extends DeckRequirement {
     amount: number
   ) {
     super();
-    this.title = 'Land per Card Req';
-    this.reqValues.set(DeckReqVariableNames.BiomeType, biomeType);
-    this.reqValues.set(DeckReqVariableNames.BiomeDepth, biomeDepth);
-    this.reqValues.set(DeckReqVariableNames.PerCardAmount, perCardAmount);
-    this.reqValues.set(DeckReqVariableNames.Amount, amount);
+    this.type = DeckReqType.FullLandDepthPerCard;
+    this.reqValues.set(DeckReqVariable.BiomeType, biomeType);
+    this.reqValues.set(DeckReqVariable.BiomeDepth, biomeDepth);
+    this.reqValues.set(DeckReqVariable.PerCardAmount, perCardAmount);
+    this.reqValues.set(DeckReqVariable.Amount, amount);
   }
 
-  override myRequiredValues(): DeckReqVariableNames[] {
+  override myRequiredValues(): DeckReqVariable[] {
     return [
-      DeckReqVariableNames.BiomeType,
-      DeckReqVariableNames.BiomeDepth,
-      DeckReqVariableNames.PerCardAmount,
-      DeckReqVariableNames.Amount,
+      DeckReqVariable.BiomeType,
+      DeckReqVariable.BiomeDepth,
+      DeckReqVariable.PerCardAmount,
+      DeckReqVariable.Amount,
     ];
   }
 
@@ -50,22 +50,19 @@ class FullLandDepthPerCardRequirement extends DeckRequirement {
     myBiome: LibraryBiome,
     numberOfMyCard: number
   ): boolean {
-    if (
-      myBiome.biomeType !== this.reqValues.get(DeckReqVariableNames.BiomeType)
-    )
+    if (myBiome.biomeType !== this.reqValues.get(DeckReqVariable.BiomeType))
       return false;
 
     let testingEntry: LibraryBiome;
     if (
       (
-        this.reqValues.get(DeckReqVariableNames.BiomeDepth) as BiomeDepth
+        this.reqValues.get(DeckReqVariable.BiomeDepth) as BiomeDepth
       ).toString() === 'all'
     ) {
       testingEntry = myBiome;
     } else {
       let subEntry = myBiome.subBiomes.find(
-        (sb) =>
-          sb.biomeDepth === this.reqValues.get(DeckReqVariableNames.BiomeDepth)
+        (sb) => sb.biomeDepth === this.reqValues.get(DeckReqVariable.BiomeDepth)
       );
       if (subEntry === undefined) return false;
 
@@ -74,8 +71,8 @@ class FullLandDepthPerCardRequirement extends DeckRequirement {
 
     if (
       (testingEntry.landTiles.length /
-        this.reqValues.get(DeckReqVariableNames.Amount)) *
-        this.reqValues.get(DeckReqVariableNames.PerCardAmount) <
+        this.reqValues.get(DeckReqVariable.Amount)) *
+        this.reqValues.get(DeckReqVariable.PerCardAmount) <
       numberOfMyCard
     )
       return false;
@@ -85,17 +82,15 @@ class FullLandDepthPerCardRequirement extends DeckRequirement {
 
   override requirementToText(gameManager: GameManager): string {
     return (
-      this.reqValues.get(DeckReqVariableNames.Amount) +
+      this.reqValues.get(DeckReqVariable.Amount) +
       ' of ' +
       (
-        this.reqValues.get(DeckReqVariableNames.BiomeDepth) as BiomeDepth
+        this.reqValues.get(DeckReqVariable.BiomeDepth) as BiomeDepth
       ).toString() +
       ' ' +
-      (
-        this.reqValues.get(DeckReqVariableNames.BiomeType) as BiomeType
-      ).toString() +
+      (this.reqValues.get(DeckReqVariable.BiomeType) as BiomeType).toString() +
       ' per ' +
-      this.reqValues.get(DeckReqVariableNames.PerCardAmount)
+      this.reqValues.get(DeckReqVariable.PerCardAmount)
     );
   }
 }

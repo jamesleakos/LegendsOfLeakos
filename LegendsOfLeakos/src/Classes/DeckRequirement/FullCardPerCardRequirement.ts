@@ -1,5 +1,5 @@
 import DeckRequirement from './DeckRequirement';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqType, DeckReqVariable } from '../../Enums/DeckRequirements';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
 import LibraryCard from '../Card/LibraryCard';
 import GameManager from '../Game/GameManager';
@@ -7,17 +7,17 @@ import GameManager from '../Game/GameManager';
 class FullCardPerCardRequirement extends DeckRequirement {
   constructor(libraryId: number, perCardAmount: number, amount: number) {
     super();
-    this.title = 'Card per Card Req';
-    this.reqValues.set(DeckReqVariableNames.LibraryCardId, libraryId);
-    this.reqValues.set(DeckReqVariableNames.PerCardAmount, perCardAmount);
-    this.reqValues.set(DeckReqVariableNames.Amount, amount);
+    this.type = DeckReqType.FullCardPerCard;
+    this.reqValues.set(DeckReqVariable.LibraryCardId, libraryId);
+    this.reqValues.set(DeckReqVariable.PerCardAmount, perCardAmount);
+    this.reqValues.set(DeckReqVariable.Amount, amount);
   }
 
-  override myRequiredValues(): DeckReqVariableNames[] {
+  override myRequiredValues(): DeckReqVariable[] {
     return [
-      DeckReqVariableNames.LibraryCardId,
-      DeckReqVariableNames.PerCardAmount,
-      DeckReqVariableNames.Amount,
+      DeckReqVariable.LibraryCardId,
+      DeckReqVariable.PerCardAmount,
+      DeckReqVariable.Amount,
     ];
   }
 
@@ -43,14 +43,13 @@ class FullCardPerCardRequirement extends DeckRequirement {
     numberOfMyCard: number
   ): boolean {
     let deckEntry = myBiome.cards.find(
-      (c) =>
-        c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
+      (c) => c.libraryId === this.reqValues.get(DeckReqVariable.LibraryCardId)
     );
     if (deckEntry === undefined) return false;
 
     if (
-      (deckEntry.amount / this.reqValues.get(DeckReqVariableNames.Amount)) *
-        this.reqValues.get(DeckReqVariableNames.PerCardAmount) <
+      (deckEntry.amount / this.reqValues.get(DeckReqVariable.Amount)) *
+        this.reqValues.get(DeckReqVariable.PerCardAmount) <
       numberOfMyCard
     )
       return false;
@@ -60,15 +59,14 @@ class FullCardPerCardRequirement extends DeckRequirement {
 
   override requirementToText(gameManager: GameManager): string {
     let cardInLibrary = gameManager.cardLibrary.find(
-      (c) =>
-        c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
+      (c) => c.libraryId === this.reqValues.get(DeckReqVariable.LibraryCardId)
     );
     return (
-      this.reqValues.get(DeckReqVariableNames.Amount) +
+      this.reqValues.get(DeckReqVariable.Amount) +
       ' of ' +
       cardInLibrary.name +
       ' per ' +
-      this.reqValues.get(DeckReqVariableNames.PerCardAmount)
+      this.reqValues.get(DeckReqVariable.PerCardAmount)
     );
   }
 }

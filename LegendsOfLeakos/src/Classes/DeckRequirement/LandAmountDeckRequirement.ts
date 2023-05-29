@@ -1,5 +1,5 @@
 import DeckRequirement from './DeckRequirement';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqType, DeckReqVariable } from '../../Enums/DeckRequirements';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
 import LibraryCard from '../Card/LibraryCard';
 import LibraryLandTile from '../RealmsAndLand/LandTile/LibraryLandTile';
@@ -8,13 +8,13 @@ import { BiomeType } from '../../Enums/LandAndBiome';
 class LandAmountDeckRequirement extends DeckRequirement {
   constructor(biomeType: number, amount: number) {
     super();
-    this.title = 'Land Req';
-    this.reqValues.set(DeckReqVariableNames.BiomeType, biomeType);
-    this.reqValues.set(DeckReqVariableNames.Amount, amount);
+    this.type = DeckReqType.LandAmount;
+    this.reqValues.set(DeckReqVariable.BiomeType, biomeType);
+    this.reqValues.set(DeckReqVariable.Amount, amount);
   }
 
-  override myRequiredValues(): DeckReqVariableNames[] {
-    return [DeckReqVariableNames.Amount, DeckReqVariableNames.BiomeType];
+  override myRequiredValues(): DeckReqVariable[] {
+    return [DeckReqVariable.Amount, DeckReqVariable.BiomeType];
   }
 
   override canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean {
@@ -24,12 +24,10 @@ class LandAmountDeckRequirement extends DeckRequirement {
   isRequirementMet(biome: LibraryBiome, myCardLibraryId: number): boolean {
     let landTiles: LibraryLandTile[] = biome.landTiles.filter(
       (c: LibraryLandTile) =>
-        c.landType === this.reqValues.get(DeckReqVariableNames.BiomeType)
+        c.landType === this.reqValues.get(DeckReqVariable.BiomeType)
     );
     if (landTiles !== undefined) {
-      return (
-        landTiles.length >= this.reqValues.get(DeckReqVariableNames.Amount)
-      );
+      return landTiles.length >= this.reqValues.get(DeckReqVariable.Amount);
     }
 
     return false;
@@ -37,13 +35,13 @@ class LandAmountDeckRequirement extends DeckRequirement {
 
   requirementToText(): string {
     return (
-      this.reqValues.get(DeckReqVariableNames.Amount).toString() +
+      this.reqValues.get(DeckReqVariable.Amount).toString() +
       ' of ' +
-      (
-        this.reqValues.get(DeckReqVariableNames.BiomeType) as BiomeType
-      ).toString()
+      (this.reqValues.get(DeckReqVariable.BiomeType) as BiomeType).toString()
     );
   }
+
+  static override fromJSON(json: any): DeckRequirement {}
 }
 
 export default LandAmountDeckRequirement;

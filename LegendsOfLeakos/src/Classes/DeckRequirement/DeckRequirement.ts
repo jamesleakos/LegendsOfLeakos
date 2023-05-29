@@ -1,10 +1,15 @@
 import LibraryCard from '../Card/LibraryCard';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqType, DeckReqVariable } from '../../Enums/DeckRequirements';
+import CardAmountDeckRequirement from './CardAmountDeckRequirement';
+import DepthAmountDeckRequirement from './DepthAmountDeckRequirement';
+import FullCardPerCardRequirement from './FullCardPerCardRequirement';
+import FullLandDepthPerCardRequirement from './FullLandDepthPerCardRequirement';
+import LandAmountDeckRequirement from './LandAmountDeckRequirement';
 
 abstract class DeckRequirement {
-  title: string;
-  reqValues: Map<DeckReqVariableNames, number>;
+  type: DeckReqType;
+  reqValues: Map<DeckReqVariable, number>;
 
   abstract canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean;
 
@@ -15,9 +20,25 @@ abstract class DeckRequirement {
 
   abstract requirementToText(gameProperties: any): string;
 
-  abstract myRequiredValues(): DeckReqVariableNames[];
+  abstract myRequiredValues(): DeckReqVariable[];
 
-  static fromJSON(json: any): DeckRequirement {}
+  static fromJSON(json: any): DeckRequirement {
+    let reqType = json.type as DeckReqType;
+    switch (reqType) {
+      case DeckReqType.CardAmount:
+        return CardAmountDeckRequirement.fromJSON(json);
+      case DeckReqType.FullCardPerCard:
+        return FullCardPerCardRequirement.fromJSON(json);
+      case DeckReqType.DepthAmount:
+        return DepthAmountDeckRequirement.fromJSON(json);
+      case DeckReqType.FullLandDepthPerCard:
+        return FullLandDepthPerCardRequirement.fromJSON(json);
+      case DeckReqType.LandAmount:
+        return LandAmountDeckRequirement.fromJSON(json);
+      default:
+        throw new Error('Unknown DeckRequirement type: ' + reqType);
+    }
+  }
 }
 
 export default DeckRequirement;

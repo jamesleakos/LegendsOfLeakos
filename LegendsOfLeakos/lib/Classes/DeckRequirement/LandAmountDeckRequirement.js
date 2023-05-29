@@ -24,13 +24,13 @@ var LandAmountDeckRequirement = /** @class */ (function (_super) {
     __extends(LandAmountDeckRequirement, _super);
     function LandAmountDeckRequirement(biomeType, amount) {
         var _this = _super.call(this) || this;
-        _this.title = 'Land Req';
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.BiomeType, biomeType);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.Amount, amount);
+        _this.type = DeckRequirements_1.DeckReqType.LandAmount;
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.BiomeType, biomeType);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.Amount, amount);
         return _this;
     }
     LandAmountDeckRequirement.prototype.myRequiredValues = function () {
-        return [DeckRequirements_1.DeckReqVariableNames.Amount, DeckRequirements_1.DeckReqVariableNames.BiomeType];
+        return [DeckRequirements_1.DeckReqVariable.Amount, DeckRequirements_1.DeckReqVariable.BiomeType];
     };
     LandAmountDeckRequirement.prototype.canBeAdded = function (myBiome, myCard) {
         return this.isRequirementMet(myBiome, myCard.libraryId);
@@ -38,18 +38,19 @@ var LandAmountDeckRequirement = /** @class */ (function (_super) {
     LandAmountDeckRequirement.prototype.isRequirementMet = function (biome, myCardLibraryId) {
         var _this = this;
         var landTiles = biome.landTiles.filter(function (c) {
-            return c.landType === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeType);
+            return c.landType === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeType);
         });
         if (landTiles !== undefined) {
-            return (landTiles.length >= this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount));
+            return landTiles.length >= this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount);
         }
         return false;
     };
     LandAmountDeckRequirement.prototype.requirementToText = function () {
-        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount).toString() +
+        return (this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount).toString() +
             ' of ' +
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeType).toString());
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeType).toString());
     };
+    LandAmountDeckRequirement.fromJSON = function (json) { };
     return LandAmountDeckRequirement;
 }(DeckRequirement_1.default));
 exports.default = LandAmountDeckRequirement;

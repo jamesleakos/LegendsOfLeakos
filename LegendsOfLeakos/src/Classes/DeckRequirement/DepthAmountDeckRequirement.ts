@@ -1,5 +1,5 @@
 import DeckRequirement from './DeckRequirement';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqType, DeckReqVariable } from '../../Enums/DeckRequirements';
 import GameManager from '../Game/GameManager';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
 import LibraryCard from '../Card/LibraryCard';
@@ -9,13 +9,13 @@ import { BiomeDepth } from '../../Enums/LandAndBiome';
 class DepthAmountDeckRequirement extends DeckRequirement {
   constructor(biomeDepth: number, amount: number) {
     super();
-    this.title = 'Depth Req';
-    this.reqValues.set(DeckReqVariableNames.BiomeDepth, biomeDepth);
-    this.reqValues.set(DeckReqVariableNames.Amount, amount);
+    this.type = DeckReqType.DepthAmount;
+    this.reqValues.set(DeckReqVariable.BiomeDepth, biomeDepth);
+    this.reqValues.set(DeckReqVariable.Amount, amount);
   }
 
-  override myRequiredValues(): DeckReqVariableNames[] {
-    return [DeckReqVariableNames.BiomeDepth, DeckReqVariableNames.Amount];
+  override myRequiredValues(): DeckReqVariable[] {
+    return [DeckReqVariable.BiomeDepth, DeckReqVariable.Amount];
   }
 
   override canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean {
@@ -29,23 +29,30 @@ class DepthAmountDeckRequirement extends DeckRequirement {
     let counter = 0;
     let landTiles: LibraryLandTile[] = myBiome.landTiles.filter(
       (lt: LibraryLandTile) =>
-        lt.depth === this.reqValues.get(DeckReqVariableNames.BiomeDepth)
+        lt.depth === this.reqValues.get(DeckReqVariable.BiomeDepth)
     );
     if (landTiles !== undefined) {
       counter += landTiles.length;
     }
 
-    return counter >= this.reqValues.get(DeckReqVariableNames.Amount);
+    return counter >= this.reqValues.get(DeckReqVariable.Amount);
   }
 
   override requirementToText(gameManager: GameManager): string {
     return (
-      this.reqValues.get(DeckReqVariableNames.Amount) +
+      this.reqValues.get(DeckReqVariable.Amount) +
       ' of ' +
-      (
-        this.reqValues.get(DeckReqVariableNames.BiomeDepth) as BiomeDepth
-      ).toString()
+      (this.reqValues.get(DeckReqVariable.BiomeDepth) as BiomeDepth).toString()
     );
+  }
+
+  static override fromJSON(json: any): DeckRequirement {
+    let biomeDepth = json.reqValues.biomeDepth;
+    let amount = json.reqValues.amount;
+    if (!biomeDepth || !amount) {
+      throw new Error('JSON parsing error');
+    }
+    return new DepthAmountDeckRequirement(biomeDepth, amount);
   }
 }
 

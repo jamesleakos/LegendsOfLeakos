@@ -24,13 +24,13 @@ var DepthAmountDeckRequirement = /** @class */ (function (_super) {
     __extends(DepthAmountDeckRequirement, _super);
     function DepthAmountDeckRequirement(biomeDepth, amount) {
         var _this = _super.call(this) || this;
-        _this.title = 'Depth Req';
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.BiomeDepth, biomeDepth);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.Amount, amount);
+        _this.type = DeckRequirements_1.DeckReqType.DepthAmount;
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.BiomeDepth, biomeDepth);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.Amount, amount);
         return _this;
     }
     DepthAmountDeckRequirement.prototype.myRequiredValues = function () {
-        return [DeckRequirements_1.DeckReqVariableNames.BiomeDepth, DeckRequirements_1.DeckReqVariableNames.Amount];
+        return [DeckRequirements_1.DeckReqVariable.BiomeDepth, DeckRequirements_1.DeckReqVariable.Amount];
     };
     DepthAmountDeckRequirement.prototype.canBeAdded = function (myBiome, myCard) {
         return this.isRequirementMet(myBiome, myCard.libraryId);
@@ -39,17 +39,25 @@ var DepthAmountDeckRequirement = /** @class */ (function (_super) {
         var _this = this;
         var counter = 0;
         var landTiles = myBiome.landTiles.filter(function (lt) {
-            return lt.depth === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeDepth);
+            return lt.depth === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeDepth);
         });
         if (landTiles !== undefined) {
             counter += landTiles.length;
         }
-        return counter >= this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount);
+        return counter >= this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount);
     };
     DepthAmountDeckRequirement.prototype.requirementToText = function (gameManager) {
-        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount) +
+        return (this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount) +
             ' of ' +
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeDepth).toString());
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeDepth).toString());
+    };
+    DepthAmountDeckRequirement.fromJSON = function (json) {
+        var biomeDepth = json.reqValues.biomeDepth;
+        var amount = json.reqValues.amount;
+        if (!biomeDepth || !amount) {
+            throw new Error('JSON parsing error');
+        }
+        return new DepthAmountDeckRequirement(biomeDepth, amount);
     };
     return DepthAmountDeckRequirement;
 }(DeckRequirement_1.default));

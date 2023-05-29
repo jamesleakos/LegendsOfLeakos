@@ -1,20 +1,20 @@
 import DeckRequirement from './DeckRequirement';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqType, DeckReqVariable } from '../../Enums/DeckRequirements';
 import LibraryCard from '../Card/LibraryCard';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
 import LibraryCardEntry from '../RealmsAndLand/Biome/LibraryCardEntry';
 import GameManager from '../Game/GameManager';
 
-class CardDeckRequirement extends DeckRequirement {
+class CardAmountDeckRequirement extends DeckRequirement {
   constructor(libraryId: number, amount: number) {
     super();
-    this.title = 'Card Req';
-    this.reqValues.set(DeckReqVariableNames.Amount, amount);
-    this.reqValues.set(DeckReqVariableNames.LibraryCardId, libraryId);
+    this.type = DeckReqType.CardAmount;
+    this.reqValues.set(DeckReqVariable.Amount, amount);
+    this.reqValues.set(DeckReqVariable.LibraryCardId, libraryId);
   }
 
-  override myRequiredValues(): DeckReqVariableNames[] {
-    return [DeckReqVariableNames.Amount, DeckReqVariableNames.LibraryCardId];
+  override myRequiredValues(): DeckReqVariable[] {
+    return [DeckReqVariable.Amount, DeckReqVariable.LibraryCardId];
   }
 
   override canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean {
@@ -27,35 +27,39 @@ class CardDeckRequirement extends DeckRequirement {
   ): boolean {
     let counter = 0;
     let libraryCardEntry: LibraryCardEntry = myBiome.cards.find(
-      (c) =>
-        c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
+      (c) => c.libraryId === this.reqValues.get(DeckReqVariable.LibraryCardId)
     );
     if (libraryCardEntry !== undefined) {
       counter += libraryCardEntry.amount;
     }
     for (let subbiome of myBiome.subBiomes) {
       let subCardEntry = subbiome.cards.find(
-        (c) =>
-          c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
+        (c) => c.libraryId === this.reqValues.get(DeckReqVariable.LibraryCardId)
       );
       if (subCardEntry !== undefined) {
         counter += subCardEntry.amount;
       }
     }
 
-    return counter >= this.reqValues.get(DeckReqVariableNames.Amount);
+    return counter >= this.reqValues.get(DeckReqVariable.Amount);
   }
 
   override requirementToText(gameManager: GameManager): string {
     return (
-      this.reqValues.get(DeckReqVariableNames.Amount) +
+      this.reqValues.get(DeckReqVariable.Amount) +
       ' of ' +
       gameManager.cardLibrary.find(
-        (c) =>
-          c.libraryId === this.reqValues.get(DeckReqVariableNames.LibraryCardId)
+        (c) => c.libraryId === this.reqValues.get(DeckReqVariable.LibraryCardId)
       ).name
     );
   }
+
+  static override fromJSON(json: any): CardAmountDeckRequirement {
+    let libraryId = json.reqValues.libraryId;
+    let amount = json.reqValues.amount;
+    if (!libraryId || !amount) throw new Error('Missing value in json');
+    return new CardAmountDeckRequirement(libraryId, amount);
+  }
 }
 
-export default CardDeckRequirement;
+export default CardAmountDeckRequirement;

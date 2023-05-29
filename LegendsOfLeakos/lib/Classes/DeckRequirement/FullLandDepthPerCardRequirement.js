@@ -24,19 +24,19 @@ var FullLandDepthPerCardRequirement = /** @class */ (function (_super) {
     __extends(FullLandDepthPerCardRequirement, _super);
     function FullLandDepthPerCardRequirement(biomeType, biomeDepth, perCardAmount, amount) {
         var _this = _super.call(this) || this;
-        _this.title = 'Land per Card Req';
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.BiomeType, biomeType);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.BiomeDepth, biomeDepth);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.PerCardAmount, perCardAmount);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.Amount, amount);
+        _this.type = DeckRequirements_1.DeckReqType.FullLandDepthPerCard;
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.BiomeType, biomeType);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.BiomeDepth, biomeDepth);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.PerCardAmount, perCardAmount);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.Amount, amount);
         return _this;
     }
     FullLandDepthPerCardRequirement.prototype.myRequiredValues = function () {
         return [
-            DeckRequirements_1.DeckReqVariableNames.BiomeType,
-            DeckRequirements_1.DeckReqVariableNames.BiomeDepth,
-            DeckRequirements_1.DeckReqVariableNames.PerCardAmount,
-            DeckRequirements_1.DeckReqVariableNames.Amount,
+            DeckRequirements_1.DeckReqVariable.BiomeType,
+            DeckRequirements_1.DeckReqVariable.BiomeDepth,
+            DeckRequirements_1.DeckReqVariable.PerCardAmount,
+            DeckRequirements_1.DeckReqVariable.Amount,
         ];
     };
     FullLandDepthPerCardRequirement.prototype.canBeAdded = function (myBiome, myCard) {
@@ -47,35 +47,33 @@ var FullLandDepthPerCardRequirement = /** @class */ (function (_super) {
     };
     FullLandDepthPerCardRequirement.prototype.wouldRequirementBeMetAtSomeNumberOfMyCard = function (myBiome, numberOfMyCard) {
         var _this = this;
-        if (myBiome.biomeType !== this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeType))
+        if (myBiome.biomeType !== this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeType))
             return false;
         var testingEntry;
-        if (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeDepth).toString() === 'all') {
+        if (this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeDepth).toString() === 'all') {
             testingEntry = myBiome;
         }
         else {
-            var subEntry = myBiome.subBiomes.find(function (sb) {
-                return sb.biomeDepth === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeDepth);
-            });
+            var subEntry = myBiome.subBiomes.find(function (sb) { return sb.biomeDepth === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeDepth); });
             if (subEntry === undefined)
                 return false;
             testingEntry = subEntry;
         }
         if ((testingEntry.landTiles.length /
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount)) *
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.PerCardAmount) <
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount)) *
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount) <
             numberOfMyCard)
             return false;
         return true;
     };
     FullLandDepthPerCardRequirement.prototype.requirementToText = function (gameManager) {
-        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount) +
+        return (this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount) +
             ' of ' +
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeDepth).toString() +
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeDepth).toString() +
             ' ' +
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.BiomeType).toString() +
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeType).toString() +
             ' per ' +
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.PerCardAmount));
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
     return FullLandDepthPerCardRequirement;
 }(DeckRequirement_1.default));

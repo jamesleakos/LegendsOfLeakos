@@ -1,4 +1,12 @@
-enum DeckReqVariableNames {
+enum DeckReqType {
+  CardAmount,
+  DepthAmount,
+  FullCardPerCard,
+  FullLandDepthPerCard,
+  LandAmount,
+}
+
+enum DeckReqVariable {
   Amount,
   LibraryCardId,
   BiomeType,
@@ -6,4 +14,4 @@ enum DeckReqVariableNames {
   PerCardAmount,
 }
 
-export { DeckReqVariableNames };
+export { DeckReqVariable, DeckReqType };

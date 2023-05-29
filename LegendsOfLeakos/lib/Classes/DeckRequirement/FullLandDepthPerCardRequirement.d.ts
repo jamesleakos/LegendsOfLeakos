@@ -1,11 +1,11 @@
 import DeckRequirement from './DeckRequirement';
-import { DeckReqVariableNames } from '../../Enums/DeckRequirements';
+import { DeckReqVariable } from '../../Enums/DeckRequirements';
 import LibraryBiome from '../RealmsAndLand/Biome/LibraryBiome';
 import LibraryCard from '../Card/LibraryCard';
 import GameManager from '../Game/GameManager';
 declare class FullLandDepthPerCardRequirement extends DeckRequirement {
     constructor(biomeType: number, biomeDepth: number, perCardAmount: number, amount: number);
-    myRequiredValues(): DeckReqVariableNames[];
+    myRequiredValues(): DeckReqVariable[];
     canBeAdded(myBiome: LibraryBiome, myCard: LibraryCard): boolean;
     isRequirementMet(myBiome: LibraryBiome, libraryCardID: number): boolean;
     private wouldRequirementBeMetAtSomeNumberOfMyCard;

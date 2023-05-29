@@ -24,17 +24,17 @@ var FullCardPerCardRequirement = /** @class */ (function (_super) {
     __extends(FullCardPerCardRequirement, _super);
     function FullCardPerCardRequirement(libraryId, perCardAmount, amount) {
         var _this = _super.call(this) || this;
-        _this.title = 'Card per Card Req';
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.LibraryCardId, libraryId);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.PerCardAmount, perCardAmount);
-        _this.reqValues.set(DeckRequirements_1.DeckReqVariableNames.Amount, amount);
+        _this.type = DeckRequirements_1.DeckReqType.FullCardPerCard;
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.LibraryCardId, libraryId);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.PerCardAmount, perCardAmount);
+        _this.reqValues.set(DeckRequirements_1.DeckReqVariable.Amount, amount);
         return _this;
     }
     FullCardPerCardRequirement.prototype.myRequiredValues = function () {
         return [
-            DeckRequirements_1.DeckReqVariableNames.LibraryCardId,
-            DeckRequirements_1.DeckReqVariableNames.PerCardAmount,
-            DeckRequirements_1.DeckReqVariableNames.Amount,
+            DeckRequirements_1.DeckReqVariable.LibraryCardId,
+            DeckRequirements_1.DeckReqVariable.PerCardAmount,
+            DeckRequirements_1.DeckReqVariable.Amount,
         ];
     };
     FullCardPerCardRequirement.prototype.canBeAdded = function (myBiome, myCard) {
@@ -45,27 +45,23 @@ var FullCardPerCardRequirement = /** @class */ (function (_super) {
     };
     FullCardPerCardRequirement.prototype.wouldRequirementBeMetAtSomeNumberOfMyCard = function (myBiome, numberOfMyCard) {
         var _this = this;
-        var deckEntry = myBiome.cards.find(function (c) {
-            return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
-        });
+        var deckEntry = myBiome.cards.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.LibraryCardId); });
         if (deckEntry === undefined)
             return false;
-        if ((deckEntry.amount / this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount)) *
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.PerCardAmount) <
+        if ((deckEntry.amount / this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount)) *
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount) <
             numberOfMyCard)
             return false;
         return true;
     };
     FullCardPerCardRequirement.prototype.requirementToText = function (gameManager) {
         var _this = this;
-        var cardInLibrary = gameManager.cardLibrary.find(function (c) {
-            return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.LibraryCardId);
-        });
-        return (this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.Amount) +
+        var cardInLibrary = gameManager.cardLibrary.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.LibraryCardId); });
+        return (this.reqValues.get(DeckRequirements_1.DeckReqVariable.Amount) +
             ' of ' +
             cardInLibrary.name +
             ' per ' +
-            this.reqValues.get(DeckRequirements_1.DeckReqVariableNames.PerCardAmount));
+            this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
     return FullCardPerCardRequirement;
 }(DeckRequirement_1.default));
