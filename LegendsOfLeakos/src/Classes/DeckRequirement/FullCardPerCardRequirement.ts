@@ -69,6 +69,8 @@ class FullCardPerCardRequirement extends DeckRequirement {
       this.reqValues.get(DeckReqVariable.PerCardAmount)
     );
   }
+
+  static override fromJSON(json: any): DeckRequirement {}
 }
 
 export default FullCardPerCardRequirement;

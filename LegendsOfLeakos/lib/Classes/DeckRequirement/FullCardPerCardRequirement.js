@@ -63,6 +63,7 @@ var FullCardPerCardRequirement = /** @class */ (function (_super) {
             ' per ' +
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
+    FullCardPerCardRequirement.fromJSON = function (json) { };
     return FullCardPerCardRequirement;
 }(DeckRequirement_1.default));
 exports.default = FullCardPerCardRequirement;

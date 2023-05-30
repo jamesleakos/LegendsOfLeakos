@@ -10,5 +10,6 @@ declare class FullCardPerCardRequirement extends DeckRequirement {
     isRequirementMet(myBiome: LibraryBiome, libraryCardID: number): boolean;
     private wouldRequirementBeMetAtSomeNumberOfMyCard;
     requirementToText(gameManager: GameManager): string;
+    static fromJSON(json: any): DeckRequirement;
 }
 export default FullCardPerCardRequirement;

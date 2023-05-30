@@ -75,6 +75,7 @@ var FullLandDepthPerCardRequirement = /** @class */ (function (_super) {
             ' per ' +
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
+    FullLandDepthPerCardRequirement.fromJSON = function (json) { };
     return FullLandDepthPerCardRequirement;
 }(DeckRequirement_1.default));
 exports.default = FullLandDepthPerCardRequirement;
