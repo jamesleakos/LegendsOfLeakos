@@ -78,6 +78,9 @@ var LibraryBiome = /** @class */ (function () {
         return message;
     };
     LibraryBiome.prototype.cardsCanBeAddedToBiomeOrSubbiome = function (card, amount, gameManager) {
+        if (!card) {
+            return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, 'Card is undefined');
+        }
         if (card.biomeType !== this.biomeType) {
             return new BiomeAddCardMessage(LandAndBiome_1.BiomeAddCardEnum.Failure, 0, "".concat(card.name, " belongs in the ").concat(card.biomeType, " and this is a ").concat(this.biomeType));
         }

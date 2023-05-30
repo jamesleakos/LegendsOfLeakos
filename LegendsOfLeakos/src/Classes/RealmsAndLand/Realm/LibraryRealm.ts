@@ -8,6 +8,7 @@ import {
   LandType,
   BiomeAddCardEnum,
 } from '../../../Enums/LandAndBiome';
+import GameManager from '../../Game/GameManager';
 
 class LibraryRealm {
   name: string = 'New Realm';
@@ -40,8 +41,7 @@ class LibraryRealm {
   changeLandTileType(
     tile_id: number,
     newLandType: LandType,
-    cardLibrary: LibraryCard[] = [],
-    realmLayout: any = [7, 10, 11, 12, 11, 12, 11, 10, 7]
+    gameManager: GameManager
   ): void {
     const tiles = this.getLandTiles();
     // get the tile we want to change
@@ -51,13 +51,13 @@ class LibraryRealm {
       return;
     }
     tile.landType = newLandType;
-    this.initalizeLandTiles(realmLayout);
+    this.initalizeLandTiles(gameManager.gameProperties.realmLayout);
     // TODO: update realm
-    this.updateRealm(cardLibrary);
+    this.updateRealm(gameManager);
   }
 
   // Realm Utilities
-  isRealmValid(realmLayout: any = [7, 10, 11, 12, 11, 12, 11, 10, 7]): boolean {
+  isRealmValid(gameManager: GameManager): boolean {
     // REALM STUFF
 
     // make sure there's exactly one city
@@ -71,7 +71,10 @@ class LibraryRealm {
 
     // make sure that there are the right amount of land tiles
     const landTiles = this.getLandTiles();
-    const layoutSum = realmLayout.reduce((a: number, b: number) => a + b, 0);
+    const layoutSum = gameManager.gameProperties.realmLayout.reduce(
+      (a: number, b: number) => a + b,
+      0
+    );
     if (landTiles.length !== layoutSum) {
       console.log('Error, tiles dont match');
       return false;
@@ -88,7 +91,7 @@ class LibraryRealm {
     // BIOME STUFF
     // make sure all biomes are valid
     for (const biome of this.biomes) {
-      if (!biome.areBiomeAndSubsValid()) {
+      if (!biome.areBiomeAndSubsValid(gameManager)) {
         console.log('Error, biome not valid');
         return false;
       }
@@ -117,7 +120,7 @@ class LibraryRealm {
     LibraryLandTile.assignDepth(tiles);
   }
 
-  updateRealm(cardLibrary: LibraryCard[] = []): void {
+  updateRealm(gameManager: GameManager): void {
     const tempBiomes: LibraryBiome[] = [];
 
     const landTypeBiomeTypePairs: [LandType, BiomeType][] = [
@@ -156,8 +159,9 @@ class LibraryRealm {
         if (intersection.length > 0) {
           for (let cardEntry of oldBiome.cards) {
             const message = newBiome.addCardsToBiomeOrSubbiome(
-              cardLibrary.find((c) => c.libraryId === cardEntry.libraryId),
-              cardEntry.amount
+              gameManager.getCardFromLibraryId(cardEntry.libraryId),
+              cardEntry.amount,
+              gameManager
             );
 
             if (message.result !== BiomeAddCardEnum.Success) {

@@ -41,7 +41,12 @@ class LandAmountDeckRequirement extends DeckRequirement {
     );
   }
 
-  static override fromJSON(json: any): DeckRequirement {}
+  static override fromJSON(json: any): DeckRequirement {
+    let biomeType = json.reqValues.biomeType;
+    let amount = json.reqValues.amount;
+    if (!biomeType || !amount) throw new Error('Missing value in json');
+    return new LandAmountDeckRequirement(biomeType, amount);
+  }
 }
 
 export default LandAmountDeckRequirement;

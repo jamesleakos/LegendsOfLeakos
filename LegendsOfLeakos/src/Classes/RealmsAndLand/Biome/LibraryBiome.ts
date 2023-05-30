@@ -99,6 +99,13 @@ class LibraryBiome {
     amount: number,
     gameManager: GameManager
   ): BiomeAddCardMessage {
+    if (!card) {
+      return new BiomeAddCardMessage(
+        BiomeAddCardEnum.Failure,
+        0,
+        'Card is undefined'
+      );
+    }
     if (card.biomeType !== this.biomeType) {
       return new BiomeAddCardMessage(
         BiomeAddCardEnum.Failure,

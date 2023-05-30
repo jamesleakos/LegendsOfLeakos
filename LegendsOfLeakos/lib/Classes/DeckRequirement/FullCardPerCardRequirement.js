@@ -63,7 +63,14 @@ var FullCardPerCardRequirement = /** @class */ (function (_super) {
             ' per ' +
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
-    FullCardPerCardRequirement.fromJSON = function (json) { };
+    FullCardPerCardRequirement.fromJSON = function (json) {
+        var libraryId = json.reqValues.libraryId;
+        var perCardAmount = json.reqValues.perCardAmount;
+        var amount = json.reqValues.amount;
+        if (!libraryId || !perCardAmount || !amount)
+            throw new Error('Missing value in json');
+        return new FullCardPerCardRequirement(libraryId, perCardAmount, amount);
+    };
     return FullCardPerCardRequirement;
 }(DeckRequirement_1.default));
 exports.default = FullCardPerCardRequirement;

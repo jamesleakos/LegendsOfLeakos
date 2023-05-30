@@ -75,7 +75,15 @@ var FullLandDepthPerCardRequirement = /** @class */ (function (_super) {
             ' per ' +
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
-    FullLandDepthPerCardRequirement.fromJSON = function (json) { };
+    FullLandDepthPerCardRequirement.fromJSON = function (json) {
+        var biomeType = json.reqValues.biomeType;
+        var biomeDepth = json.reqValues.biomeDepth;
+        var perCardAmount = json.reqValues.perCardAmount;
+        var amount = json.reqValues.amount;
+        if (!biomeType || !biomeDepth || !perCardAmount || !amount)
+            throw new Error('Missing value in json');
+        return new FullLandDepthPerCardRequirement(biomeType, biomeDepth, perCardAmount, amount);
+    };
     return FullLandDepthPerCardRequirement;
 }(DeckRequirement_1.default));
 exports.default = FullLandDepthPerCardRequirement;

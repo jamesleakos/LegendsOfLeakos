@@ -37,9 +37,7 @@ var LibraryRealm = /** @class */ (function () {
         }
         return tiles.sort(function (a, b) { return a.id - b.id; });
     };
-    LibraryRealm.prototype.changeLandTileType = function (tile_id, newLandType, cardLibrary, realmLayout) {
-        if (cardLibrary === void 0) { cardLibrary = []; }
-        if (realmLayout === void 0) { realmLayout = [7, 10, 11, 12, 11, 12, 11, 10, 7]; }
+    LibraryRealm.prototype.changeLandTileType = function (tile_id, newLandType, gameManager) {
         var tiles = this.getLandTiles();
         // get the tile we want to change
         var tile = tiles.find(function (c) { return c.id === tile_id; });
@@ -48,14 +46,13 @@ var LibraryRealm = /** @class */ (function () {
             return;
         }
         tile.landType = newLandType;
-        this.initalizeLandTiles(realmLayout);
+        this.initalizeLandTiles(gameManager.gameProperties.realmLayout);
         // TODO: update realm
-        this.updateRealm(cardLibrary);
+        this.updateRealm(gameManager);
     };
     // Realm Utilities
-    LibraryRealm.prototype.isRealmValid = function (realmLayout) {
+    LibraryRealm.prototype.isRealmValid = function (gameManager) {
         // REALM STUFF
-        if (realmLayout === void 0) { realmLayout = [7, 10, 11, 12, 11, 12, 11, 10, 7]; }
         // make sure there's exactly one city
         var cities = this.getLandTiles().filter(function (c) { return c.landType === LandAndBiome_1.LandType.city; });
         if (cities.length !== 1) {
@@ -64,7 +61,7 @@ var LibraryRealm = /** @class */ (function () {
         }
         // make sure that there are the right amount of land tiles
         var landTiles = this.getLandTiles();
-        var layoutSum = realmLayout.reduce(function (a, b) { return a + b; }, 0);
+        var layoutSum = gameManager.gameProperties.realmLayout.reduce(function (a, b) { return a + b; }, 0);
         if (landTiles.length !== layoutSum) {
             console.log('Error, tiles dont match');
             return false;
@@ -81,7 +78,7 @@ var LibraryRealm = /** @class */ (function () {
         // make sure all biomes are valid
         for (var _i = 0, _b = this.biomes; _i < _b.length; _i++) {
             var biome = _b[_i];
-            if (!biome.areBiomeAndSubsValid()) {
+            if (!biome.areBiomeAndSubsValid(gameManager)) {
                 console.log('Error, biome not valid');
                 return false;
             }
@@ -106,8 +103,7 @@ var LibraryRealm = /** @class */ (function () {
         LibraryLandTile_1.default.assignNeighbors(tiles);
         LibraryLandTile_1.default.assignDepth(tiles);
     };
-    LibraryRealm.prototype.updateRealm = function (cardLibrary) {
-        if (cardLibrary === void 0) { cardLibrary = []; }
+    LibraryRealm.prototype.updateRealm = function (gameManager) {
         var tempBiomes = [];
         var landTypeBiomeTypePairs = [
             [LandAndBiome_1.LandType.forest, LandAndBiome_1.BiomeType.forest],
@@ -139,15 +135,12 @@ var LibraryRealm = /** @class */ (function () {
                     return newBiome.landTiles.includes(value);
                 });
                 if (intersection.length > 0) {
-                    var _loop_2 = function (cardEntry) {
-                        var message = newBiome.addCardsToBiomeOrSubbiome(cardLibrary.find(function (c) { return c.libraryId === cardEntry.libraryId; }), cardEntry.amount);
+                    for (var _e = 0, _f = oldBiome.cards; _e < _f.length; _e++) {
+                        var cardEntry = _f[_e];
+                        var message = newBiome.addCardsToBiomeOrSubbiome(gameManager.getCardFromLibraryId(cardEntry.libraryId), cardEntry.amount, gameManager);
                         if (message.result !== LandAndBiome_1.BiomeAddCardEnum.Success) {
                             console.log(message.message);
                         }
-                    };
-                    for (var _e = 0, _f = oldBiome.cards; _e < _f.length; _e++) {
-                        var cardEntry = _f[_e];
-                        _loop_2(cardEntry);
                     }
                 }
             }
@@ -217,7 +210,7 @@ var LibraryRealm = /** @class */ (function () {
     };
     LibraryRealm.recursiveTileAdder = function (landTile, tempBiome) {
         tempBiome.landTiles.push(landTile);
-        var _loop_3 = function (neighbor) {
+        var _loop_2 = function (neighbor) {
             if (neighbor.landType === landTile.landType) {
                 var sortedTile = tempBiome.landTiles.find(function (c) { return c.id === neighbor.id; });
                 if (sortedTile === undefined) {
@@ -228,7 +221,7 @@ var LibraryRealm = /** @class */ (function () {
         var this_2 = this;
         for (var _i = 0, _a = landTile.neighbors; _i < _a.length; _i++) {
             var neighbor = _a[_i];
-            _loop_3(neighbor);
+            _loop_2(neighbor);
         }
     };
     // #endregion

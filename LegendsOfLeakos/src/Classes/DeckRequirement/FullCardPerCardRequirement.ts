@@ -70,7 +70,14 @@ class FullCardPerCardRequirement extends DeckRequirement {
     );
   }
 
-  static override fromJSON(json: any): DeckRequirement {}
+  static override fromJSON(json: any): DeckRequirement {
+    let libraryId = json.reqValues.libraryId;
+    let perCardAmount = json.reqValues.perCardAmount;
+    let amount = json.reqValues.amount;
+    if (!libraryId || !perCardAmount || !amount)
+      throw new Error('Missing value in json');
+    return new FullCardPerCardRequirement(libraryId, perCardAmount, amount);
+  }
 }
 
 export default FullCardPerCardRequirement;
