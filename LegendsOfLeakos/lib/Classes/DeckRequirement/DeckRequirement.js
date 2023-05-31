@@ -12,6 +12,13 @@ var LandAmountDeckRequirement_1 = __importDefault(require("./LandAmountDeckRequi
 var DeckRequirement = /** @class */ (function () {
     function DeckRequirement() {
     }
+    DeckRequirement.prototype.toJSON = function () {
+        var reqObject = {};
+        this.reqValues.forEach(function (value, key) {
+            reqObject[DeckRequirements_1.DeckReqVariable[key]] = value;
+        });
+        return reqObject;
+    };
     DeckRequirement.fromJSON = function (json) {
         var reqType = json.type;
         switch (reqType) {

@@ -17,6 +17,13 @@ class PayResourceCost {
     return null;
   }
 
+  toJSON(): any {
+    return {
+      statId: this.statId,
+      value: this.value,
+    };
+  }
+
   static fromJSON(json: any): PayResourceCost {
     return new PayResourceCost(json.statId, json.value);
   }

@@ -22,6 +22,16 @@ abstract class DeckRequirement {
 
   abstract myRequiredValues(): DeckReqVariable[];
 
+  toJSON(): any {
+    let reqObject: { [key: string]: number } = {};
+
+    this.reqValues.forEach((value: number, key: DeckReqVariable) => {
+      reqObject[DeckReqVariable[key]] = value;
+    });
+
+    return reqObject;
+  }
+
   static fromJSON(json: any): DeckRequirement {
     let reqType = json.type as DeckReqType;
     switch (reqType) {

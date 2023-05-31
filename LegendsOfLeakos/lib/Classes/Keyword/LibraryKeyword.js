@@ -118,6 +118,20 @@ var LibraryKeyword = /** @class */ (function () {
         }
         return KVList;
     };
+    LibraryKeyword.prototype.toJSON = function () {
+        return {
+            keywordType: this.keywordType.toString(),
+            indexForUpgrades: this.indexForUpgrades,
+            designerDescription: this.designerDescription,
+            isPermanent: this.isPermanent,
+            duration: this.duration,
+            startsActive: this.startsActive,
+            conditions: this.conditions.map(function (c) {
+                return c.toJSON();
+            }),
+            imageName: this.imageName,
+        };
+    };
     LibraryKeyword.fromJSON = function (json) {
         var keywordType = json.keywordType;
         var indexForUpgrades = json.indexForUpgrades;

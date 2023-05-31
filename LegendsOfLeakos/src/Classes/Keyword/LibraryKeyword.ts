@@ -177,6 +177,21 @@ class LibraryKeyword {
     return KVList;
   }
 
+  toJSON(): any {
+    return {
+      keywordType: this.keywordType.toString(),
+      indexForUpgrades: this.indexForUpgrades,
+      designerDescription: this.designerDescription,
+      isPermanent: this.isPermanent,
+      duration: this.duration,
+      startsActive: this.startsActive,
+      conditions: this.conditions.map((c) => {
+        return c.toJSON();
+      }),
+      imageName: this.imageName,
+    };
+  }
+
   static fromJSON(json: any): LibraryKeyword {
     const keywordType: number = json.keywordType;
     const indexForUpgrades: number = json.indexForUpgrades;

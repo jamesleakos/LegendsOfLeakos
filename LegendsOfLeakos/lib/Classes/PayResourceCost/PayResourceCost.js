@@ -13,6 +13,12 @@ var PayResourceCost = /** @class */ (function () {
         }
         return null;
     };
+    PayResourceCost.prototype.toJSON = function () {
+        return {
+            statId: this.statId,
+            value: this.value,
+        };
+    };
     PayResourceCost.fromJSON = function (json) {
         return new PayResourceCost(json.statId, json.value);
     };
