@@ -20,6 +20,7 @@ declare class TargetType {
     cardSatisfiesConditions(sourceCard: RuntimeCard): boolean;
     zoneSatisfiesConditions(zone: RuntimeZone): boolean;
     static getFightTargetType(): TargetType;
+    toJSON(): any;
     static fromJSON(targetTypeJSON: any): TargetType;
 }
 export default TargetType;

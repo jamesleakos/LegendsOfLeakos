@@ -57,9 +57,18 @@ class EffectValue {
     return this.modInts.map((evInt) => evInt.effectiveValue);
   }
 
+  toJSON(): any {
+    return {
+      effectValueType: this.effectValueType.toString(),
+      setValue: this.setValue,
+      modInts: this.modInts.map((i) => i.toJSON()),
+    };
+  }
+
   static fromJSON(json: any): EffectValue {
     return new EffectValue(
-      json.effectValueType,
+      // frim string
+      EffectValueType[json.effectValueType as keyof typeof EffectValueType],
       json.setValue,
       json.modInts.map((i: any) => ModifiableInt.fromJSON(i))
     );

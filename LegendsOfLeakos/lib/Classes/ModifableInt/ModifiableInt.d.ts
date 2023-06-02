@@ -4,6 +4,7 @@ declare class ModifiableInt {
     effectValueIntModifiers: IntModifier[];
     constructor(baseValue: number, effectValueIntModifiers: IntModifier[]);
     get effectiveValue(): number;
+    toJSON(): any;
     static fromJSON(json: any): ModifiableInt;
 }
 export default ModifiableInt;

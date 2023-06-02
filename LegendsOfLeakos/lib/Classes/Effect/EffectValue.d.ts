@@ -11,6 +11,7 @@ declare class EffectValue {
     postEffect(): void;
     contains(x: number): boolean;
     effectiveValues(): number[];
+    toJSON(): any;
     static fromJSON(json: any): EffectValue;
 }
 export default EffectValue;

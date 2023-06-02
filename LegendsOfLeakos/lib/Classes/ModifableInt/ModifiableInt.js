@@ -25,6 +25,11 @@ var ModifiableInt = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    ModifiableInt.prototype.toJSON = function () {
+        return {
+            baseValue: this.baseValue,
+        };
+    };
     ModifiableInt.fromJSON = function (json) {
         var newModifiableInt = new ModifiableInt(json.baseValue, new Array());
         return newModifiableInt;

@@ -77,6 +77,20 @@ class ActivatedAbility extends BaseAbility {
     return AA;
   }
 
+  toJSON(): any {
+    return {
+      indexForUpgrades: this.indexForUpgrades,
+      name: this.name,
+      effect: this.effect.toJSON(),
+      costs: this.costs.map((cost) => cost.toJSON()),
+      usesPerTurn: this.usesPerTurn,
+      usesRemaining: this.usesRemaining,
+      usableInPhases: this.usableInPhases.map((phase) => phase.toString()),
+      isActive: this.isActive,
+      imageName: this.imageName,
+    };
+  }
+
   static fromJSON(json: any): ActivatedAbility {
     return ActivatedAbility.createActivatedAbility(
       json.indexForUpgrades,
@@ -85,7 +99,9 @@ class ActivatedAbility extends BaseAbility {
       json.costs.map((cost: any) => PayResourceCost.fromJSON(cost)),
       json.usesPerTurn,
       json.usesRemaining,
-      json.usableInPhases,
+      json.usableInPhases.map(
+        (phase: any) => PhaseEnum[phase as keyof typeof PhaseEnum]
+      ),
       json.isActive,
       json.imageName
     );

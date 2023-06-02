@@ -21,6 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var BaseAbility_1 = __importDefault(require("./BaseAbility"));
 var PayResourceCost_1 = __importDefault(require("../PayResourceCost/PayResourceCost"));
 var Effect_1 = __importDefault(require("../Effect/Effect"));
+var Phase_1 = require("../../Enums/Phase");
 var Ability_1 = require("../../Enums/Ability");
 // Import other required classes and types
 var ActivatedAbility = /** @class */ (function (_super) {
@@ -53,8 +54,21 @@ var ActivatedAbility = /** @class */ (function (_super) {
         var AA = new ActivatedAbility(indexForUpgrades, abilityName, effect, costs, usesPerTurn, usesRemaining, usableInPhases, isActive, imageName);
         return AA;
     };
+    ActivatedAbility.prototype.toJSON = function () {
+        return {
+            indexForUpgrades: this.indexForUpgrades,
+            name: this.name,
+            effect: this.effect.toJSON(),
+            costs: this.costs.map(function (cost) { return cost.toJSON(); }),
+            usesPerTurn: this.usesPerTurn,
+            usesRemaining: this.usesRemaining,
+            usableInPhases: this.usableInPhases.map(function (phase) { return phase.toString(); }),
+            isActive: this.isActive,
+            imageName: this.imageName,
+        };
+    };
     ActivatedAbility.fromJSON = function (json) {
-        return ActivatedAbility.createActivatedAbility(json.indexForUpgrades, json.name, Effect_1.default.fromJSON(json.effect), json.costs.map(function (cost) { return PayResourceCost_1.default.fromJSON(cost); }), json.usesPerTurn, json.usesRemaining, json.usableInPhases, json.isActive, json.imageName);
+        return ActivatedAbility.createActivatedAbility(json.indexForUpgrades, json.name, Effect_1.default.fromJSON(json.effect), json.costs.map(function (cost) { return PayResourceCost_1.default.fromJSON(cost); }), json.usesPerTurn, json.usesRemaining, json.usableInPhases.map(function (phase) { return Phase_1.PhaseEnum[phase]; }), json.isActive, json.imageName);
     };
     return ActivatedAbility;
 }(BaseAbility_1.default));

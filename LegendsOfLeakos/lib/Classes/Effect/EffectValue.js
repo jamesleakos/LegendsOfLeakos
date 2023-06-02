@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Effect_1 = require("../../Enums/Effect");
 var ModifiableInt_1 = __importDefault(require("../ModifableInt/ModifiableInt"));
 var IntModifier_1 = __importDefault(require("../ModifableInt/IntModifier"));
 var EffectValue = /** @class */ (function () {
@@ -34,8 +35,17 @@ var EffectValue = /** @class */ (function () {
     EffectValue.prototype.effectiveValues = function () {
         return this.modInts.map(function (evInt) { return evInt.effectiveValue; });
     };
+    EffectValue.prototype.toJSON = function () {
+        return {
+            effectValueType: this.effectValueType.toString(),
+            setValue: this.setValue,
+            modInts: this.modInts.map(function (i) { return i.toJSON(); }),
+        };
+    };
     EffectValue.fromJSON = function (json) {
-        return new EffectValue(json.effectValueType, json.setValue, json.modInts.map(function (i) { return ModifiableInt_1.default.fromJSON(i); }));
+        return new EffectValue(
+        // frim string
+        Effect_1.EffectValueType[json.effectValueType], json.setValue, json.modInts.map(function (i) { return ModifiableInt_1.default.fromJSON(i); }));
     };
     return EffectValue;
 }());

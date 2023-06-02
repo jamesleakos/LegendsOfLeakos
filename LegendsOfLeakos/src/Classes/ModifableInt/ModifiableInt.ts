@@ -22,6 +22,12 @@ class ModifiableInt {
     return value;
   }
 
+  toJSON(): any {
+    return {
+      baseValue: this.baseValue,
+    };
+  }
+
   static fromJSON(json: any): ModifiableInt {
     const newModifiableInt = new ModifiableInt(
       json.baseValue,

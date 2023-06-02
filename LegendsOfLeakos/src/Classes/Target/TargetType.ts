@@ -124,14 +124,30 @@ class TargetType {
     );
   }
 
+  toJSON(): any {
+    return {
+      name: this.name,
+      targetTypeEnum: this.targetTypeEnum.toString(),
+      minSelectionsRequired: this.minSelectionsRequired,
+      maxSelectionsAllowed: this.maxSelectionsAllowed,
+      minSelectionsThatMustRemain: this.minSelectionsThatMustRemain,
+      targetableTypeSelectionEnum: this.targetableTypeSelectionEnum.toString(),
+      conditions: this.conditions.map((c) => c.toJSON()),
+    };
+  }
+
   static fromJSON(targetTypeJSON: any): TargetType {
     return new TargetType(
       targetTypeJSON.name,
-      targetTypeJSON.targetTypeEnum,
+      TargetTypeEnum[
+        targetTypeJSON.targetTypeEnum as keyof typeof TargetTypeEnum
+      ],
       targetTypeJSON.minSelectionsRequired,
       targetTypeJSON.maxSelectionsAllowed,
       targetTypeJSON.minSelectionsThatMustRemain,
-      targetTypeJSON.targetableTypeSelectionEnum,
+      TargetableTypeSelectionEnum[
+        targetTypeJSON.targetableTypeSelectionEnum as keyof typeof TargetableTypeSelectionEnum
+      ],
       targetTypeJSON.conditions.map((c: any) => Condition.fromJSON(c))
     );
   }

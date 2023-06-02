@@ -208,8 +208,17 @@ abstract class Effect {
     return { effect: outEffect, wasSuccessful: success, message: message };
   }
 
+  toJSON(): any {
+    return {
+      effectEnum: this.effectEnum.toString(),
+      effectValueList: this.effectValueList.map((ev) => ev.toJSON()),
+      targetTypes: this.targetTypes.map((tt) => tt.toJSON()),
+    };
+  }
+
   static fromJSON(json: any): Effect {
-    const effectEnum = json.effectEnum;
+    //from string
+    const effectEnum = EffectType[json.effectEnum as keyof typeof EffectType];
     const effectValueList = json.effectValueList.map((ev: any) =>
       EffectValue.fromJSON(ev)
     );

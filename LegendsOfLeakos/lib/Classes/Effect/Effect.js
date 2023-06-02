@@ -117,8 +117,16 @@ var Effect = /** @class */ (function () {
         }
         return { effect: outEffect, wasSuccessful: success, message: message };
     };
+    Effect.prototype.toJSON = function () {
+        return {
+            effectEnum: this.effectEnum.toString(),
+            effectValueList: this.effectValueList.map(function (ev) { return ev.toJSON(); }),
+            targetTypes: this.targetTypes.map(function (tt) { return tt.toJSON(); }),
+        };
+    };
     Effect.fromJSON = function (json) {
-        var effectEnum = json.effectEnum;
+        //from string
+        var effectEnum = Effect_1.EffectType[json.effectEnum];
         var effectValueList = json.effectValueList.map(function (ev) {
             return EffectValue_1.default.fromJSON(ev);
         });
