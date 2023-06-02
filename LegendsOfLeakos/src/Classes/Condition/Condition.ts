@@ -93,9 +93,16 @@ abstract class Condition {
     return condition;
   }
 
+  toJSON(): any {
+    return {
+      conditionType: this.conditionType.toString(),
+      conditionValues: this.conditionValues.map((x) => x.toJSON()),
+    };
+  }
+
   static fromJSON(json: any): Condition {
     const condition = this.createCondition(
-      json.conditionType,
+      ConditionType[json.conditionType as keyof typeof ConditionType],
       json.conditionValues.map((x: any) => ConditionValue.fromJSON(x))
     ).condition;
     return condition;

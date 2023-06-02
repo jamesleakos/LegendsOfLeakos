@@ -14,6 +14,7 @@ declare abstract class Condition {
     abstract getReadableString(gameProperties: any): string;
     static createCondition(conditionType: ConditionType, conditionValues: ConditionValue[]): ConditionFactoryPackage;
     static createConditionForDeckBuilder(conditionType: ConditionType): Condition;
+    toJSON(): any;
     static fromJSON(json: any): Condition;
 }
 export { Condition, ConditionFactoryPackage };

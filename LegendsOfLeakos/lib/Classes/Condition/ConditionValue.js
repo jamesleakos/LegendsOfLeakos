@@ -1,4 +1,13 @@
 "use strict";
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var Condition_1 = require("../../Enums/Condition");
 var Zone_1 = require("../../Enums/Zone");
@@ -30,6 +39,12 @@ var ConditionValue = /** @class */ (function () {
             default:
                 return 'Not found - Come Look for Error';
         }
+    };
+    ConditionValue.prototype.toJSON = function () {
+        return {
+            conditionValueType: this.conditionValueType.toString(),
+            values: __spreadArray([], this.values, true),
+        };
     };
     ConditionValue.fromJSON = function (json) {
         return new ConditionValue(json.conditionValueType, json.values);

@@ -5,6 +5,7 @@ declare class ConditionValue {
     constructor(conditionValueType: ConditionValueType, values: Array<number>);
     returnReadableStringOfValues(): string;
     getValueString(index: number): string;
+    toJSON(): any;
     static fromJSON(json: any): ConditionValue;
 }
 export default ConditionValue;

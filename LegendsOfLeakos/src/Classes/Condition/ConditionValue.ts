@@ -33,6 +33,13 @@ class ConditionValue {
     }
   }
 
+  toJSON(): any {
+    return {
+      conditionValueType: this.conditionValueType.toString(),
+      values: [...this.values],
+    };
+  }
+
   static fromJSON(json: any): ConditionValue {
     return new ConditionValue(json.conditionValueType, json.values);
   }
