@@ -58,6 +58,23 @@ class CardUpgrade {
     card.upgradesApplied.push(this.upgradeIndex);
   }
 
+  toJSON(): any {
+    return {
+      name: this.name,
+      upgradeIndex: this.upgradeIndex,
+      isStartingUpgrade: this.isStartingUpgrade,
+      description: this.description,
+      attackStatUpgrade: this.attackStatUpgrade.toJSON(),
+      lifeStatUpgrade: this.lifeStatUpgrade.toJSON(),
+      priorityStatUpgrade: this.priorityStatUpgrade.toJSON(),
+      costs: this.costs.map((cost) => cost.toJSON()),
+      keywordUpgrades: this.keywordUpgrades.map((ku) => ku.toJSON()),
+      activatedAbilityUpgrades: this.activatedAbilityUpgrades.map((aau) =>
+        aau.toJSON()
+      ),
+    };
+  }
+
   static fromJSON(json: any): CardUpgrade {
     const newCardUpgrade = new CardUpgrade();
     newCardUpgrade.name = json.name;

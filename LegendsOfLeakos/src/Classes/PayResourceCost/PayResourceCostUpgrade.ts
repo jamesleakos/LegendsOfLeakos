@@ -12,6 +12,13 @@ class PayResourceCostUpgrade {
     );
   }
 
+  toJSON(): any {
+    return {
+      statId: this.statId,
+      valueChange: this.valueChange.toJSON(),
+    };
+  }
+
   static fromJSON(json: any): PayResourceCostUpgrade {
     return new PayResourceCostUpgrade(
       json.statId,

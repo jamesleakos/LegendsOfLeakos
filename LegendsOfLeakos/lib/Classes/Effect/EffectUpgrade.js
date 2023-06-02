@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Effect_1 = require("../../Enums/Effect");
 var EffectValueUpgrade_1 = __importDefault(require("../Effect/EffectValueUpgrade"));
 var TargetTypeUpgrade_1 = __importDefault(require("../Target/TargetTypeUpgrade"));
 var Target_1 = require("../../Enums/Target");
@@ -59,8 +60,15 @@ var EffectUpgrade = /** @class */ (function () {
             }
         }
     };
+    EffectUpgrade.prototype.toJSON = function () {
+        return {
+            effectEnum: this.effectEnum.toString(),
+            effectValueUpgrades: this.effectValueUpgrades.map(function (evu) { return evu.toJSON(); }),
+            targetTypeUpgrades: this.targetTypeUpgrades.map(function (ttu) { return ttu.toJSON(); }),
+        };
+    };
     EffectUpgrade.fromJSON = function (json) {
-        return new EffectUpgrade(json.effectEnum, json.effectValueUpgrades.map(function (evu) {
+        return new EffectUpgrade(Effect_1.EffectType[json.effectEnum], json.effectValueUpgrades.map(function (evu) {
             return EffectValueUpgrade_1.default.fromJSON(evu);
         }), json.targetTypeUpgrades.map(function (ttu) { return TargetTypeUpgrade_1.default.fromJSON(ttu); }));
     };

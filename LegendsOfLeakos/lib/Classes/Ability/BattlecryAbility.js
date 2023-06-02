@@ -29,6 +29,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseAbility_1 = __importDefault(require("./BaseAbility"));
 var Effect_1 = __importDefault(require("../Effect/Effect"));
+var Phase_1 = require("../../Enums/Phase");
 var Ability_1 = require("../../Enums/Ability");
 var BattlecryAbility = /** @class */ (function (_super) {
     __extends(BattlecryAbility, _super);
@@ -40,8 +41,17 @@ var BattlecryAbility = /** @class */ (function (_super) {
         _this.usableInPhases = __spreadArray([], usableInPhases, true);
         return _this;
     }
+    BattlecryAbility.prototype.toJSON = function () {
+        return {
+            name: this.name,
+            type: this.type,
+            effect: this.effect.toJSON(),
+            // map enums to strings
+            usableInPhases: this.usableInPhases.map(function (phase) { return phase.toString(); }),
+        };
+    };
     BattlecryAbility.fromJSON = function (json) {
-        var temp = new BattlecryAbility(json.name, Effect_1.default.fromJSON(json.effect), json.usableInPhases);
+        var temp = new BattlecryAbility(json.name, Effect_1.default.fromJSON(json.effect), json.usableInPhases.map(function (phase) { return Phase_1.PhaseEnum[phase]; }));
         return temp;
     };
     return BattlecryAbility;

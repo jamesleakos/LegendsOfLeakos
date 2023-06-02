@@ -17,6 +17,12 @@ var StatUpgrade = /** @class */ (function () {
         var mod = new StatModifier_1.default(this.value.effectiveValue);
         stat.addModifier(mod);
     };
+    StatUpgrade.prototype.toJSON = function () {
+        return {
+            statId: this.statId,
+            value: this.value.toJSON(),
+        };
+    };
     StatUpgrade.fromJSON = function (json) {
         return new StatUpgrade(json.statId, ModifiableInt_1.default.fromJSON(json.value));
     };

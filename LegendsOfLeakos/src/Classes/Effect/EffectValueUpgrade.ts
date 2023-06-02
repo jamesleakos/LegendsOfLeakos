@@ -13,9 +13,16 @@ class EffectValueUpgrade {
     );
   }
 
+  toJSON(): any {
+    return {
+      effectValueType: this.effectValueType.toString(),
+      setValueChange: this.setValueChange.toJSON(),
+    };
+  }
+
   static fromJSON(json: any): EffectValueUpgrade {
     return new EffectValueUpgrade(
-      json.effectValueType,
+      EffectValueType[json.effectValueType as keyof typeof EffectValueType],
       ModifiableInt.fromJSON(json.setValueChange)
     );
   }

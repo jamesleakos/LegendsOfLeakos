@@ -72,9 +72,17 @@ class EffectUpgrade {
     }
   }
 
+  toJSON(): any {
+    return {
+      effectEnum: this.effectEnum.toString(),
+      effectValueUpgrades: this.effectValueUpgrades.map((evu) => evu.toJSON()),
+      targetTypeUpgrades: this.targetTypeUpgrades.map((ttu) => ttu.toJSON()),
+    };
+  }
+
   static fromJSON(json: any): EffectUpgrade {
     return new EffectUpgrade(
-      json.effectEnum,
+      EffectType[json.effectEnum as keyof typeof EffectType],
       json.effectValueUpgrades.map((evu: any) =>
         EffectValueUpgrade.fromJSON(evu)
       ),

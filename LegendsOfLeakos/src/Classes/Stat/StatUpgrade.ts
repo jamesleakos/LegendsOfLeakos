@@ -18,6 +18,13 @@ export class StatUpgrade {
     stat.addModifier(mod);
   }
 
+  toJSON(): any {
+    return {
+      statId: this.statId,
+      value: this.value.toJSON(),
+    };
+  }
+
   static fromJSON(json: any): StatUpgrade {
     return new StatUpgrade(json.statId, ModifiableInt.fromJSON(json.value));
   }

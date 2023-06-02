@@ -29,6 +29,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var BaseAbilityUpgrade_1 = __importDefault(require("./BaseAbilityUpgrade"));
 var EffectUpgrade_1 = __importDefault(require("../Effect/EffectUpgrade"));
+var Phase_1 = require("../../Enums/Phase");
 var ActivatedAbility_1 = __importDefault(require("./ActivatedAbility"));
 var PayResourceCost_1 = __importDefault(require("../PayResourceCost/PayResourceCost"));
 var PayResourceCostUpgrade_1 = __importDefault(require("../PayResourceCost/PayResourceCostUpgrade"));
@@ -70,8 +71,21 @@ var ActivatedAbilityUpgrade = /** @class */ (function (_super) {
         }
         ability.isActive = this.isActive;
     };
+    ActivatedAbilityUpgrade.prototype.toJSON = function () {
+        return {
+            abilityUpgradeIndex: this.abilityUpgradeIndex,
+            effectUpgrade: this.effectUpgrade.toJSON(),
+            addUsablePhases: this.addUsablePhases.map(function (phase) { return phase.toString(); }),
+            removeUsablePhases: this.removeUsablePhases.map(function (phase) {
+                return phase.toString();
+            }),
+            costUpgrades: this.costUpgrades.map(function (c) { return c.toJSON(); }),
+            usesPerTurnChange: this.usesPerTurnChange.toJSON(),
+            isActive: this.isActive,
+        };
+    };
     ActivatedAbilityUpgrade.fromJSON = function (json) {
-        return new ActivatedAbilityUpgrade(json.abilityUpgradeIndex, EffectUpgrade_1.default.fromJSON(json.effectUpgrade), json.addUsablePhases, json.removeUsablePhases, json.costUpgrades.map(function (c) { return PayResourceCostUpgrade_1.default.fromJSON(c); }), ModifiableInt_1.default.fromJSON(json.usesPerTurnChange), json.isActive);
+        return new ActivatedAbilityUpgrade(json.abilityUpgradeIndex, EffectUpgrade_1.default.fromJSON(json.effectUpgrade), json.addUsablePhases.map(function (phase) { return Phase_1.PhaseEnum[phase]; }), json.removeUsablePhases.map(function (phase) { return Phase_1.PhaseEnum[phase]; }), json.costUpgrades.map(function (c) { return PayResourceCostUpgrade_1.default.fromJSON(c); }), ModifiableInt_1.default.fromJSON(json.usesPerTurnChange), json.isActive);
     };
     return ActivatedAbilityUpgrade;
 }(BaseAbilityUpgrade_1.default));

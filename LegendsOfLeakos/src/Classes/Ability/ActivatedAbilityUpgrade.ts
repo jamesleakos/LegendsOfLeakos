@@ -69,12 +69,30 @@ class ActivatedAbilityUpgrade extends BaseAbilityUpgrade {
     (ability as ActivatedAbility).isActive = this.isActive;
   }
 
+  toJSON(): any {
+    return {
+      abilityUpgradeIndex: this.abilityUpgradeIndex,
+      effectUpgrade: this.effectUpgrade.toJSON(),
+      addUsablePhases: this.addUsablePhases.map((phase) => phase.toString()),
+      removeUsablePhases: this.removeUsablePhases.map((phase) =>
+        phase.toString()
+      ),
+      costUpgrades: this.costUpgrades.map((c) => c.toJSON()),
+      usesPerTurnChange: this.usesPerTurnChange.toJSON(),
+      isActive: this.isActive,
+    };
+  }
+
   static fromJSON(json: any): ActivatedAbilityUpgrade {
     return new ActivatedAbilityUpgrade(
       json.abilityUpgradeIndex,
       EffectUpgrade.fromJSON(json.effectUpgrade),
-      json.addUsablePhases,
-      json.removeUsablePhases,
+      json.addUsablePhases.map(
+        (phase: string) => PhaseEnum[phase as keyof typeof PhaseEnum]
+      ),
+      json.removeUsablePhases.map(
+        (phase: string) => PhaseEnum[phase as keyof typeof PhaseEnum]
+      ),
       json.costUpgrades.map((c: any) => PayResourceCostUpgrade.fromJSON(c)),
       ModifiableInt.fromJSON(json.usesPerTurnChange),
       json.isActive

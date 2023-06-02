@@ -17,9 +17,16 @@ class KeywordValueUpgrade {
     });
   }
 
+  toJSON(): any {
+    return {
+      keywordValueType: this.keywordValueType.toString(),
+      valueChanges: this.valueChanges.map((c) => c.toJSON()),
+    };
+  }
+
   static fromJSON(json: any): KeywordValueUpgrade {
     const newKeywordValueUpgrade = new KeywordValueUpgrade(
-      json.keywordValueType,
+      KeywordValueType[json.keywordValueType as keyof typeof KeywordValueType],
       new Array<ModifiableInt>()
     );
     json.valueChanges.forEach((c: any) => {

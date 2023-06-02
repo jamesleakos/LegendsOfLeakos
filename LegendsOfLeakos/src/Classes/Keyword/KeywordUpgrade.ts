@@ -69,6 +69,17 @@ class KeywordUpgrade {
     keyword.isActive = this.isActive;
   }
 
+  toJSON(): any {
+    return {
+      keywordType: this.keywordType,
+      keywordUpgradeIndex: this.keywordUpgradeIndex,
+      isPermanent: this.isPermanent,
+      durationChange: this.durationChange.toJSON(),
+      keywordValueUpgrades: this.keywordValueUpgrades.map((k) => k.toJSON()),
+      isActive: this.isActive,
+    };
+  }
+
   static fromJSON(json: any): KeywordUpgrade {
     const keywordType = json.keywordType as KeywordType;
     const keywordUpgradeIndex = json.keywordUpgradeIndex as number;

@@ -8,6 +8,7 @@ declare class EffectUpgrade {
     targetTypeUpgrades: TargetTypeUpgrade[];
     constructor(effectType: EffectType, effectValueUpgrades: EffectValueUpgrade[], targetTypeUpgrades: TargetTypeUpgrade[]);
     upgradeEffect(effect: Effect): void;
+    toJSON(): any;
     static fromJSON(json: any): EffectUpgrade;
 }
 export default EffectUpgrade;

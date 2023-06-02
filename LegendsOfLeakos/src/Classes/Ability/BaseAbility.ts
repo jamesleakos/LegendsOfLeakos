@@ -4,7 +4,7 @@ import { PhaseEnum } from '../../Enums/Phase';
 
 class BaseAbility {
   public name: string;
-  public iamge: string;
+  public image: string;
   public type: AbilityType;
 
   public effect: Effect;

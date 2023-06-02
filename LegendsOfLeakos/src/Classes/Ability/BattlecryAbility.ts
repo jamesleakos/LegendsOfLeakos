@@ -12,11 +12,23 @@ class BattlecryAbility extends BaseAbility {
     this.usableInPhases = [...usableInPhases];
   }
 
+  toJSON(): any {
+    return {
+      name: this.name,
+      type: this.type,
+      effect: this.effect.toJSON(),
+      // map enums to strings
+      usableInPhases: this.usableInPhases.map((phase) => phase.toString()),
+    };
+  }
+
   static fromJSON(json: any): BattlecryAbility {
     const temp = new BattlecryAbility(
       json.name,
       Effect.fromJSON(json.effect),
-      json.usableInPhases
+      json.usableInPhases.map(
+        (phase: string) => PhaseEnum[phase as keyof typeof PhaseEnum]
+      )
     );
     return temp;
   }

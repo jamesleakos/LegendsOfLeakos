@@ -15,6 +15,7 @@ declare class KeywordUpgrade {
     removeCondtionsOfType: ConditionType[];
     constructor(keywordType: KeywordType, keywordUpgradeIndex: number, isPermanent: boolean, durationChange: ModifiableInt, keywordValueUpgrades: KeywordValueUpgrade[], isActive: boolean);
     upgradeKeyword(keyword: RuntimeKeyword): void;
+    toJSON(): any;
     static fromJSON(json: any): KeywordUpgrade;
 }
 export default KeywordUpgrade;

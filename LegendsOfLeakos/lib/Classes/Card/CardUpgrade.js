@@ -51,6 +51,22 @@ var CardUpgrade = /** @class */ (function () {
         }
         card.upgradesApplied.push(this.upgradeIndex);
     };
+    CardUpgrade.prototype.toJSON = function () {
+        return {
+            name: this.name,
+            upgradeIndex: this.upgradeIndex,
+            isStartingUpgrade: this.isStartingUpgrade,
+            description: this.description,
+            attackStatUpgrade: this.attackStatUpgrade.toJSON(),
+            lifeStatUpgrade: this.lifeStatUpgrade.toJSON(),
+            priorityStatUpgrade: this.priorityStatUpgrade.toJSON(),
+            costs: this.costs.map(function (cost) { return cost.toJSON(); }),
+            keywordUpgrades: this.keywordUpgrades.map(function (ku) { return ku.toJSON(); }),
+            activatedAbilityUpgrades: this.activatedAbilityUpgrades.map(function (aau) {
+                return aau.toJSON();
+            }),
+        };
+    };
     CardUpgrade.fromJSON = function (json) {
         var newCardUpgrade = new CardUpgrade();
         newCardUpgrade.name = json.name;

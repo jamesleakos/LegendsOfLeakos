@@ -45,6 +45,16 @@ var KeywordUpgrade = /** @class */ (function () {
         });
         keyword.isActive = this.isActive;
     };
+    KeywordUpgrade.prototype.toJSON = function () {
+        return {
+            keywordType: this.keywordType,
+            keywordUpgradeIndex: this.keywordUpgradeIndex,
+            isPermanent: this.isPermanent,
+            durationChange: this.durationChange.toJSON(),
+            keywordValueUpgrades: this.keywordValueUpgrades.map(function (k) { return k.toJSON(); }),
+            isActive: this.isActive,
+        };
+    };
     KeywordUpgrade.fromJSON = function (json) {
         var keywordType = json.keywordType;
         var keywordUpgradeIndex = json.keywordUpgradeIndex;

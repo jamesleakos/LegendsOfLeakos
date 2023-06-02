@@ -50,11 +50,30 @@ class TargetTypeUpgrade {
     this.removeCondtionsOfType = [...removeCondtionsOfType];
   }
 
+  toJSON(): any {
+    return {
+      targetTypeIndex: this.targetTypeIndex,
+      newTargetTypeEnum: this.newTargetTypeEnum.toString(),
+      newTargetableTypeSelectionEnum:
+        this.newTargetableTypeSelectionEnum.toString(),
+      minSelectionsRequiredChange: this.minSelectionsRequiredChange.toJSON(),
+      maxSelectionsAllowedChange: this.maxSelectionsAllowedChange.toJSON(),
+      minSelectionsThatMustRemainChange:
+        this.minSelectionsThatMustRemainChange.toJSON(),
+      newConditions: this.newConditions.map((c) => c.toJSON()),
+      removeCondtionsOfType: this.removeCondtionsOfType.map((c) =>
+        c.toString()
+      ),
+    };
+  }
+
   static fromJSON(json: any): TargetTypeUpgrade {
     return new TargetTypeUpgrade(
       json.targetTypeIndex,
-      json.newTargetTypeEnum,
-      json.newTargetableTypeSelectionEnum,
+      TargetTypeEnum[json.newTargetTypeEnum as keyof typeof TargetTypeEnum],
+      TargetableTypeSelectionEnum[
+        json.newTargetableTypeSelectionEnum as keyof typeof TargetableTypeSelectionEnum
+      ],
       ModifiableInt.fromJSON(json.minSelectionsRequiredChange),
       ModifiableInt.fromJSON(json.maxSelectionsAllowedChange),
       ModifiableInt.fromJSON(json.minSelectionsThatMustRemainChange),
