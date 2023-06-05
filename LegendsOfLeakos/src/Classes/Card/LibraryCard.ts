@@ -5,6 +5,7 @@ import PayResourceCost from '../PayResourceCost/PayResourceCost';
 import CardUpgrade from './CardUpgrade';
 import DeckRequirement from '../DeckRequirement/DeckRequirement';
 import { BiomeType, BiomeDepth } from '../../Enums/LandAndBiome';
+import Stat from '../Stat/Stat';
 
 class LibraryCard {
   libraryId: number;
@@ -19,9 +20,9 @@ class LibraryCard {
   deckRequirements: DeckRequirement[] = [];
 
   // stats
-  attack: number;
-  health: number;
-  priority: number;
+  attack: Stat;
+  health: Stat;
+  priority: Stat;
 
   libraryKeywords: LibraryKeyword[] = [];
   activatedAbilities: ActivatedAbility[] = [];
@@ -42,9 +43,9 @@ class LibraryCard {
       biomeDepth: this.biomeDepth.toString(),
       cardText: this.cardText,
       imageName: this.imageName,
-      attack: this.attack,
-      health: this.health,
-      priority: this.priority,
+      attack: this.attack.toJSON(),
+      health: this.health.toJSON(),
+      priority: this.priority.toJSON(),
       costs: this.costs.map((c) => c.toJSON()),
       deckRequirements: this.deckRequirements.map((c) => c.toJSON()),
       libraryKeywords: this.libraryKeywords.map((c) => c.toJSON()),

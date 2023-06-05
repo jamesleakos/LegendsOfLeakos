@@ -5,14 +5,8 @@
     "name": "Elf",
     "biomeType": "forest",
     "biomeDepth": "all",
-    "cardText": {
-      "value": "Default Card Text",
-      "name": "Default Card Text"
-    },
-    "imageName": {
-      "value": "trollherds_4",
-      "name": "Image Name"
-    },
+    "cardText": "Default Card Text",
+    "imageName": "trollherds_4",
     "costs": [
       {
         "statId": 1,

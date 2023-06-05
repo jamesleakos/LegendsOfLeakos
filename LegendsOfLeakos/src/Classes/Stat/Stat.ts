@@ -5,6 +5,7 @@ export class Stat {
   statId: number;
   name: string;
   private _baseValue: number;
+  // the baseValue can change (even apart from modifiers, but the original value never will)
   originalValue: number;
   minValue: number;
   maxValue: number;
