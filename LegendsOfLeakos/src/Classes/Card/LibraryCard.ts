@@ -19,10 +19,10 @@ class LibraryCard {
 
   deckRequirements: DeckRequirement[] = [];
 
-  // stats
-  attack: Stat;
-  health: Stat;
-  priority: Stat;
+  // stats - saved as numbers in the library card
+  attack: number;
+  health: number;
+  priority: number;
 
   libraryKeywords: LibraryKeyword[] = [];
   activatedAbilities: ActivatedAbility[] = [];
@@ -43,9 +43,9 @@ class LibraryCard {
       biomeDepth: this.biomeDepth.toString(),
       cardText: this.cardText,
       imageName: this.imageName,
-      attack: this.attack.toJSON(),
-      health: this.health.toJSON(),
-      priority: this.priority.toJSON(),
+      attack: this.attack,
+      health: this.health,
+      priority: this.priority,
       costs: this.costs.map((c) => c.toJSON()),
       deckRequirements: this.deckRequirements.map((c) => c.toJSON()),
       libraryKeywords: this.libraryKeywords.map((c) => c.toJSON()),

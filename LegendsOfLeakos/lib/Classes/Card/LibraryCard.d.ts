@@ -5,7 +5,6 @@ import PayResourceCost from '../PayResourceCost/PayResourceCost';
 import CardUpgrade from './CardUpgrade';
 import DeckRequirement from '../DeckRequirement/DeckRequirement';
 import { BiomeType, BiomeDepth } from '../../Enums/LandAndBiome';
-import Stat from '../Stat/Stat';
 declare class LibraryCard {
     libraryId: number;
     cardTypeId: number;
@@ -16,9 +15,9 @@ declare class LibraryCard {
     imageName: String;
     costs: PayResourceCost[];
     deckRequirements: DeckRequirement[];
-    attack: Stat;
-    health: Stat;
-    priority: Stat;
+    attack: number;
+    health: number;
+    priority: number;
     libraryKeywords: LibraryKeyword[];
     activatedAbilities: ActivatedAbility[];
     battlecryAbilities: BattlecryAbility[];
