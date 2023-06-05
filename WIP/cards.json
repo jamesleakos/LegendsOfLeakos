@@ -7,6 +7,9 @@
     "biomeDepth": "all",
     "cardText": "Default Card Text",
     "imageName": "trollherds_4",
+    "attack": 1,
+    "health": 5,
+    "priority": 1,
     "costs": [
       {
         "statId": 1,
@@ -14,38 +17,6 @@
       }
     ],
     "deckRequirements": [],
-    "stats": [
-      {
-        "baseValue": 1,
-        "statId": 0,
-        "name": "Attack",
-        "originalValue": 1,
-        "minValue": 0,
-        "maxValue": 99,
-        "modifiers": [],
-        "buffs": []
-      },
-      {
-        "baseValue": 5,
-        "statId": 1,
-        "name": "Life",
-        "originalValue": 5,
-        "minValue": 0,
-        "maxValue": 99,
-        "modifiers": [],
-        "buffs": []
-      },
-      {
-        "baseValue": 1,
-        "statId": 2,
-        "name": "Priority",
-        "originalValue": 1,
-        "minValue": 0,
-        "maxValue": 99,
-        "modifiers": [],
-        "buffs": []
-      }
-    ],
     "libraryKeywords": [
       {
         "keywordType": "DivineShield",
