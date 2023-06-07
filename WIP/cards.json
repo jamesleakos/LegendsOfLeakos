@@ -17,70 +17,8 @@
       }
     ],
     "deckRequirements": [],
-    "libraryKeywords": [
-      {
-        "keywordType": "DivineShield",
-        "indexForUpgrades": 0,
-        "designerDescription": "New Description from CardBuilderScene.CreateNewKeyword",
-        "isPermanent": true,
-        "duration": 0,
-        "startsActive": false,
-        "keywordValueList": [
-          {
-            "keywordValue": {
-              "keywordValueType": "uses",
-              "values": [0]
-            },
-            "numberOfValuesNeeded": 1,
-            "setByDesigner": true
-          }
-        ],
-        "conditions": [],
-        "imageName": {
-          "value": "tower_1",
-          "name": "Image Name"
-        }
-      }
-    ],
-    "activatedAbilities": [
-      {
-        "indexForUpgrades": 0,
-        "isActive": true,
-        "costs": [],
-        "usesPerTurn": 1,
-        "usesRemaining": 1,
-        "name": "New Ability",
-        "imageName": {
-          "value": "river_towers_1.png",
-          "name": "Image Name"
-        },
-        "type": "Activated",
-        "effect": {
-          "effectEnum": "EnchantCard",
-          "effectValueList": [
-            {
-              "effectValueType": "CreateEnchantmentEnchantmentLibraryID",
-              "setValue": 0,
-              "modInts": []
-            }
-          ],
-          "targetTypes": [
-            {
-              "name": "Targets To Be Enchanted",
-              "targetTypeEnum": "TargetCreature",
-              "targetableTypeSelectionEnum": "TargetableOnActivation",
-              "minSelectionsRequired": 1,
-              "maxSelectionsAllowed": 1,
-              "minSelectionsThatMustRemain": 1,
-              "conditions": [],
-              "playerSelectsTarget": true
-            }
-          ],
-          "$type": "LegendsOfLeakos.EnchantCardEffect"
-        },
-        "usableInPhases": ["Battle", "Skirmish", "Maneuver", "Recruit"]
-      }
-    ],
+    "libraryKeywords": [],
+    "activatedAbilities": [],
     "battlecryAbilities": [],
     "cardUpgrades": [],
     "id": 0
