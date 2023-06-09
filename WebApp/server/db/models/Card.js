@@ -54,10 +54,7 @@ const CardSchema = new mongoose.Schema({
     required: false
   },
   // use cost schema
-  costs: {
-    type: Array,
-    required: false
-  },
+  costs: [PayResourceCostSchema],
 });
 
 const PayResourceCostSchema = new mongoose.Schema({
@@ -69,3 +66,17 @@ const PayResourceCostSchema = new mongoose.Schema({
     type: Number
   }
 });
+
+const ReqValueSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    required: true
+  },
+
+
+  const DeckRequirementSchema = new mongoose.Schema({
+    type: {
+      type: String,
+      required: true
+    },
+    reqValues: [];
