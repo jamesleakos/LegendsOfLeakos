@@ -1,27 +1,10 @@
 const mongoose = require('mongoose');
-
-//library card class properties as follows
-// libraryId: number;
-// cardTypeId: number;
-// name: String;
-// biomeType: BiomeType;
-// biomeDepth: BiomeDepth;
-// cardText: String;
-// imageName: String;
-// costs: PayResourceCost[] = [];
-
-// deckRequirements: DeckRequirement[] = [];
-
-// // stats - saved as numbers in the library card
-// attack: number;
-// health: number;
-// priority: number;
-
-// libraryKeywords: LibraryKeyword[] = [];
-// activatedAbilities: ActivatedAbility[] = [];
-// battlecryAbilities: BattlecryAbility[] = [];
-
-// cardUpgrades: CardUpgrade[] = [];
+const PayResourceCostSchema = require('./PayResourceCost');
+const DeckRequirementSchema = require('./DeckRequirement');
+const LibraryKeywordSchema = require('./LibraryKeyword');
+const ActivatedAbilitySchema = require('./ActivatedAbility');
+const BattleAbilitySchema = require('./BattleAbility');
+const CardUpgradeSchema = require('./CardUpgrade');
 
 const CardSchema = new mongoose.Schema({
   libraryId: {
@@ -55,28 +38,13 @@ const CardSchema = new mongoose.Schema({
   },
   // use cost schema
   costs: [PayResourceCostSchema],
+  deckRequirements: [DeckRequirementSchema],
+  libraryKeywords: [LibraryKeywordSchema],
+  activatedAbilities: [ActivatedAbilitySchema],
+  battleAbilities: [BattleAbilitySchema],
+  cardUpgrades: [CardUpgradeSchema],
 });
 
-const PayResourceCostSchema = new mongoose.Schema({
-  statId: {
-    type: Number,
-    required: true
-  },
-  value: {
-    type: Number
-  }
-});
+const Card = mongoose.model('cards', CardSchema);
+export default Card;
 
-const ReqValueSchema = new mongoose.Schema({
-  type: {
-    type: String,
-    required: true
-  },
-
-
-  const DeckRequirementSchema = new mongoose.Schema({
-    type: {
-      type: String,
-      required: true
-    },
-    reqValues: [];
