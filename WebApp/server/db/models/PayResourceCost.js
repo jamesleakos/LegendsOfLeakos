@@ -7,3 +7,5 @@ const PayResourceCostSchema = new mongoose.Schema({
     type: Number
   }
 });
+
+export default PayResourceCostSchema;

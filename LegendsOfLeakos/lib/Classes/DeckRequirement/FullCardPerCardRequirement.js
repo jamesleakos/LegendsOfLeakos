@@ -64,9 +64,9 @@ var FullCardPerCardRequirement = /** @class */ (function (_super) {
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
     FullCardPerCardRequirement.fromJSON = function (json) {
-        var libraryId = json.reqValues.libraryId;
-        var perCardAmount = json.reqValues.perCardAmount;
-        var amount = json.reqValues.amount;
+        var amount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.Amount.toString(); }).value;
+        var perCardAmount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.PerCardAmount.toString(); }).value;
+        var libraryId = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.LibraryCardId.toString(); }).value;
         if (!libraryId || !perCardAmount || !amount)
             throw new Error('Missing value in json');
         return new FullCardPerCardRequirement(libraryId, perCardAmount, amount);

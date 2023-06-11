@@ -58,8 +58,8 @@ var CardAmountDeckRequirement = /** @class */ (function (_super) {
             gameManager.cardLibrary.find(function (c) { return c.libraryId === _this.reqValues.get(DeckRequirements_1.DeckReqVariable.LibraryCardId); }).name);
     };
     CardAmountDeckRequirement.fromJSON = function (json) {
-        var libraryId = json.reqValues.libraryId;
-        var amount = json.reqValues.amount;
+        var libraryId = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.LibraryCardId.toString(); }).value;
+        var amount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.Amount.toString(); }).value;
         if (!libraryId || !amount)
             throw new Error('Missing value in json');
         return new CardAmountDeckRequirement(libraryId, amount);

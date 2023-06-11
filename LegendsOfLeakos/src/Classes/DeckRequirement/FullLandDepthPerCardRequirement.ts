@@ -95,10 +95,18 @@ class FullLandDepthPerCardRequirement extends DeckRequirement {
   }
 
   static override fromJSON(json: any): DeckRequirement {
-    let biomeType = json.reqValues.biomeType;
-    let biomeDepth = json.reqValues.biomeDepth;
-    let perCardAmount = json.reqValues.perCardAmount;
-    let amount = json.reqValues.amount;
+    let amount = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.Amount.toString()
+    ).value;
+    let biomeType = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.BiomeType.toString()
+    ).value;
+    let biomeDepth = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.BiomeDepth.toString()
+    ).value;
+    let perCardAmount = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.PerCardAmount.toString()
+    ).value;
     if (!biomeType || !biomeDepth || !perCardAmount || !amount)
       throw new Error('Missing value in json');
     return new FullLandDepthPerCardRequirement(

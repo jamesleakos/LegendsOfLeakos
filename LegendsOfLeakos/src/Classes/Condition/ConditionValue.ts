@@ -41,7 +41,12 @@ class ConditionValue {
   }
 
   static fromJSON(json: any): ConditionValue {
-    return new ConditionValue(json.conditionValueType, json.values);
+    return new ConditionValue(
+      ConditionValueType[
+        json.conditionValueType as keyof typeof ConditionValueType
+      ],
+      json.values
+    );
   }
 }
 

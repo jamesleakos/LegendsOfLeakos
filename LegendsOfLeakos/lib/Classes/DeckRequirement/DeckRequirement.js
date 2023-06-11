@@ -13,11 +13,14 @@ var DeckRequirement = /** @class */ (function () {
     function DeckRequirement() {
     }
     DeckRequirement.prototype.toJSON = function () {
-        var reqObject = {};
+        var reqValueList = [];
         this.reqValues.forEach(function (value, key) {
-            reqObject[DeckRequirements_1.DeckReqVariable[key]] = value;
+            reqValueList.push({ key: key.toString(), value: value });
         });
-        return reqObject;
+        return {
+            type: this.type.toString(),
+            reqValues: reqValueList,
+        };
     };
     DeckRequirement.fromJSON = function (json) {
         var reqType = json.type;

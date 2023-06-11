@@ -51,8 +51,8 @@ var LandAmountDeckRequirement = /** @class */ (function (_super) {
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeType).toString());
     };
     LandAmountDeckRequirement.fromJSON = function (json) {
-        var biomeType = json.reqValues.biomeType;
-        var amount = json.reqValues.amount;
+        var amount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.Amount.toString(); }).value;
+        var biomeType = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.BiomeType.toString(); }).value;
         if (!biomeType || !amount)
             throw new Error('Missing value in json');
         return new LandAmountDeckRequirement(biomeType, amount);

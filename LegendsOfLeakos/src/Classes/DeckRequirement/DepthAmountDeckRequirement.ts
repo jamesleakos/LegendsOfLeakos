@@ -47,8 +47,13 @@ class DepthAmountDeckRequirement extends DeckRequirement {
   }
 
   static override fromJSON(json: any): DeckRequirement {
-    let biomeDepth = json.reqValues.biomeDepth;
-    let amount = json.reqValues.amount;
+    let amount = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.Amount.toString()
+    ).value;
+    let biomeDepth = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.BiomeDepth.toString()
+    ).value;
+
     if (!biomeDepth || !amount) {
       throw new Error('JSON parsing error');
     }

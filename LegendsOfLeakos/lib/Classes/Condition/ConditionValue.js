@@ -47,7 +47,7 @@ var ConditionValue = /** @class */ (function () {
         };
     };
     ConditionValue.fromJSON = function (json) {
-        return new ConditionValue(json.conditionValueType, json.values);
+        return new ConditionValue(Condition_1.ConditionValueType[json.conditionValueType], json.values);
     };
     return ConditionValue;
 }());

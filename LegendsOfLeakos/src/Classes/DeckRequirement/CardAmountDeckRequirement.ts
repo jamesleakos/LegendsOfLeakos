@@ -55,8 +55,12 @@ class CardAmountDeckRequirement extends DeckRequirement {
   }
 
   static override fromJSON(json: any): CardAmountDeckRequirement {
-    let libraryId = json.reqValues.libraryId;
-    let amount = json.reqValues.amount;
+    let libraryId = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.LibraryCardId.toString()
+    ).value;
+    let amount = json.reqValues.find(
+      (c: any) => c.key === DeckReqVariable.Amount.toString()
+    ).value;
     if (!libraryId || !amount) throw new Error('Missing value in json');
     return new CardAmountDeckRequirement(libraryId, amount);
   }

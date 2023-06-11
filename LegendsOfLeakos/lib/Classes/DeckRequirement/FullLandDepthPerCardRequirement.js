@@ -76,10 +76,10 @@ var FullLandDepthPerCardRequirement = /** @class */ (function (_super) {
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.PerCardAmount));
     };
     FullLandDepthPerCardRequirement.fromJSON = function (json) {
-        var biomeType = json.reqValues.biomeType;
-        var biomeDepth = json.reqValues.biomeDepth;
-        var perCardAmount = json.reqValues.perCardAmount;
-        var amount = json.reqValues.amount;
+        var amount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.Amount.toString(); }).value;
+        var biomeType = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.BiomeType.toString(); }).value;
+        var biomeDepth = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.BiomeDepth.toString(); }).value;
+        var perCardAmount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.PerCardAmount.toString(); }).value;
         if (!biomeType || !biomeDepth || !perCardAmount || !amount)
             throw new Error('Missing value in json');
         return new FullLandDepthPerCardRequirement(biomeType, biomeDepth, perCardAmount, amount);

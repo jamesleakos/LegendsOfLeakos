@@ -52,8 +52,8 @@ var DepthAmountDeckRequirement = /** @class */ (function (_super) {
             this.reqValues.get(DeckRequirements_1.DeckReqVariable.BiomeDepth).toString());
     };
     DepthAmountDeckRequirement.fromJSON = function (json) {
-        var biomeDepth = json.reqValues.biomeDepth;
-        var amount = json.reqValues.amount;
+        var amount = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.Amount.toString(); }).value;
+        var biomeDepth = json.reqValues.find(function (c) { return c.key === DeckRequirements_1.DeckReqVariable.BiomeDepth.toString(); }).value;
         if (!biomeDepth || !amount) {
             throw new Error('JSON parsing error');
         }
