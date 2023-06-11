@@ -7,11 +7,11 @@ import { AbilityType } from '../../Enums/Ability';
 
 class ActivatedAbility extends BaseAbility {
   indexForUpgrades: number;
+  // doubles as starts active if saved in the library
   isActive: boolean;
   costs: PayResourceCost[] = [];
   usesPerTurn: number;
   usesRemaining: number;
-  imageName: string;
 
   constructor(
     indexForUpgrades: number,
@@ -22,7 +22,7 @@ class ActivatedAbility extends BaseAbility {
     setUsesRemaining: number,
     usableInPhases: PhaseEnum[],
     isActive: boolean,
-    imageName: string
+    image: string
   ) {
     super();
 
@@ -44,7 +44,7 @@ class ActivatedAbility extends BaseAbility {
       this.usableInPhases.push(phase);
     });
 
-    this.imageName = imageName;
+    this.image = image;
   }
 
   onEndTurn(): void {
@@ -87,7 +87,7 @@ class ActivatedAbility extends BaseAbility {
       usesRemaining: this.usesRemaining,
       usableInPhases: this.usableInPhases.map((phase) => phase.toString()),
       isActive: this.isActive,
-      imageName: this.imageName,
+      image: this.image,
     };
   }
 
@@ -103,7 +103,7 @@ class ActivatedAbility extends BaseAbility {
         (phase: any) => PhaseEnum[phase as keyof typeof PhaseEnum]
       ),
       json.isActive,
-      json.imageName
+      json.image
     );
   }
 }

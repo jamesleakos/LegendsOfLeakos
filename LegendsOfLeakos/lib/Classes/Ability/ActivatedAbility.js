@@ -26,7 +26,7 @@ var Ability_1 = require("../../Enums/Ability");
 // Import other required classes and types
 var ActivatedAbility = /** @class */ (function (_super) {
     __extends(ActivatedAbility, _super);
-    function ActivatedAbility(indexForUpgrades, setName, setEffect, setCosts, setUsesPerTurn, setUsesRemaining, usableInPhases, isActive, imageName) {
+    function ActivatedAbility(indexForUpgrades, setName, setEffect, setCosts, setUsesPerTurn, setUsesRemaining, usableInPhases, isActive, image) {
         var _this = _super.call(this) || this;
         _this.costs = [];
         _this.name = setName;
@@ -43,7 +43,7 @@ var ActivatedAbility = /** @class */ (function (_super) {
         usableInPhases.forEach(function (phase) {
             _this.usableInPhases.push(phase);
         });
-        _this.imageName = imageName;
+        _this.image = image;
         return _this;
     }
     ActivatedAbility.prototype.onEndTurn = function () {
@@ -64,11 +64,11 @@ var ActivatedAbility = /** @class */ (function (_super) {
             usesRemaining: this.usesRemaining,
             usableInPhases: this.usableInPhases.map(function (phase) { return phase.toString(); }),
             isActive: this.isActive,
-            imageName: this.imageName,
+            image: this.image,
         };
     };
     ActivatedAbility.fromJSON = function (json) {
-        return ActivatedAbility.createActivatedAbility(json.indexForUpgrades, json.name, Effect_1.default.fromJSON(json.effect), json.costs.map(function (cost) { return PayResourceCost_1.default.fromJSON(cost); }), json.usesPerTurn, json.usesRemaining, json.usableInPhases.map(function (phase) { return Phase_1.PhaseEnum[phase]; }), json.isActive, json.imageName);
+        return ActivatedAbility.createActivatedAbility(json.indexForUpgrades, json.name, Effect_1.default.fromJSON(json.effect), json.costs.map(function (cost) { return PayResourceCost_1.default.fromJSON(cost); }), json.usesPerTurn, json.usesRemaining, json.usableInPhases.map(function (phase) { return Phase_1.PhaseEnum[phase]; }), json.isActive, json.image);
     };
     return ActivatedAbility;
 }(BaseAbility_1.default));
