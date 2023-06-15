@@ -1,15 +1,5 @@
-// keywordType: KeywordType;
-// indexForUpgrades: number;
-// designerDescription: string;
-// isPermanent: boolean;
-// duration: number;
-// startsActive: boolean;
-// keywordValueList: Array<LibraryKeywordValue>; // Don't need new, look down at the constructor
-// conditions: Array<Condition> = [];
-// imageName: string; // Don't need new, check out constructor
-
-// using the above properties, make a model
 const mongoose = require('mongoose');
+const ConditionSchema = require('./Condition');
 
 const LibraryKeywordSchema = new mongoose.Schema({
   keywordType: {
@@ -42,6 +32,14 @@ const LibraryKeywordSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+});
+
+const LibraryKeywordValueSchema = new mongoose.Schema({
+  keywordValueType: {
+    type: String,
+    required: true,
+  },
+  values: [Number],
 });
 
 export default LibraryKeywordSchema;
