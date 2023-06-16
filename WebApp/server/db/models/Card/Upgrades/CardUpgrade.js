@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 import ActivatedAbilitySchema from '../ActivatedAbility';
 import PayResourceCostSchema from '../PayResourceCost';
 import StatUpgradeSchema from '../StatUpgrade';
+import KeywordUpgradeSchema from '../KeywordUpgrade';
+import ActivatedAbilityUpgradeSchema from '../ActivatedAbilityUpgrade';
 
 const CardUpgradeSchema = new mongoose.Schema({
   name: {
