@@ -18,6 +18,7 @@ function CardDisplay({ biome }) {
     axios
       .get('/cards')
       .then((res) => {
+        console.log('res.data', res.data);
         setCardLibrary(res.data);
       })
       .catch((err) => {
