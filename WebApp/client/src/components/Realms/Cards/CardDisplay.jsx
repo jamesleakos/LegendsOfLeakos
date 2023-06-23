@@ -19,6 +19,8 @@ function CardDisplay({ biome }) {
       .get('/cards')
       .then((res) => {
         console.log('res.data', res.data);
+        // we are here - check what we're getting back
+
         setCardLibrary(res.data);
       })
       .catch((err) => {
